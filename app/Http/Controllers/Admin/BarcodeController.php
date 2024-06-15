@@ -105,7 +105,7 @@ class BarcodeController extends Controller
     public function download($barcodeId)
     {
         $barcode = Barcode::find($barcodeId);
-        $barcodeFile = (new BarcodeGenerator)->generateQrCode($barcode->value);
+        $barcodeFile = (new BarcodeGenerator(width: 1280, height: 1280))->generateQrCode($barcode->value);
         return response($barcodeFile)->withHeaders([
             'Content-Type' => 'aplication/octet-stream',
             'Content-Disposition' => 'attachment; filename=' . ($barcode->name ?? $barcode->value) . '.png',
@@ -118,7 +118,7 @@ class BarcodeController extends Controller
         if ($barcodes->isEmpty()) {
             return redirect()->back()->withErrors('Barcodes not found');
         }
-        $zipFile = (new BarcodeGenerator)->generateQrCodesZip(
+        $zipFile = (new BarcodeGenerator(width: 1280, height: 1280))->generateQrCodesZip(
             $barcodes->mapWithKeys(fn ($barcode) => [$barcode->name => $barcode->value])->toArray()
         );
 

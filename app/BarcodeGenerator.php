@@ -24,7 +24,7 @@ class BarcodeGenerator
         protected $manager = new ImageManager(Driver::class),
         protected $barcodeHeight = 75,
         protected $width = 720,
-        protected $height = 360,
+        protected $height = 720,
     ) {
         //
     }
