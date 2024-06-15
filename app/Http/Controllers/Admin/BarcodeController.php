@@ -40,10 +40,11 @@ class BarcodeController extends Controller
             'lat' => ['required', 'numeric'],
             'lng' => ['required', 'numeric'],
             'radius' => ['required', 'numeric'],
-            'time_in_valid_from' => ['date_format:H:i', 'before:time_in_valid_until'],
-            'time_in_valid_until' => ['date_format:H:i', 'after:time_in_valid_from'],
-            'time_out_valid_from' => ['date_format:H:i', 'before:time_out_valid_until'],
-            'time_out_valid_until' => ['date_format:H:i', 'after:time_out_valid_from'],
+            'time_limit' => ['required'],
+            // 'time_in_valid_from' => ['date_format:H:i', 'before:time_in_valid_until'],
+            // 'time_in_valid_until' => ['date_format:H:i', 'after:time_in_valid_from'],
+            // 'time_out_valid_from' => ['date_format:H:i', 'before:time_out_valid_until'],
+            // 'time_out_valid_until' => ['date_format:H:i', 'after:time_out_valid_from'],
         ]);
         try {
             Barcode::create([
@@ -51,12 +52,13 @@ class BarcodeController extends Controller
                 'value' => $request->value,
                 'coordinates' => Helpers::createPointQuery($request->lat, $request->lng),
                 'radius' => $request->radius,
-                'time_in_valid_from' => $request->time_in_valid_from,
-                'time_in_valid_until' => $request->time_in_valid_until,
-                'time_out_valid_from' => $request->time_out_valid_from,
-                'time_out_valid_until' => $request->time_out_valid_until,
+                'time_limit' => $request->time_limit
+                // 'time_in_valid_from' => $request->time_in_valid_from,
+                // 'time_in_valid_until' => $request->time_in_valid_until,
+                // 'time_out_valid_from' => $request->time_out_valid_from,
+                // 'time_out_valid_until' => $request->time_out_valid_until,
             ]);
-            return redirect()->route('admin.barcodes.index')->with('success', __('Created successfully.'));
+            return redirect()->route('admin.barcodes')->with('success', __('Created successfully.'));
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors($th->getMessage());
         }
@@ -75,10 +77,11 @@ class BarcodeController extends Controller
             'lat' => ['required', 'numeric'],
             'lng' => ['required', 'numeric'],
             'radius' => ['required', 'numeric'],
-            'time_in_valid_from' => ['date_format:H:i', 'before:time_in_valid_until'],
-            'time_in_valid_until' => ['date_format:H:i', 'after:time_in_valid_from'],
-            'time_out_valid_from' => ['date_format:H:i', 'before:time_out_valid_until'],
-            'time_out_valid_until' => ['date_format:H:i', 'after:time_out_valid_from'],
+            'time_limit' => ['required'],
+            // 'time_in_valid_from' => ['date_format:H:i', 'before:time_in_valid_until'],
+            // 'time_in_valid_until' => ['date_format:H:i', 'after:time_in_valid_from'],
+            // 'time_out_valid_from' => ['date_format:H:i', 'before:time_out_valid_until'],
+            // 'time_out_valid_until' => ['date_format:H:i', 'after:time_out_valid_from'],
         ]);
         try {
             $barcode->update([
@@ -86,12 +89,13 @@ class BarcodeController extends Controller
                 'value' => $request->value,
                 'coordinates' => Helpers::createPointQuery($request->lat, $request->lng),
                 'radius' => $request->radius,
-                'time_in_valid_from' => $request->time_in_valid_from,
-                'time_in_valid_until' => $request->time_in_valid_until,
-                'time_out_valid_from' => $request->time_out_valid_from,
-                'time_out_valid_until' => $request->time_out_valid_until,
+                'time_limit' => $request->time_limit
+                // 'time_in_valid_from' => $request->time_in_valid_from,
+                // 'time_in_valid_until' => $request->time_in_valid_until,
+                // 'time_out_valid_from' => $request->time_out_valid_from,
+                // 'time_out_valid_until' => $request->time_out_valid_until,
             ]);
-            return redirect()->route('admin.barcodes.index')->with('success', __('Updated successfully.'));
+            return redirect()->route('admin.barcodes')->with('success', __('Updated successfully.'));
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors($th->getMessage());
         }
@@ -101,7 +105,7 @@ class BarcodeController extends Controller
     public function download($barcodeId)
     {
         $barcode = Barcode::find($barcodeId);
-        $barcodeFile = (new BarcodeGenerator)->generateBarcode($barcode->value);
+        $barcodeFile = (new BarcodeGenerator)->generateQrCode($barcode->value);
         return response($barcodeFile)->withHeaders([
             'Content-Type' => 'aplication/octet-stream',
             'Content-Disposition' => 'attachment; filename=' . ($barcode->name ?? $barcode->value) . '.png',
@@ -114,7 +118,7 @@ class BarcodeController extends Controller
         if ($barcodes->isEmpty()) {
             return redirect()->back()->withErrors('Barcodes not found');
         }
-        $zipFile = (new BarcodeGenerator)->generateBarcodesZip(
+        $zipFile = (new BarcodeGenerator)->generateQrCodesZip(
             $barcodes->mapWithKeys(fn ($barcode) => [$barcode->name => $barcode->value])->toArray()
         );
 

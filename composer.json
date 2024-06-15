@@ -11,6 +11,8 @@
         "php": "^8.2",
         "blade-ui-kit/blade-heroicons": "^2.3",
         "blade-ui-kit/blade-icons": "^1.6",
+        "chillerlan/php-qrcode": "^5.0",
+        "endroid/qr-code": "^5.0",
         "intervention/image": "^3.6",
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.1",

@@ -3,6 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Barcode;
+// use chillerlan\QRCode\QRCode as QRCodeQRCode;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 use Picqer\Barcode\BarcodeGeneratorHTML;
@@ -34,19 +37,34 @@ class BarcodeComponent extends Component
 
     public function render()
     {
-        $generator = new BarcodeGeneratorHTML();
+        // $writer = new PngWriter();
+        // $generator = new QrCode('');
         $barcodes = Barcode::all()->map(
             fn ($barcode) => $barcode->setAttribute(
                 'barcode',
-                $generator->getBarcode(
-                    $barcode->value,
-                    type: $generator::TYPE_CODE_128,
-                    height: 75,
-                )
+                // (new QRCodeQRCode())->render($barcode->value),
             ),
         );
         return view('livewire.barcode', [
             'barcodes' => $barcodes
         ]);
     }
+
+    // public function render()
+    // {
+    //     $generator = new BarcodeGeneratorHTML();
+    //     $barcodes = Barcode::all()->map(
+    //         fn ($barcode) => $barcode->setAttribute(
+    //             'barcode',
+    //             $generator->getBarcode(
+    //                 $barcode->value,
+    //                 type: $generator::TYPE_CODE_128,
+    //                 height: 75,
+    //             )
+    //         ),
+    //     );
+    //     return view('livewire.barcode', [
+    //         'barcodes' => $barcodes
+    //     ]);
+    // }
 }

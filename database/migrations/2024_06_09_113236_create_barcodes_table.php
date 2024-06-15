@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('value')->unique();
-            $table->time('time_in_valid_from')->nullable(); // waktu absensi masuk dibuka (cth: 05:00)
-            $table->time('time_in_valid_until'); // batas waktu absensi masuk (cth: 09:00)
-            $table->time('time_out_valid_from')->nullable(); // waktu mulai absensi keluar (cth: 15:00)
-            $table->time('time_out_valid_until')->nullable(); // batas waktu absensi keluar (cth: 17:00)
+            // batas waktu absensi masuk (cth: 09:00) lebih dari itu dinyatakan terlambat
+            $table->time('time_limit');
+            // $table->time('time_in_valid_from')->nullable(); // waktu absensi masuk dibuka (cth: 05:00)
+            // $table->time('time_in_valid_until'); // batas waktu absensi masuk (cth: 09:00)
+            // $table->time('time_out_valid_from')->nullable(); // waktu mulai absensi keluar (cth: 15:00)
+            // $table->time('time_out_valid_until')->nullable(); // batas waktu absensi keluar (cth: 17:00)
             $table->geography('coordinates', 'POINT'); // lokasi barcode
             $table->float('radius'); // jarak maksimal absen dari lokasi barcode (dalam meter)
             $table->string('image_path')->nullable();

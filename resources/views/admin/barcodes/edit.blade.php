@@ -40,48 +40,20 @@
 
             <div class="mt-4 flex gap-3">
               <div class="w-full">
-                <x-label for="time_in_valid_from">{{ __('Time In Valid From') }}</x-label>
-                <x-input name="time_in_valid_from" id="time_in_valid_from" class="mt-1 block w-full" type="time"
-                  :value="old('time_in_valid_from') ?? $barcode->time_in_valid_from" />
-                @error('time_in_valid_from')
-                  <x-input-error for="time_in_valid_from" class="mt-2" message="{{ $message }}" />
+                <x-label for="time_limit">{{ __('Attendance Time Limit') }}</x-label>
+                <x-input name="time_limit" id="time_limit" class="mt-1 block w-full" type="time" :value="old('time_limit') ?? $barcode->time_limit" />
+                @error('time_limit')
+                  <x-input-error for="time_limit" class="mt-2" message="{{ $message }}" />
                 @enderror
               </div>
               <div class="w-full">
-                <x-label for="time_in_valid_until">{{ __('Time In Valid Until') }}</x-label>
-                <x-input name="time_in_valid_until" id="time_in_valid_until" class="mt-1 block w-full" type="time"
-                  :value="old('time_in_valid_until') ?? $barcode->time_in_valid_until" />
-                @error('time_in_valid_until')
-                  <x-input-error for="time_in_valid_until" class="mt-2" message="{{ $message }}" />
+                <x-label for="radius">Radius Valid Absen</x-label>
+                <x-input name="radius" id="radius" class="mt-1 block w-full" type="number" :value="old('radius') ?? $barcode->radius"
+                  placeholder="50 (meter)" />
+                @error('radius')
+                  <x-input-error for="radius" class="mt-2" message="{{ $message }}" />
                 @enderror
               </div>
-            </div>
-            <div class="mt-4 flex gap-3">
-              <div class="w-full">
-                <x-label for="time_out_valid_from">{{ __('Time Out Valid From') }}</x-label>
-                <x-input name="time_out_valid_from" id="time_out_valid_from" class="mt-1 block w-full" type="time"
-                  :value="old('time_out_valid_from') ?? $barcode->time_out_valid_from" />
-                @error('time_out_valid_from')
-                  <x-input-error for="time_out_valid_from" class="mt-2" message="{{ $message }}" />
-                @enderror
-              </div>
-              <div class="w-full">
-                <x-label for="time_out_valid_until">{{ __('Time Out Valid Until') }}</x-label>
-                <x-input name="time_out_valid_until" id="time_out_valid_until" class="mt-1 block w-full" type="time"
-                  :value="old('time_out_valid_until') ?? $barcode->time_out_valid_until" />
-                @error('time_out_valid_until')
-                  <x-input-error for="time_out_valid_until" class="mt-2" message="{{ $message }}" />
-                @enderror
-              </div>
-            </div>
-
-            <div class="mt-4">
-              <x-label for="radius">Radius Valid Absen</x-label>
-              <x-input name="radius" id="radius" class="mt-1 block w-full" type="number" :value="old('radius') ?? $barcode->radius"
-                placeholder="50 (meter)" />
-              @error('radius')
-                <x-input-error for="radius" class="mt-2" message="{{ $message }}" />
-              @enderror
             </div>
 
             <div class="mt-5">

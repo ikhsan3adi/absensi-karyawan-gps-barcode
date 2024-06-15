@@ -22,10 +22,11 @@ class BarcodeFactory extends Factory
             'value' => fake()->ean13(),
             'radius' => 10,
             'coordinates' => $this->generateCoordinates(),
-            'time_in_valid_from' => '05:00:00',
-            'time_in_valid_until' => '09:00:00',
-            'time_out_valid_from' => '15:00:00',
-            'time_out_valid_until' => '20:00:00',
+            'time_limit' => '09:00:00',
+            // 'time_in_valid_from' => '05:00:00',
+            // 'time_in_valid_until' => '09:00:00',
+            // 'time_out_valid_from' => '15:00:00',
+            // 'time_out_valid_until' => '20:00:00',
         ];
     }
 
