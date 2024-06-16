@@ -21,6 +21,13 @@ class DivisionComponent extends Component
         'name' => ['required', 'string', 'max:255', 'unique:divisions'],
     ];
 
+    public function showCreating()
+    {
+        $this->reset();
+        $this->resetErrorBag();
+        $this->creating = true;
+    }
+
     public function create()
     {
         $this->validate();
@@ -32,6 +39,7 @@ class DivisionComponent extends Component
 
     public function edit($id)
     {
+        $this->resetErrorBag();
         $this->editing = true;
         $division = Division::find($id);
         $this->name = $division->name;

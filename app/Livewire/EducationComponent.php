@@ -21,6 +21,13 @@ class EducationComponent extends Component
         'name' => ['required', 'string', 'max:255', 'unique:educations'],
     ];
 
+    public function showCreating()
+    {
+        $this->resetErrorBag();
+        $this->reset();
+        $this->creating = true;
+    }
+
     public function create()
     {
         $this->validate();
@@ -32,6 +39,7 @@ class EducationComponent extends Component
 
     public function edit($id)
     {
+        $this->resetErrorBag();
         $this->editing = true;
         $education = Education::find($id);
         $this->name = $education->name;

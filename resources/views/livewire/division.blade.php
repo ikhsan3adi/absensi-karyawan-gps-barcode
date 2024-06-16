@@ -3,7 +3,7 @@
     <h3 class="mb-4 text-lg font-semibold leading-tight text-gray-800 dark:text-gray-200 md:mb-0">
       Data Divisi
     </h3>
-    <x-button wire:click="$toggle('creating')">
+    <x-button wire:click="showCreating">
       <x-heroicon-o-plus class="mr-2 h-4 w-4" /> Tambah Divisi
     </x-button>
   </div>
@@ -37,6 +37,7 @@
       @endforeach
     </tbody>
   </table>
+  <div class="h-1 w-full border-b-4 border-gray-200 dark:border-gray-700"></div>
 
   <x-confirmation-modal wire:model="confirmingDeletion">
     <x-slot name="title">
@@ -63,7 +64,7 @@
       Divisi Baru
     </x-slot>
 
-    <form wire:submit.prevent="create">
+    <form wire:submit="create">
       <x-slot name="content">
         <x-label for="name">Nama Divisi</x-label>
         <x-input id="name" class="mt-1 block w-full" type="text" wire:model="name" />

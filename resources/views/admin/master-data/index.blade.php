@@ -9,10 +9,11 @@
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="overflow-hidden bg-white shadow-xl dark:bg-gray-800 sm:rounded-lg">
         <div class="p-6 lg:p-8">
-          <div class="mb-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div class="mb-5 grid grid-cols-1 gap-4 gap-y-8 lg:grid-cols-2">
             @livewire('division-component')
             @livewire('job-title-component')
             @livewire('education-component')
+            @livewire('shift-component')
           </div>
         </div>
       </div>

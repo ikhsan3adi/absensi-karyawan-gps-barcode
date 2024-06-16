@@ -2,57 +2,49 @@
 
 namespace App\Livewire;
 
-use App\Models\JobTitle;
+use App\Livewire\Forms\ShiftForm;
+use App\Models\Shift;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 
-class JobTitleComponent extends Component
+class ShiftComponent extends Component
 {
     use InteractsWithBanner;
 
-    public $name;
+    public ShiftForm $form;
     public $deleteName = null;
     public $creating = false;
     public $editing = false;
     public $confirmingDeletion = false;
     public $selectedId = null;
 
-    protected $rules = [
-        'name' => ['required', 'string', 'max:255', 'unique:job_titles'],
-    ];
-
     public function showCreating()
     {
-        $this->resetErrorBag();
-        $this->reset();
+        $this->form->resetErrorBag();
+        $this->form->reset();
         $this->creating = true;
     }
 
     public function create()
     {
-        $this->validate();
-        JobTitle::create(['name' => $this->name]);
+        $this->form->store();
         $this->creating = false;
-        $this->name = null;
         $this->banner(__('Created successfully.'));
     }
 
     public function edit($id)
     {
-        $this->resetErrorBag();
+        $this->form->resetErrorBag();
         $this->editing = true;
-        $jobTitle = JobTitle::find($id);
-        $this->name = $jobTitle->name;
-        $this->selectedId = $id;
+        /** @var Shift $shift */
+        $shift = Shift::find($id);
+        $this->form->setShift($shift);
     }
 
     public function update()
     {
-        $this->validate();
-        $jobTitle = JobTitle::find($this->selectedId);
-        $jobTitle->update(['name' => $this->name]);
+        $this->form->update();
         $this->editing = false;
-        $this->selectedId = null;
         $this->banner(__('Updated successfully.'));
     }
 
@@ -65,17 +57,15 @@ class JobTitleComponent extends Component
 
     public function delete()
     {
-        $jobTitle = JobTitle::find($this->selectedId);
-        $jobTitle->delete();
+        $shift = Shift::find($this->selectedId);
+        $this->form->setShift($shift)->delete();
         $this->confirmingDeletion = false;
-        $this->selectedId = null;
-        $this->deleteName = null;
         $this->banner(__('Deleted successfully.'));
     }
 
     public function render()
     {
-        $jobTitles = JobTitle::all();
-        return view('livewire.job-title', ['jobTitles' => $jobTitles]);
+        $shifts = Shift::all();
+        return view('livewire.shift', ['shifts' => $shifts]);
     }
 }

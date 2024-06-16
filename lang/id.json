@@ -146,6 +146,8 @@
     "Hide :name": "Sembunyikan :name",
     "Home": "Beranda",
     "Coords": "Koordinat",
+    "Time Start": "Mulai",
+    "Time End": "Selesai",
     "Time In Valid From": "Mulai Waktu Masuk",
     "Time In Valid Until": "Batas Waktu Masuk",
     "Time Out Valid From": "Mulai Waktu Keluar",
