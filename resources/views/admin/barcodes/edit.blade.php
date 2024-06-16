@@ -40,19 +40,14 @@
 
             <div class="mt-4 flex gap-3">
               <div class="w-full">
-                <x-label for="time_limit">{{ __('Attendance Time Limit') }}</x-label>
-                <x-input name="time_limit" id="time_limit" class="mt-1 block w-full" type="time" :value="old('time_limit') ?? $barcode->time_limit" />
-                @error('time_limit')
-                  <x-input-error for="time_limit" class="mt-2" message="{{ $message }}" />
-                @enderror
-              </div>
-              <div class="w-full">
                 <x-label for="radius">Radius Valid Absen</x-label>
                 <x-input name="radius" id="radius" class="mt-1 block w-full" type="number" :value="old('radius') ?? $barcode->radius"
                   placeholder="50 (meter)" />
                 @error('radius')
                   <x-input-error for="radius" class="mt-2" message="{{ $message }}" />
                 @enderror
+              </div>
+              <div class="w-full">
               </div>
             </div>
 
@@ -107,13 +102,12 @@
           onUpdate: (lat, lng) => {
             document.getElementById('lat').value = lat;
             document.getElementById('lng').value = lng;
-          }
+          },
+          location: [
+            Number({{ old('lat') ?? $barcode->latLng['lat'] }}),
+            Number({{ old('lng') ?? $barcode->latLng['lng'] }}),
+          ]
         });
-        @if (old('lat') && old('lng'))
-          window.setMapLocation({
-            location: [Number({{ old('lat') }}), Number({{ old('lng') }})]
-          });
-        @endif
       });
 
       let map = document.getElementById('map');

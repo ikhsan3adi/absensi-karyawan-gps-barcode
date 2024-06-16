@@ -17,11 +17,6 @@ class Barcode extends Model
         'value',
         'coordinates',
         'radius',
-        'time_limit',
-        // 'time_in_valid_from',
-        // 'time_in_valid_until',
-        // 'time_out_valid_from',
-        // 'time_out_valid_until',
     ];
 
     function getLatLngAttribute(): array

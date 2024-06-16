@@ -24,15 +24,7 @@
         </div>
         <a href="{{ route('admin.barcodes.show', $barcode->id) }}" class="pointer-events-auto">
           <div class="container flex items-center justify-center p-4">
-            <div class="children:dark:text-gray-100 text-center dark:bg-gray-300">
-              {{-- {!! $barcode->barcode !!} --}}
-              <div id="qrcode{{ $loop->iteration }}"></div>
-              <script type="text/javascript">
-                new QRCode(document.getElementById("qrcode{{ $loop->iteration }}"), {
-                  text: '{{ $barcode->value }}',
-                  correctLevel: QRCode.CorrectLevel.M
-                });
-              </script>
+            <div id="qrcode{{ $barcode->id }}" class="h-64 w-64 bg-transparent">
             </div>
           </div>
         </a>
@@ -42,12 +34,12 @@
           </h3>
         </a>
         <ul class="list-disc pl-4 dark:text-gray-400">
-          <li> {{ __('Attendance Time Limit') }}: {{ $barcode->time_limit }}</li>
-          {{-- <li> {{ __('Time In Valid From') }}: {{ $barcode->time_in_valid_from }}</li> --}}
-          {{-- <li> {{ __('Time In Valid Until') }}: {{ $barcode->time_in_valid_until }}</li>
-           <li> {{ __('Time Out Valid From') }}: {{ $barcode->time_out_valid_from }}</li>
-           <li> {{ __('Time Out Valid Until') }}: {{ $barcode->time_out_valid_until }}</li> --}}
-          <li> {{ __('Coords') . ': ' . $barcode->lat_lng['lat'] . ', ' . $barcode->latLng['lng'] }}</li>
+          <li>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ $barcode->lat_lng['lat'] }},{{ $barcode->lat_lng['lng'] }}"
+              target="_blank" class="pointer-events-auto hover:text-blue-500 hover:underline">
+              {{ __('Coords') . ': ' . $barcode->lat_lng['lat'] . ', ' . $barcode->latLng['lng'] }}
+            </a>
+          </li>
           <li> {{ __('Radius (meter)') }}: {{ $barcode->radius }}</li>
         </ul>
       </div>
@@ -74,3 +66,39 @@
     </x-slot>
   </x-confirmation-modal>
 </div>
+
+@script
+  <script type="text/javascript">
+    let barcodes = {{ $barcodes->map(fn($barcode) => $barcode->id) }};
+
+    let isDark = window.themeSwitcher().switchOn;
+
+    barcodes.forEach(element => {
+      new QRCode(document.getElementById("qrcode" + element), {
+        text: '{{ $barcode->value }}',
+        colorDark: window.themeSwitcher().switchOn ? "#ffffff" : "#000000",
+        colorLight: window.themeSwitcher().switchOn ? "#000000" : "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    });
+    setInterval(() => {
+      if (isDark == window.themeSwitcher().switchOn &&
+        document.getElementById("qrcode" + barcodes[0]).hasAttribute("title")) {
+        return;
+      }
+      isDark = window.themeSwitcher().switchOn;
+      barcodes.forEach(element => {
+        if (!document.getElementById("qrcode" + element)) {
+          return;
+        }
+        document.getElementById("qrcode" + element).innerHTML = "";
+        new QRCode(document.getElementById("qrcode" + element), {
+          text: '{{ $barcode->value }}',
+          colorDark: window.themeSwitcher().switchOn ? "#ffffff" : "#000000",
+          colorLight: window.themeSwitcher().switchOn ? "#000000" : "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M,
+        });
+      });
+    }, 250);
+  </script>
+@endscript

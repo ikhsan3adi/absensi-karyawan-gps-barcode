@@ -16,9 +16,9 @@ window.themeSwitcher = function () {
 
 let map;
 
-window.initializeMap = ({ onUpdate }) => {
+window.initializeMap = ({ onUpdate, location }) => {
     // Initialize the map centered at a default location
-    let defaultLocation = [-6.928334121065185, 107.60809121537025];
+    let defaultLocation = location ?? [-6.928334121065185, 107.60809121537025];
     map = L.map('map').setView(defaultLocation, 13);
 
     // Set up the OSM layer
