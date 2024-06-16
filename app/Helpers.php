@@ -25,6 +25,6 @@ class Helpers
      */
     public static function unpackPoint($point)
     {
-        return unpack('x/x/x/x/corder/Ltype/dlat/dlng', $point);
+        return unpack('x/x/x/x/corder/Ltype/dlng/dlat', $point);
     }
 }
