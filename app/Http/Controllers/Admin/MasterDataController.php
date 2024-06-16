@@ -12,5 +12,6 @@ class MasterDataController extends Controller
      */
     public function __invoke(Request $request)
     {
+        return view('admin.master-data.index');
     }
 }

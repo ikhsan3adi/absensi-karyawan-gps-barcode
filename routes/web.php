@@ -52,7 +52,7 @@ Route::middleware([
         ]);
 
         // Master Data
-        Route::get('/masterdata', fn () => view('admin.master-data.index'))
+        Route::get('/masterdata', MasterDataController::class)
             ->name('admin.masters');
 
         // // Presence/Absensi
