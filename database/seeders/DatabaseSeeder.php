@@ -6,6 +6,7 @@ use App\Models\Barcode;
 use App\Models\Division;
 use App\Models\Education;
 use App\Models\JobTitle;
+use App\Models\Shift;
 use App\Models\User;
 use Database\Factories\DivisionFactory;
 use Database\Factories\EducationFactory;
@@ -41,6 +42,7 @@ class DatabaseSeeder extends Seeder
             }
             JobTitle::create(['name' => $value]);
         }
-        Barcode::factory(1)->create();
+        Barcode::factory(1)->create(['name' => 'Barcode 1']);
+        Shift::factory(2)->create();
     }
 }

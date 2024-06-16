@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Shift;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -18,15 +19,11 @@ class BarcodeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->randomElement(['Barcode 1', 'Barcode 2', 'Barcode 3', 'Barcode 4', 'Barcode 5']),
+            'name' => fake()->unique()
+                ->randomElement(['Barcode 1', 'Barcode 2', 'Barcode 3', 'Barcode 4', 'Barcode 5']),
             'value' => fake()->ean13(),
-            'radius' => 10,
+            'radius' => 50,
             'coordinates' => $this->generateCoordinates(),
-            'time_limit' => '09:00:00',
-            // 'time_in_valid_from' => '05:00:00',
-            // 'time_in_valid_until' => '09:00:00',
-            // 'time_out_valid_from' => '15:00:00',
-            // 'time_out_valid_until' => '20:00:00',
         ];
     }
 

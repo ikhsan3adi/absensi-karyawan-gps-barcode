@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barcodes', function (Blueprint $table) {
+        Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('value')->unique();
-            $table->geography('coordinates', 'POINT'); // lokasi barcode
-            $table->float('radius'); // jarak maksimal absen dari lokasi barcode (dalam meter)
+            $table->string('name');
+            $table->time('start_time');
+            $table->time('end_time')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('barcodes');
+        Schema::dropIfExists('shifts');
     }
 };
