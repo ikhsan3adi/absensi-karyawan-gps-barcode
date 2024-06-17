@@ -31,6 +31,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'group',
         'phone',
         'gender',
         'birth_date',
@@ -77,6 +78,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public static $groups = ['user', 'admin'];
 
     public function education()
     {

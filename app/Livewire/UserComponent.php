@@ -6,19 +6,26 @@ use App\Livewire\Forms\UserForm;
 use App\Models\User;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class UserComponent extends Component
 {
-    use WithPagination, InteractsWithBanner;
+    use WithPagination, InteractsWithBanner, WithFileUploads;
 
     public UserForm $form;
+    public $groups = [];
     public $deleteName = null;
     public $creating = false;
     public $editing = false;
     public $confirmingDeletion = false;
     public $selectedId = null;
     public $showDetail = null;
+
+    public function __construct()
+    {
+        $this->groups = User::$groups;
+    }
 
     public function show($id)
     {
@@ -54,6 +61,11 @@ class UserComponent extends Component
         $this->form->update();
         $this->editing = false;
         $this->banner(__('Updated successfully.'));
+    }
+
+    public function deleteProfilePhoto()
+    {
+        $this->form->deleteProfilePhoto();
     }
 
     public function confirmDeletion($id, $name)

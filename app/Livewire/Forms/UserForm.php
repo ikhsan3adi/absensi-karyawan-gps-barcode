@@ -26,6 +26,7 @@ class UserForm extends Form
     public $division_id = null;
     public $education_id = null;
     public $job_title_id = null;
+    public $photo = null;
 
     public function rules()
     {
@@ -54,6 +55,7 @@ class UserForm extends Form
             'division_id' => ['nullable', 'exists:divisions,id'],
             'education_id' => ['nullable', 'exists:educations,id'],
             'job_title_id' => ['nullable', 'exists:job_titles,id'],
+            'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ];
     }
 
@@ -85,10 +87,12 @@ class UserForm extends Form
             return abort(403);
         }
         $this->validate();
-        User::create([
+        /** @var User $user */
+        $user = User::create([
             ...$this->all(),
-            'password' => Hash::make($this->password ?? 'password')
+            'password' => Hash::make($this->password ?? 'password'),
         ]);
+        if (isset($this->photo)) $user->updateProfilePhoto($this->photo);
         $this->reset();
     }
 
@@ -102,7 +106,13 @@ class UserForm extends Form
             ...$this->all(),
             'password' => Hash::make($this->password ?? 'password')
         ]);
+        if (isset($this->photo)) $this->user->updateProfilePhoto($this->photo);
         $this->reset();
+    }
+
+    public function deleteProfilePhoto()
+    {
+        $this->user->deleteProfilePhoto();
     }
 
     public function delete()
@@ -111,6 +121,7 @@ class UserForm extends Form
             return abort(403);
         }
         $this->user->delete();
+        $this->deleteProfilePhoto();
         $this->reset();
     }
 }

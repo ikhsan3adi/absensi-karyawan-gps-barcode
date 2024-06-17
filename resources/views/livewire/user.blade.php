@@ -44,7 +44,7 @@
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
       @php
-        $class = 'cursor-pointer group-hover:bg-gray-100 group-dark:hover:bg-gray-700';
+        $class = 'cursor-pointer group-hover:bg-gray-100 dark:group-hover:bg-gray-700';
       @endphp
       @foreach ($users as $user)
         @php
@@ -126,7 +126,48 @@
 
     <form wire:submit="create">
       <x-slot name="content">
-        <div>
+        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+          <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4">
+            <!-- Profile Photo File Input -->
+            <input type="file" id="photo" class="hidden" wire:model.live="form.photo" x-ref="photo"
+              x-on:change="
+                                    photoName = $refs.photo.files[0].name;
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        photoPreview = e.target.result;
+                                    };
+                                    reader.readAsDataURL($refs.photo.files[0]);
+                            " />
+
+            <x-label for="photo" value="{{ __('Photo') }}" />
+
+            <!-- Current Profile Photo -->
+            <div class="mt-2 h-20 w-20 rounded-full outline outline-gray-400" x-show="! photoPreview">
+            </div>
+
+            <!-- New Profile Photo Preview -->
+            <div class="mt-2" x-show="photoPreview" style="display: none;">
+              <span class="block h-20 w-20 rounded-full bg-cover bg-center bg-no-repeat"
+                x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+              </span>
+            </div>
+
+            <x-secondary-button class="me-2 mt-2" type="button" x-on:click.prevent="$refs.photo.click()">
+              {{ __('Select A New Photo') }}
+            </x-secondary-button>
+
+            @if ($form->user?->profile_photo_path)
+              <x-secondary-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
+                {{ __('Remove Photo') }}
+              </x-secondary-button>
+            @endif
+
+            @error('form.photo')
+              <x-input-error for="form.photo" message="{{ $message }}" class="mt-2" />
+            @enderror
+          </div>
+        @endif
+        <div class="mt-4">
           <x-label for="name">Nama Karyawan</x-label>
           <x-input id="name" class="mt-1 block w-full" type="text" wire:model="form.name" />
           @error('form.name')
@@ -151,12 +192,28 @@
             @enderror
           </div>
         </div>
-        <div class="mt-4">
-          <x-label for="password">{{ __('Password') }}</x-label>
-          <x-input id="password" class="mt-1 block w-full" type="password" wire:model="form.password" />
-          @error('form.password')
-            <x-input-error for="form.password" class="mt-2" message="{{ $message }}" />
-          @enderror
+        <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
+          <div class="w-full">
+            <x-label for="password">{{ __('Password') }}</x-label>
+            <x-input id="password" class="mt-1 block w-full" type="password" wire:model="form.password"
+              placeholder="New Password" />
+            @error('form.password')
+              <x-input-error for="form.password" class="mt-2" message="{{ $message }}" />
+            @enderror
+          </div>
+          <div class="w-full">
+            <x-label for="form.group" value="{{ __('Group') }}" />
+            <x-select id="form.group" class="mt-1 block w-full" wire:model="form.group">
+              @foreach ($groups as $group)
+                <option value="{{ $group }}" {{ $group == $form->group ? 'selected' : '' }}>
+                  {{ $group }}
+                </option>
+              @endforeach
+            </x-select>
+            @error('form.group')
+              <x-input-error for="form.group" class="mt-2" message="{{ $message }}" />
+            @enderror
+          </div>
         </div>
         <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
           <div class="w-full">
@@ -268,7 +325,7 @@
           {{ __('Cancel') }}
         </x-secondary-button>
 
-        <x-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
+        <x-button class="ml-2" wire:click="create" wire:loading.attr="disabled" wire:target="form.photo">
           {{ __('Confirm') }}
         </x-button>
       </x-slot>
@@ -282,7 +339,50 @@
 
     <form wire:submit.prevent="update" id="user-edit">
       <x-slot name="content">
-        <div>
+        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+          <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4">
+            <!-- Profile Photo File Input -->
+            <input type="file" id="photo" class="hidden" wire:model.live="form.photo" x-ref="photo"
+              x-on:change="
+                                    photoName = $refs.photo.files[0].name;
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        photoPreview = e.target.result;
+                                    };
+                                    reader.readAsDataURL($refs.photo.files[0]);
+                            " />
+
+            <x-label for="photo" value="{{ __('Photo') }}" />
+
+            <!-- Current Profile Photo -->
+            <div class="mt-2" x-show="! photoPreview">
+              <img src="{{ $form->user?->profile_photo_url }}" alt="{{ $form->user?->name }}"
+                class="h-20 w-20 rounded-full object-cover">
+            </div>
+
+            <!-- New Profile Photo Preview -->
+            <div class="mt-2" x-show="photoPreview" style="display: none;">
+              <span class="block h-20 w-20 rounded-full bg-cover bg-center bg-no-repeat"
+                x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+              </span>
+            </div>
+
+            <x-secondary-button class="me-2 mt-2" type="button" x-on:click.prevent="$refs.photo.click()">
+              {{ __('Select A New Photo') }}
+            </x-secondary-button>
+
+            @if ($form->user?->profile_photo_path)
+              <x-secondary-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
+                {{ __('Remove Photo') }}
+              </x-secondary-button>
+            @endif
+
+            @error('form.photo')
+              <x-input-error for="form.photo" message="{{ $message }}" class="mt-2" />
+            @enderror
+          </div>
+        @endif
+        <div class="mt-4">
           <x-label for="name">Nama Karyawan</x-label>
           <x-input id="name" class="mt-1 block w-full" type="text" wire:model="form.name" />
           @error('form.name')
@@ -307,13 +407,28 @@
             @enderror
           </div>
         </div>
-        <div class="mt-4">
-          <x-label for="password">{{ __('Password') }}</x-label>
-          <x-input id="password" class="mt-1 block w-full" type="password" wire:model="form.password"
-            placeholder="New Password" />
-          @error('form.password')
-            <x-input-error for="form.password" class="mt-2" message="{{ $message }}" />
-          @enderror
+        <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
+          <div class="w-full">
+            <x-label for="password">{{ __('Password') }}</x-label>
+            <x-input id="password" class="mt-1 block w-full" type="password" wire:model="form.password"
+              placeholder="New Password" />
+            @error('form.password')
+              <x-input-error for="form.password" class="mt-2" message="{{ $message }}" />
+            @enderror
+          </div>
+          <div class="w-full">
+            <x-label for="form.group" value="{{ __('Group') }}" />
+            <x-select id="form.group" class="mt-1 block w-full" wire:model="form.group">
+              @foreach ($groups as $group)
+                <option value="{{ $group }}" {{ $group == $form->group ? 'selected' : '' }}>
+                  {{ $group }}
+                </option>
+              @endforeach
+            </x-select>
+            @error('form.group')
+              <x-input-error for="form.group" class="mt-2" message="{{ $message }}" />
+            @enderror
+          </div>
         </div>
         <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
           <div class="w-full">
@@ -425,7 +540,7 @@
           {{ __('Cancel') }}
         </x-secondary-button>
 
-        <x-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
+        <x-button class="ml-2" wire:click="update" wire:loading.attr="disabled" wire:target="form.photo">
           {{ __('Confirm') }}
         </x-button>
       </x-slot>
@@ -468,19 +583,31 @@
           </div>
           <div class="mt-4">
             <x-label for="birth_date" value="{{ __('Birth Date') }}" />
-            <p>{{ \Illuminate\Support\Carbon::parse($form->user->birth_date)->format('D d M Y') }}</p>
+            @if ($form->user->birth_date)
+              <p>{{ \Illuminate\Support\Carbon::parse($form->user->birth_date)->format('D d M Y') }}</p>
+            @else
+              <p>-</p>
+            @endif
           </div>
           <div class="mt-4">
             <x-label for="birth_place" value="{{ __('Birth Place') }}" />
-            <p>{{ $form->user->birth_place }}</p>
+            <p>{{ $form->user->birth_place ?? '-' }}</p>
           </div>
           <div class="mt-4">
             <x-label for="address" value="{{ __('Address') }}" />
-            <p>{{ $form->user->address }}</p>
+            @if (empty($form->user->address))
+              <p>-</p>
+            @else
+              <p>{{ $form->user->address }}</p>
+            @endif
           </div>
           <div class="mt-4">
             <x-label for="city" value="{{ __('City') }}" />
-            <p>{{ $form->user->city }}</p>
+            @if (empty($form->user->city))
+              <p>-</p>
+            @else
+              <p>{{ $form->user->city }}</p>
+            @endif
           </div>
           <div class="mt-4">
             <x-label for="job_title_id" value="{{ __('Job Title') }}" />
