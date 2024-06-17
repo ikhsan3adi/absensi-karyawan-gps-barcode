@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Shift;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 
@@ -39,6 +40,9 @@ class ShiftForm extends Form
 
     public function store()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $this->validate();
         Shift::create($this->all());
         $this->reset();
@@ -46,6 +50,9 @@ class ShiftForm extends Form
 
     public function update()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $this->validate();
         $this->shift->update($this->all());
         $this->reset();
@@ -53,6 +60,9 @@ class ShiftForm extends Form
 
     public function delete()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $this->shift->delete();
         $this->reset();
     }

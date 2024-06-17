@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Education;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 
@@ -30,6 +31,9 @@ class EducationComponent extends Component
 
     public function create()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $this->validate();
         Education::create(['name' => $this->name]);
         $this->creating = false;
@@ -48,6 +52,9 @@ class EducationComponent extends Component
 
     public function update()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $this->validate();
         $education = Education::find($this->selectedId);
         $education->update(['name' => $this->name]);
@@ -65,6 +72,9 @@ class EducationComponent extends Component
 
     public function delete()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $education = Education::find($this->selectedId);
         $education->delete();
         $this->confirmingDeletion = false;

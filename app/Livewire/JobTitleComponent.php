@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\JobTitle;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 
@@ -30,6 +31,9 @@ class JobTitleComponent extends Component
 
     public function create()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $this->validate();
         JobTitle::create(['name' => $this->name]);
         $this->creating = false;
@@ -48,6 +52,9 @@ class JobTitleComponent extends Component
 
     public function update()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $this->validate();
         $jobTitle = JobTitle::find($this->selectedId);
         $jobTitle->update(['name' => $this->name]);
@@ -65,6 +72,9 @@ class JobTitleComponent extends Component
 
     public function delete()
     {
+        if (Auth::user()->group != 'admin') {
+            return abort(403);
+        }
         $jobTitle = JobTitle::find($this->selectedId);
         $jobTitle->delete();
         $this->confirmingDeletion = false;
