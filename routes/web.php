@@ -42,14 +42,12 @@ Route::middleware([
             ->name('admin.barcodes.download');
 
         // User/Employee/Karyawan
-        Route::resource('/users', UserController::class)->names([
-            'index' => 'admin.users',
-            'create' => 'admin.users.create',
-            'store' => 'admin.users.store',
-            'edit' => 'admin.users.edit',
-            'update' => 'admin.users.update',
-            'destroy' => 'admin.users.destroy',
-        ]);
+        Route::resource('/users', UserController::class)
+            ->only(['index', 'show'])
+            ->names([
+                'index' => 'admin.users',
+                'show' => 'admin.users.show',
+            ]);
 
         // Master Data
         Route::get('/masterdata', MasterDataController::class)

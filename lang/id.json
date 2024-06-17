@@ -10,6 +10,8 @@
     "Birth Place": "Tempat Lahir",
     "Male": "Laki-laki",
     "Female": "Perempuan",
+    "male": "laki-laki",
+    "female": "perempuan",
     "Select Gender": "Pilih Jenis Kelamin",
     "Select Division": "Pilih Divisi",
     "Select Education": "Pilih Pendidikan",
