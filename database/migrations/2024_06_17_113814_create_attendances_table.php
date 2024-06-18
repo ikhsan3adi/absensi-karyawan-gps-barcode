@@ -28,6 +28,7 @@ return new class extends Migration
                 'absent' // tidak hadir
             ])->default('absent');
             $table->string('note')->nullable(); // keterangan
+            $table->string('attachment')->nullable(); // lampiran
             $table->timestamps();
         });
     }
