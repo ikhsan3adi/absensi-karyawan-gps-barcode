@@ -35,18 +35,23 @@
         {{ __('Date') . ': ' . now()->format('d/m/Y') }}<br>
         {{ __('Your location') . ': ' . (is_null($currentLiveCoords) ? '-, -' : $currentLiveCoords[0] . ', ' . $currentLiveCoords[1]) }}
       </h4>
-      <div class="mb-4 grid grid-cols-2 gap-3 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
         <div
-          class="{{ $attendance?->status == 'late' ? 'bg-red-500' : 'bg-blue-500' }} flex items-center justify-between rounded-md px-4 py-2 text-white shadow-lg shadow-gray-400 dark:shadow-gray-700">
+          class="{{ $attendance?->status == 'late' ? 'bg-red-500' : 'bg-blue-500' }} flex items-center justify-between rounded-md px-4 py-2 text-white dark:shadow-gray-700">
           <div>
             <h4 class="text-lg font-semibold md:text-xl">Absen Masuk</h4>
-            {{ $attendance?->time_in ? Carbon::parse($attendance?->time_in)->format('H:i:s') : 'Belum Absen' }}
-            {{ $attendance?->status == 'late' ? ' | Terlambat: Ya' : '' }}
+            <div class="flex flex-col sm:flex-row">
+              <span>{{ $attendance?->time_in ? Carbon::parse($attendance?->time_in)->format('H:i:s') : 'Belum Absen' }}</span>
+              @if ($attendance?->status == 'late')
+                <span class="mx-1 hidden sm:inline-block">|</span>
+              @endif
+              <span>{{ $attendance?->status == 'late' ? 'Terlambat: Ya' : '' }}</span>
+            </div>
           </div>
           <x-heroicon-o-arrows-pointing-in class="h-5 w-5"></x-heroicon-o-arrows-pointing-in>
         </div>
         <div
-          class="flex items-center justify-between rounded-md bg-orange-500 px-4 py-2 text-white shadow-lg shadow-gray-400 dark:shadow-gray-700">
+          class="flex items-center justify-between rounded-md bg-orange-500 px-4 py-2 text-white dark:shadow-gray-700">
           <div>
             <h4 class="text-lg font-semibold md:text-xl">Absen Keluar</h4>
             {{ $attendance?->time_out ? Carbon::parse($attendance?->time_out)->format('H:i:s') : 'Belum Absen' }}
@@ -54,7 +59,7 @@
           <x-heroicon-o-arrows-pointing-out class="h-5 w-5"></x-heroicon-o-arrows-pointing-out>
         </div>
         <div
-          class="col-span-2 flex items-center justify-between rounded-md bg-purple-500 px-4 py-2 text-white shadow-lg shadow-gray-400 dark:shadow-gray-700 md:col-span-1 lg:col-span-2 xl:col-span-1">
+          class="col-span-2 flex items-center justify-between rounded-md bg-purple-500 px-4 py-2 text-white dark:shadow-gray-700 md:col-span-1 lg:col-span-2 xl:col-span-1">
           <div>
             <h4 class="text-lg font-semibold md:text-xl">Koordinat Absen</h4>
             {{ is_null($attendance?->coordinates) ? 'Belum Absen' : $attendance?->lat_lng['lat'] . ', ' . $attendance?->lat_lng['lng'] }}
@@ -63,23 +68,23 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4" wire:ignore>
-        <div
-          class="flex items-center justify-center rounded-md bg-green-500 px-4 py-2 shadow-lg shadow-gray-400 dark:shadow-gray-700">
-          <x-heroicon-o-envelope-open class="h-6 w-6 text-white"></x-heroicon-o-envelope-open>
-        </div>
-        <div
-          class="flex items-center justify-center rounded-md bg-blue-500 px-4 py-2 shadow-lg shadow-gray-400 dark:shadow-gray-700">
-          <x-heroicon-o-envelope-open class="h-6 w-6 text-white"></x-heroicon-o-envelope-open>
-        </div>
-        <div
-          class="flex items-center justify-center rounded-md bg-yellow-500 px-4 py-2 shadow-lg shadow-gray-400 dark:shadow-gray-700">
-          <x-heroicon-o-envelope-open class="h-6 w-6 text-white"></x-heroicon-o-envelope-open>
-        </div>
-        <div
-          class="flex items-center justify-center rounded-md bg-red-500 px-4 py-2 shadow-lg shadow-gray-400 dark:shadow-gray-700">
-          <x-heroicon-o-envelope-open class="h-6 w-6 text-white"></x-heroicon-o-envelope-open>
-        </div>
+      <hr class="my-4">
+
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-3" wire:ignore>
+        <a href="{{ route('apply-leave') }}" target="_blank">
+          <div
+            class="flex flex-col-reverse items-center justify-center gap-2 rounded-md bg-amber-500 px-4 py-2 text-center font-medium text-white shadow-md shadow-gray-400 transition duration-100 hover:bg-amber-600 dark:shadow-gray-700 md:flex-row md:gap-3">
+            Ajukan Izin
+            <x-heroicon-o-envelope-open class="h-6 w-6 text-white"></x-heroicon-o-envelope-open>
+          </div>
+        </a>
+        <a href="{{ route('attendance-history') }}" target="_blank">
+          <div
+            class="flex flex-col-reverse items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-center font-medium text-white shadow-md shadow-gray-400 hover:bg-blue-600 dark:shadow-gray-700 md:flex-row md:gap-3">
+            Riwayat Absen
+            <x-heroicon-o-clock class="h-6 w-6 text-white"></x-heroicon-o-clock>
+          </div>
+        </a>
       </div>
     </div>
   </div>
