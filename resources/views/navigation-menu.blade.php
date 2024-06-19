@@ -121,6 +121,12 @@
         <x-responsive-nav-link href="{{ route('admin.barcodes') }}" :active="request()->routeIs('admin.barcodes')">
           {{ __('Barcode') }}
         </x-responsive-nav-link>
+        <x-responsive-nav-link href="{{ route('admin.users') }}" :active="request()->routeIs('admin.users')">
+          {{ __('Employee') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link href="{{ route('admin.masters') }}" :active="request()->routeIs('admin.masters')">
+          {{ __('Master Data') }}
+        </x-responsive-nav-link>
       @else
         <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
           {{ __('Home') }}
