@@ -7,6 +7,7 @@ use App\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\Barcode;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BarcodeController extends Controller
 {
@@ -62,7 +63,9 @@ class BarcodeController extends Controller
 
     public function update(Request $request, Barcode $barcode)
     {
-        $request->validate($this->rules);
+        $request->validate(array_merge($this->rules, [
+            'value' => ['required', 'string', 'max:255', Rule::unique('barcodes')->ignore($barcode->id)],
+        ]));
         try {
             $barcode->update([
                 'name' => $request->name,
