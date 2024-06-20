@@ -50,9 +50,11 @@ class BarcodeController extends Controller
                 'coordinates' => Helpers::createPointQuery($request->lat, $request->lng),
                 'radius' => $request->radius,
             ]);
-            return redirect()->route('admin.barcodes')->with('success', __('Created successfully.'));
+            return redirect()->route('admin.barcodes')->with('flash.banner', __('Created successfully.'));
         } catch (\Throwable $th) {
-            return redirect()->back()->withErrors($th->getMessage());
+            return redirect()->back()
+                ->with('flash.banner', $th->getMessage())
+                ->with('flash.bannerStyle', 'danger');
         }
     }
 
@@ -73,9 +75,11 @@ class BarcodeController extends Controller
                 'coordinates' => Helpers::createPointQuery($request->lat, $request->lng),
                 'radius' => $request->radius,
             ]);
-            return redirect()->route('admin.barcodes')->with('success', __('Updated successfully.'));
+            return redirect()->route('admin.barcodes')->with('flash.banner', __('Updated successfully.'));
         } catch (\Throwable $th) {
-            return redirect()->back()->withErrors($th->getMessage());
+            return redirect()->back()
+                ->with('flash.banner', $th->getMessage())
+                ->with('flash.bannerStyle', 'danger');
         }
     }
 
@@ -94,7 +98,9 @@ class BarcodeController extends Controller
     {
         $barcodes = Barcode::all();
         if ($barcodes->isEmpty()) {
-            return redirect()->back()->withErrors('Barcodes not found');
+            return redirect()->back()
+                ->with('flash.banner', 'Barcode ' . __('Not Found'))
+                ->with('flash.bannerStyle', 'danger');
         }
         $zipFile = (new BarcodeGenerator(width: 1280, height: 1280))->generateQrCodesZip(
             $barcodes->mapWithKeys(fn ($barcode) => [$barcode->name => $barcode->value])->toArray()

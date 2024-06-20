@@ -45,6 +45,11 @@
           <x-secondary-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
             {{ __('Remove Photo') }}
           </x-secondary-button>
+        @else
+          <x-secondary-button type="button" class="mt-2" x-show="photoPreview"
+            x-on:click="photoName = null; photoPreview = null">
+            {{ __('Remove Photo') }}
+          </x-secondary-button>
         @endif
 
         <x-input-error for="photo" class="mt-2" />
