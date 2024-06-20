@@ -19,6 +19,9 @@
             <x-nav-link href="{{ route('admin.barcodes') }}" :active="request()->routeIs('admin.barcodes')">
               {{ __('Barcode') }}
             </x-nav-link>
+            <x-nav-link href="{{ route('admin.attendances') }}" :active="request()->routeIs('admin.attendances')">
+              {{ __('Attendance') }}
+            </x-nav-link>
             <x-nav-link href="{{ route('admin.users') }}" :active="request()->routeIs('admin.users')">
               {{ __('Employee') }}
             </x-nav-link>
@@ -120,6 +123,9 @@
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.barcodes') }}" :active="request()->routeIs('admin.barcodes')">
           {{ __('Barcode') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link href="{{ route('admin.attendances') }}" :active="request()->routeIs('admin.attendances')">
+          {{ __('Attendance') }}
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.users') }}" :active="request()->routeIs('admin.users')">
           {{ __('Employee') }}
