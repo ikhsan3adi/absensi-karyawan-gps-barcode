@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\MasterData;
 
-use App\Models\JobTitle;
+use App\Models\Division;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 
-class JobTitleComponent extends Component
+class DivisionComponent extends Component
 {
     use InteractsWithBanner;
 
@@ -19,13 +19,13 @@ class JobTitleComponent extends Component
     public $selectedId = null;
 
     protected $rules = [
-        'name' => ['required', 'string', 'max:255', 'unique:job_titles'],
+        'name' => ['required', 'string', 'max:255', 'unique:divisions'],
     ];
 
     public function showCreating()
     {
-        $this->resetErrorBag();
         $this->reset();
+        $this->resetErrorBag();
         $this->creating = true;
     }
 
@@ -35,7 +35,7 @@ class JobTitleComponent extends Component
             return abort(403);
         }
         $this->validate();
-        JobTitle::create(['name' => $this->name]);
+        Division::create(['name' => $this->name]);
         $this->creating = false;
         $this->name = null;
         $this->banner(__('Created successfully.'));
@@ -45,8 +45,8 @@ class JobTitleComponent extends Component
     {
         $this->resetErrorBag();
         $this->editing = true;
-        $jobTitle = JobTitle::find($id);
-        $this->name = $jobTitle->name;
+        $division = Division::find($id);
+        $this->name = $division->name;
         $this->selectedId = $id;
     }
 
@@ -56,8 +56,8 @@ class JobTitleComponent extends Component
             return abort(403);
         }
         $this->validate();
-        $jobTitle = JobTitle::find($this->selectedId);
-        $jobTitle->update(['name' => $this->name]);
+        $division = Division::find($this->selectedId);
+        $division->update(['name' => $this->name]);
         $this->editing = false;
         $this->selectedId = null;
         $this->banner(__('Updated successfully.'));
@@ -75,8 +75,8 @@ class JobTitleComponent extends Component
         if (Auth::user()->group != 'admin') {
             return abort(403);
         }
-        $jobTitle = JobTitle::find($this->selectedId);
-        $jobTitle->delete();
+        $division = Division::find($this->selectedId);
+        $division->delete();
         $this->confirmingDeletion = false;
         $this->selectedId = null;
         $this->deleteName = null;
@@ -85,7 +85,7 @@ class JobTitleComponent extends Component
 
     public function render()
     {
-        $jobTitles = JobTitle::all();
-        return view('livewire.job-title', ['jobTitles' => $jobTitles]);
+        $divisions = Division::all();
+        return view('livewire.master-data.division', ['divisions' => $divisions]);
     }
 }

@@ -23,7 +23,7 @@
           {{ __('Email') }}
         </th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-          {{ __('Phone') }}
+          {{ __('Phone Number') }}
         </th>
         <th scope="col"
           class="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 sm:table-cell">

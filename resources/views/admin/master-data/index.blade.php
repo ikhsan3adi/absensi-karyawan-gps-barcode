@@ -10,10 +10,10 @@
       <div class="overflow-x-scroll bg-white shadow-xl dark:bg-gray-800 sm:rounded-lg">
         <div class="p-6 lg:p-8">
           <div class="mb-5 grid grid-cols-1 gap-4 gap-y-8 lg:grid-cols-2">
-            @livewire('division-component')
-            @livewire('job-title-component')
-            @livewire('education-component')
-            @livewire('shift-component')
+            @livewire('master-data.division-component')
+            @livewire('master-data.job-title-component')
+            @livewire('master-data.education-component')
+            @livewire('master-data.shift-component')
           </div>
         </div>
       </div>

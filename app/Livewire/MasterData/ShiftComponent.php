@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\MasterData;
 
 use App\Livewire\Forms\ShiftForm;
 use App\Models\Shift;
@@ -66,6 +66,6 @@ class ShiftComponent extends Component
     public function render()
     {
         $shifts = Shift::all();
-        return view('livewire.shift', ['shifts' => $shifts]);
+        return view('livewire.master-data.shift', ['shifts' => $shifts]);
     }
 }

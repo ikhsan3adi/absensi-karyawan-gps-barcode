@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\MasterData;
 
-use App\Models\Education;
+use App\Models\JobTitle;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 
-class EducationComponent extends Component
+class JobTitleComponent extends Component
 {
     use InteractsWithBanner;
 
@@ -19,7 +19,7 @@ class EducationComponent extends Component
     public $selectedId = null;
 
     protected $rules = [
-        'name' => ['required', 'string', 'max:255', 'unique:educations'],
+        'name' => ['required', 'string', 'max:255', 'unique:job_titles'],
     ];
 
     public function showCreating()
@@ -35,7 +35,7 @@ class EducationComponent extends Component
             return abort(403);
         }
         $this->validate();
-        Education::create(['name' => $this->name]);
+        JobTitle::create(['name' => $this->name]);
         $this->creating = false;
         $this->name = null;
         $this->banner(__('Created successfully.'));
@@ -45,8 +45,8 @@ class EducationComponent extends Component
     {
         $this->resetErrorBag();
         $this->editing = true;
-        $education = Education::find($id);
-        $this->name = $education->name;
+        $jobTitle = JobTitle::find($id);
+        $this->name = $jobTitle->name;
         $this->selectedId = $id;
     }
 
@@ -56,8 +56,8 @@ class EducationComponent extends Component
             return abort(403);
         }
         $this->validate();
-        $education = Education::find($this->selectedId);
-        $education->update(['name' => $this->name]);
+        $jobTitle = JobTitle::find($this->selectedId);
+        $jobTitle->update(['name' => $this->name]);
         $this->editing = false;
         $this->selectedId = null;
         $this->banner(__('Updated successfully.'));
@@ -75,8 +75,8 @@ class EducationComponent extends Component
         if (Auth::user()->group != 'admin') {
             return abort(403);
         }
-        $education = Education::find($this->selectedId);
-        $education->delete();
+        $jobTitle = JobTitle::find($this->selectedId);
+        $jobTitle->delete();
         $this->confirmingDeletion = false;
         $this->selectedId = null;
         $this->deleteName = null;
@@ -85,7 +85,7 @@ class EducationComponent extends Component
 
     public function render()
     {
-        $educations = Education::all();
-        return view('livewire.education', ['educations' => $educations]);
+        $jobTitles = JobTitle::all();
+        return view('livewire.master-data.job-title', ['jobTitles' => $jobTitles]);
     }
 }
