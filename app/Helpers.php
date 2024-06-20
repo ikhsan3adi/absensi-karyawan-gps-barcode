@@ -15,7 +15,7 @@ class Helpers
     /**
      * Unpacks the given point into individual components.
      *
-     * @param string $point The point to unpack.
+     * @param mixed $point The point to unpack.
      * @return array The unpacked point in the format:
      *               [
      *                   ...
@@ -23,8 +23,16 @@ class Helpers
      *                   'lng' => longitude
      *               ]
      */
-    public static function unpackPoint($point)
+    public static function unpackPoint($point = null)
     {
+        if (is_null($point)) {
+            return ['lat' => null, 'lng' => null];
+        }
         return unpack('x/x/x/x/corder/Ltype/dlng/dlat', $point);
+    }
+
+    public static function getGoogleMapsUrl($lat, $lng)
+    {
+        return "https://maps.google.com/maps?q=$lat,$lng";
     }
 }
