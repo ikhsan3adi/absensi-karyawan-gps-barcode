@@ -18,6 +18,7 @@ class ScanComponent extends Component
     public $shift_id = null;
     public ?array $currentLiveCoords = null;
     public string $successMsg = '';
+    public bool $isAbsence = false;
 
     public function scan(string $barcode)
     {
@@ -100,6 +101,7 @@ class ScanComponent extends Component
     {
         $this->attendance = $attendance;
         $this->shift_id = $attendance->shift_id;
+        $this->isAbsence = $attendance->status !== 'present' && $attendance->status !== 'late';
     }
 
     public function getAttendance()
@@ -113,7 +115,7 @@ class ScanComponent extends Component
         ];
     }
 
-    public function rendering()
+    public function mount()
     {
         /** @var Attendance */
         $attendance = Attendance::where('user_id', Auth::user()->id)
