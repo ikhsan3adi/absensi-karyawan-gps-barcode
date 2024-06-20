@@ -3,7 +3,10 @@
 use App\Http\Controllers\Admin\BarcodeController;
 use App\Http\Controllers\Admin\MasterDataController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserAttendanceController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,9 +19,22 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/', fn () => redirect('/home'));
-    Route::get('/home', HomeController::class)->name('home');
+    Route::get('/', fn () => Auth::user()->group == 'admin' ? redirect('/admin') : redirect('/home'));
 
+    // USER AREA
+    Route::middleware('user')->group(function () {
+        Route::get('/home', HomeController::class)->name('home');
+
+        Route::get('/apply-leave', [UserAttendanceController::class, 'applyLeave'])
+            ->name('apply-leave');
+        Route::post('/apply-leave', [UserAttendanceController::class, 'storeLeaveRequest'])
+            ->name('store-leave-request');
+
+        Route::get('/attendance-history', [UserAttendanceController::class, 'history'])
+            ->name('attendance-history');
+    });
+
+    // ADMIN AREA
     Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/', fn () => redirect('/admin/dashboard'));
         Route::get('/dashboard', function () {
@@ -53,9 +69,12 @@ Route::middleware([
         Route::get('/masterdata', MasterDataController::class)
             ->name('admin.masters');
 
-        // // Presence/Absensi
-        // Route::get('/presence', [App\Http\Controllers\Admin\PresenceController::class, 'index'])
-        //     ->name('admin.presence');
+        // Presence/Absensi
+        Route::resource('/attendances', AttendanceController::class)
+            ->only(['index'])
+            ->names([
+                'index' => 'admin.attendances',
+            ]);
 
         // // Reports/Laporan
         // Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])

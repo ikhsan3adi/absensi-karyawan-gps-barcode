@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Helpers;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Attendance extends Model
 {
@@ -52,5 +54,13 @@ class Attendance extends Model
     function getLatLngAttribute(): array
     {
         return Helpers::unpackPoint($this->coordinates);
+    }
+
+    public function attachmentUrl(): ?Attribute
+    {
+        return $this->attachment ?
+            Attribute::get(function (): string {
+                return Storage::disk(config('jetstream.attachment_disk'))->url($this->attachment);
+            }) : null;
     }
 }
