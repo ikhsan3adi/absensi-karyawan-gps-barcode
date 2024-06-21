@@ -36,6 +36,10 @@ class Attendance extends Model
         ];
     }
 
+    protected $hidden = [
+        'coordinates',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

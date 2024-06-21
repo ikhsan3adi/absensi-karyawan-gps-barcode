@@ -17,7 +17,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Check if the user is authenticated and belongs to the 'admin' group
-        if (Auth::check() && Auth::user()->group === 'admin') {
+        if (Auth::check() && Auth::user()?->group === 'admin') {
             return $next($request);
         }
 
