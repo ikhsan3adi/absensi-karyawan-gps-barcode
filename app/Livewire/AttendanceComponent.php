@@ -21,10 +21,21 @@ class AttendanceComponent extends Component
     public ?string $division = null;
     public ?string $jobTitle = null;
     public ?string $search = null;
+    public bool $showAttachment = false;
+    public $currentAttachment = [];
+
+    public function showAttendanceAttachment($note, $attachment)
+    {
+        $this->showAttachment = true;
+        $this->currentAttachment = [
+            'note' => $note,
+            'attachment' => $attachment,
+        ];
+    }
 
     public function mount()
     {
-        $this->month = date('Y-m');
+        $this->date = date('Y-m-d');
     }
 
     public function updating($key): void
@@ -39,6 +50,7 @@ class AttendanceComponent extends Component
         }
         if ($key === 'week') {
             $this->resetPage();
+            $this->month = null;
             $this->date = null;
         }
         if ($key === 'date') {
@@ -50,8 +62,16 @@ class AttendanceComponent extends Component
 
     public function render()
     {
-        if (!$this->month) {
-            $this->month = date('Y-m');
+        if ($this->date) {
+            $dates = [Carbon::parse($this->date)];
+        } else if ($this->week) {
+            $start = Carbon::parse($this->week)->startOfWeek();
+            $end = Carbon::parse($this->week)->endOfWeek();
+            $dates = $start->range($end)->toArray();
+        } else if ($this->month) {
+            $start = Carbon::parse($this->month)->startOfMonth();
+            $end = Carbon::parse($this->month)->endOfMonth();
+            $dates = $start->range($end)->toArray();
         }
         $employees = User::where('group', 'user')
             ->when($this->search, fn ($q) => $q->where('name', 'like', '%' . $this->search . '%')->orWhere('nip', 'like', '%' . $this->search . '%'))
@@ -59,7 +79,7 @@ class AttendanceComponent extends Component
             ->when($this->jobTitle, fn ($q) => $q->where('job_title_id', $this->jobTitle))
             ->paginate(20)->through(function ($user) {
                 if ($this->date) {
-                    $attendances = Cache::remember(
+                    $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$this->date",
                         now()->addHour(),
                         function () use ($user) {
@@ -70,11 +90,19 @@ class AttendanceComponent extends Component
                                 ->where('date', $date->toDateString())
                                 ->get();
 
-                            return $attendances->map(fn ($v) => $v->getAttributes())->toArray();
+                            return $attendances->map(
+                                function (Attendance $v) {
+                                    $v->setAttribute('coordinates', $v->lat_lng);
+                                    if ($v->attachment) {
+                                        $v->setAttribute('attachment', $v->attachment_url);
+                                    }
+                                    return $v->getAttributes();
+                                }
+                            )->toArray();
                         }
-                    ) ?? [];
+                    ) ?? []);
                 } else if ($this->week) {
-                    $attendances = Cache::remember(
+                    $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$this->week",
                         now()->addHour(),
                         function () use ($user) {
@@ -84,14 +112,14 @@ class AttendanceComponent extends Component
                             /** @var Collection<Attendance>  */
                             $attendances = Attendance::where('user_id', $user->id)
                                 ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
-                                ->get();
+                                ->get(['id', 'status', 'date']);
 
                             return $attendances->map(fn ($v) => $v->getAttributes())->toArray();
                         }
-                    ) ?? [];
-                } else {
+                    ) ?? []);
+                } else if ($this->month) {
                     $my = Carbon::parse($this->month);
-                    $attendances = Cache::remember(
+                    $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$my->month-$my->year",
                         now()->addHour(),
                         function () use ($user, $my) {
@@ -110,12 +138,14 @@ class AttendanceComponent extends Component
                             //     'absent' => $attendances->where('status', 'absent')->count(),
                             // ];
                         }
-                    ) ?? [];
+                    ) ?? []);
+                } else {
+                    /** @var Collection */
+                    $attendances = Attendance::paginate(20);
                 }
                 $user->attendances = $attendances;
                 return $user;
             });
-        dd($employees);
-        return view('livewire.attendance', ['employees' => $employees]);
+        return view('livewire.attendance', ['employees' => $employees, 'dates' => $dates]);
     }
 }

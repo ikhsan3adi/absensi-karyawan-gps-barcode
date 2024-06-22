@@ -70,14 +70,11 @@ Route::middleware([
             ->name('admin.masters');
 
         // Presence/Absensi
-        Route::resource('/attendances', AttendanceController::class)
-            ->only(['index'])
-            ->names([
-                'index' => 'admin.attendances',
-            ]);
+        Route::get('/attendances', [AttendanceController::class, 'index'])
+            ->name('admin.attendances');
 
-        // // Reports/Laporan
-        // Route::get('/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])
-        //     ->name('admin.reports');
+        // Presence/Absensi
+        Route::get('/attendances/report', [AttendanceController::class, 'report'])
+            ->name('admin.attendances.report');
     });
 });
