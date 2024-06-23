@@ -36,6 +36,25 @@
                   @enderror
                 </div>
 
+                <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3">
+                  <div>
+                    <x-label for="from" value="Tanggal mulai" />
+                    <x-input type="date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" id="from"
+                      class="mt-1 block w-full" name="from" required />
+                    @error('from')
+                      <x-input-error for="from" class="mt-2" message="{{ $message }}" />
+                    @enderror
+                  </div>
+                  <div>
+                    <x-label for="to" value="Tanggal berakhir (Opsional)" />
+                    <x-input type="date" id="to" min="{{ date('Y-m-d') }}" class="mt-1 block w-full"
+                      name="to" />
+                    @error('to')
+                      <x-input-error for="to" class="mt-2" message="{{ $message }}" />
+                    @enderror
+                  </div>
+                </div>
+
                 <div class="mt-4">
                   <x-label for="note" value="Keterangan" />
                   <x-textarea id="note" type="text" class="mt-1 block w-full" name="note" required
