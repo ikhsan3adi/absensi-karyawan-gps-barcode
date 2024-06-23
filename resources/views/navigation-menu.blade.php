@@ -22,7 +22,7 @@
             <x-nav-link href="{{ route('admin.attendances') }}" :active="request()->routeIs('admin.attendances')">
               {{ __('Attendance') }}
             </x-nav-link>
-            <x-nav-link href="{{ route('admin.users') }}" :active="request()->routeIs('admin.users')">
+            <x-nav-link href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
               {{ __('Employee') }}
             </x-nav-link>
             <x-nav-link href="{{ route('admin.masters') }}" :active="request()->routeIs('admin.masters')">
@@ -127,7 +127,7 @@
         <x-responsive-nav-link href="{{ route('admin.attendances') }}" :active="request()->routeIs('admin.attendances')">
           {{ __('Attendance') }}
         </x-responsive-nav-link>
-        <x-responsive-nav-link href="{{ route('admin.users') }}" :active="request()->routeIs('admin.users')">
+        <x-responsive-nav-link href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
           {{ __('Employee') }}
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.masters') }}" :active="request()->routeIs('admin.masters')">

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire\MasterData;
+namespace App\Livewire\Admin\MasterData;
 
-use App\Models\Division;
+use App\Models\Education;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 
-class DivisionComponent extends Component
+class EducationComponent extends Component
 {
     use InteractsWithBanner;
 
@@ -19,13 +19,13 @@ class DivisionComponent extends Component
     public $selectedId = null;
 
     protected $rules = [
-        'name' => ['required', 'string', 'max:255', 'unique:divisions'],
+        'name' => ['required', 'string', 'max:255', 'unique:educations'],
     ];
 
     public function showCreating()
     {
-        $this->reset();
         $this->resetErrorBag();
+        $this->reset();
         $this->creating = true;
     }
 
@@ -35,7 +35,7 @@ class DivisionComponent extends Component
             return abort(403);
         }
         $this->validate();
-        Division::create(['name' => $this->name]);
+        Education::create(['name' => $this->name]);
         $this->creating = false;
         $this->name = null;
         $this->banner(__('Created successfully.'));
@@ -45,8 +45,8 @@ class DivisionComponent extends Component
     {
         $this->resetErrorBag();
         $this->editing = true;
-        $division = Division::find($id);
-        $this->name = $division->name;
+        $education = Education::find($id);
+        $this->name = $education->name;
         $this->selectedId = $id;
     }
 
@@ -56,8 +56,8 @@ class DivisionComponent extends Component
             return abort(403);
         }
         $this->validate();
-        $division = Division::find($this->selectedId);
-        $division->update(['name' => $this->name]);
+        $education = Education::find($this->selectedId);
+        $education->update(['name' => $this->name]);
         $this->editing = false;
         $this->selectedId = null;
         $this->banner(__('Updated successfully.'));
@@ -75,8 +75,8 @@ class DivisionComponent extends Component
         if (Auth::user()->group != 'admin') {
             return abort(403);
         }
-        $division = Division::find($this->selectedId);
-        $division->delete();
+        $education = Education::find($this->selectedId);
+        $education->delete();
         $this->confirmingDeletion = false;
         $this->selectedId = null;
         $this->deleteName = null;
@@ -85,7 +85,7 @@ class DivisionComponent extends Component
 
     public function render()
     {
-        $divisions = Division::all();
-        return view('livewire.master-data.division', ['divisions' => $divisions]);
+        $educations = Education::all();
+        return view('livewire.admin.master-data.education', ['educations' => $educations]);
     }
 }

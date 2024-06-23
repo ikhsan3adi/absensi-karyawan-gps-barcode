@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin;
 
 use Livewire\Component;
 
@@ -17,7 +17,7 @@ class BarcodeValueInputComponent extends Component
 
     public function render()
     {
-        return view('livewire.barcode-value-input');
+        return view('livewire.admin.barcode-value-input');
     }
 
     public function generate()

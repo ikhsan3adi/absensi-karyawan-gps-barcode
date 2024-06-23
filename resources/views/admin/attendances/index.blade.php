@@ -9,7 +9,7 @@
     <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
       <div class="overflow-x-scroll bg-white shadow-xl dark:bg-gray-800 sm:rounded-lg">
         <div class="p-6 lg:p-8">
-          @livewire('attendance-component')
+          @livewire('admin.attendance-component')
         </div>
       </div>
     </div>

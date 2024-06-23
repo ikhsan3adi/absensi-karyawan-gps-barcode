@@ -6,7 +6,7 @@
 
   <x-slot name="header">
     <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-      {{ __('New Barcode') }}
+      {{ __('Edit Barcode') }}
     </h2>
   </x-slot>
 
@@ -29,7 +29,7 @@
               </div>
               <div class="w-full">
                 <x-label for="value">Value Barcode</x-label>
-                @livewire('barcode-value-input-component', ['value' => $barcode->value])
+                @livewire('admin.barcode-value-input-component', ['value' => $barcode->value])
               </div>
             </div>
 

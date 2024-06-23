@@ -1,22 +1,37 @@
 <?php
 
-namespace App\Livewire\MasterData;
+namespace App\Livewire\Admin;
 
-use App\Livewire\Forms\ShiftForm;
-use App\Models\Shift;
+use App\Livewire\Forms\UserForm;
+use App\Models\User;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
-class ShiftComponent extends Component
+class EmployeeComponent extends Component
 {
-    use InteractsWithBanner;
+    use WithPagination, InteractsWithBanner, WithFileUploads;
 
-    public ShiftForm $form;
+    public UserForm $form;
+    public $groups = [];
     public $deleteName = null;
     public $creating = false;
     public $editing = false;
     public $confirmingDeletion = false;
     public $selectedId = null;
+    public $showDetail = null;
+
+    public function __construct()
+    {
+        $this->groups = User::$groups;
+    }
+
+    public function show($id)
+    {
+        $this->form->setUser(User::find($id));
+        $this->showDetail = true;
+    }
 
     public function showCreating()
     {
@@ -36,9 +51,9 @@ class ShiftComponent extends Component
     {
         $this->form->resetErrorBag();
         $this->editing = true;
-        /** @var Shift $shift */
-        $shift = Shift::find($id);
-        $this->form->setShift($shift);
+        /** @var User $user */
+        $user = User::find($id);
+        $this->form->setUser($user);
     }
 
     public function update()
@@ -46,6 +61,11 @@ class ShiftComponent extends Component
         $this->form->update();
         $this->editing = false;
         $this->banner(__('Updated successfully.'));
+    }
+
+    public function deleteProfilePhoto()
+    {
+        $this->form->deleteProfilePhoto();
     }
 
     public function confirmDeletion($id, $name)
@@ -57,15 +77,15 @@ class ShiftComponent extends Component
 
     public function delete()
     {
-        $shift = Shift::find($this->selectedId);
-        $this->form->setShift($shift)->delete();
+        $user = User::find($this->selectedId);
+        $this->form->setUser($user)->delete();
         $this->confirmingDeletion = false;
         $this->banner(__('Deleted successfully.'));
     }
 
     public function render()
     {
-        $shifts = Shift::all();
-        return view('livewire.master-data.shift', ['shifts' => $shifts]);
+        $users = User::paginate(20);
+        return view('livewire.admin.employees', ['users' => $users]);
     }
 }

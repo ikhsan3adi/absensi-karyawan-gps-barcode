@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Admin\BarcodeController;
 use App\Http\Controllers\Admin\MasterDataController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserAttendanceController;
 use Illuminate\Support\Facades\Auth;
@@ -58,12 +58,9 @@ Route::middleware([
             ->name('admin.barcodes.download');
 
         // User/Employee/Karyawan
-        Route::resource('/users', UserController::class)
-            ->only(['index', 'show'])
-            ->names([
-                'index' => 'admin.users',
-                'show' => 'admin.users.show',
-            ]);
+        Route::resource('/employee', EmployeeController::class)
+            ->only(['index'])
+            ->names(['index' => 'admin.employees']);
 
         // Master Data
         Route::get('/masterdata', MasterDataController::class)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\MasterData;
+namespace App\Livewire\Admin\MasterData;
 
 use App\Models\JobTitle;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +86,6 @@ class JobTitleComponent extends Component
     public function render()
     {
         $jobTitles = JobTitle::all();
-        return view('livewire.master-data.job-title', ['jobTitles' => $jobTitles]);
+        return view('livewire.admin.master-data.job-title', ['jobTitles' => $jobTitles]);
     }
 }

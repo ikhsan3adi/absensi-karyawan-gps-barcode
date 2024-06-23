@@ -28,7 +28,7 @@
               </div>
               <div class="w-full">
                 <x-label for="value">Value Barcode</x-label>
-                @livewire('barcode-value-input-component')
+                @livewire('admin.barcode-value-input-component')
               </div>
             </div>
 

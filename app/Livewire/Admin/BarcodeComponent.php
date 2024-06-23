@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin;
 
 use App\Models\Barcode;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +38,7 @@ class BarcodeComponent extends Component
     public function render()
     {
         $barcodes = Barcode::all();
-        return view('livewire.barcode', [
+        return view('livewire.admin.barcode', [
             'barcodes' => $barcodes
         ]);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin;
 
 use App\Models\Attendance;
 use App\Models\User;
@@ -146,6 +146,6 @@ class AttendanceComponent extends Component
                 $user->attendances = $attendances;
                 return $user;
             });
-        return view('livewire.attendance', ['employees' => $employees, 'dates' => $dates]);
+        return view('livewire.admin.attendance', ['employees' => $employees, 'dates' => $dates]);
     }
 }
