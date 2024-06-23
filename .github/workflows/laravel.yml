@@ -57,9 +57,6 @@ jobs:
       run: sudo rm -rf node_modules
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-      env:
-        DB_CONNECTION: ${{ env.DB_CONNECTION }}
-        DB_DATABASE: ${{ env.DB_DATABASE }}
       run: php artisan test
 
     - name: Execute migrations
