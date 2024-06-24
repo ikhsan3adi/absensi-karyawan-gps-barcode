@@ -161,7 +161,7 @@
                 $isWeekend = $date->isWeekend();
                 $attendance = $attendances->firstWhere(fn($v, $k) => $v['date'] === $date->format('Y-m-d'));
                 $status = ($attendance ?? [
-                    'status' => $isWeekend ? '-' : 'absent',
+                    'status' => $isWeekend || !$date->isPast() ? '-' : 'absent',
                 ])['status'];
                 switch ($status) {
                     case 'present':
@@ -280,21 +280,19 @@
     <div class="px-6 py-4">
       @if ($currentAttendance)
         <div class="flex flex-col gap-3">
-          <div class="flex flex-col gap-3">
-            @if ($currentAttendance['attachment'])
-              <x-label for="attachment" value="{{ __('Attachment') }}"></x-label>
-              <img src="{{ $currentAttendance['attachment'] }}" alt="Attachment"
-                class="max-h-64 object-contain md:max-h-96">
-            @endif
-            @if ($currentAttendance['lat'] && $currentAttendance['lat'])
-              <x-label for="map" value="Koordinat Lokasi Absen"></x-label>
-              <div class="my-2 h-52 w-full md:h-64" id="map"></div>
-            @endif
-          </div>
+          @if ($currentAttendance['attachment'])
+            <x-label for="attachment" value="{{ __('Attachment') }}"></x-label>
+            <img src="{{ $currentAttendance['attachment'] }}" alt="Attachment"
+              class="max-h-64 object-contain md:max-h-96">
+          @endif
           @if ($currentAttendance['note'])
             <x-label for="note" value="Keterangan"></x-label>
             <x-textarea type="text" id="note" disabled
               value="{{ $currentAttendance['note'] }}"></x-textarea>
+          @endif
+          @if ($currentAttendance['lat'] && $currentAttendance['lat'])
+            <x-label for="map" value="Koordinat Lokasi Absen"></x-label>
+            <div class="my-2 h-52 w-full md:h-64" id="map"></div>
           @endif
         </div>
       @endif

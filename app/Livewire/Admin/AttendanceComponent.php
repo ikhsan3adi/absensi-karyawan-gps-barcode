@@ -22,12 +22,10 @@ class AttendanceComponent extends Component
     public ?string $jobTitle = null;
     public ?string $search = null;
     public bool $showDetail = false;
-    public bool $showLocation = false;
     public $currentAttendance = [];
 
     public function show($note, $attachment, $lat, $lng)
     {
-        $this->showLocation = false;
         $this->showDetail = true;
         $this->currentAttendance = [
             'note' => $note,
