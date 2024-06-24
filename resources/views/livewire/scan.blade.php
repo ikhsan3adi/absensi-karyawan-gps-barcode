@@ -2,6 +2,37 @@
   @php
     use Illuminate\Support\Carbon;
   @endphp
+  @pushOnce('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  @endpushOnce
+  @pushOnce('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+      let currentMap = document.getElementById('currentMap');
+      let map = document.getElementById('map');
+
+      setTimeout(() => {
+        toggleCurrentMap();
+        toggleMap();
+      }, 1000);
+
+      function toggleCurrentMap() {
+        const mapIsVisible = currentMap.style.display === "none";
+        currentMap.style.display = mapIsVisible ? "block" : "none";
+        document.querySelector('#toggleCurrentMap').innerHTML = mapIsVisible ?
+          `<x-heroicon-s-chevron-up class="mr-2 h-5 w-5" />` :
+          `<x-heroicon-s-chevron-down class="mr-2 h-5 w-5" />`;
+      }
+
+      function toggleMap() {
+        const mapIsVisible = map.style.display === "none";
+        map.style.display = mapIsVisible ? "block" : "none";
+      }
+    </script>
+  @endpushOnce
+
   @if (!$isAbsence)
     <script src="{{ url('/assets/js/html5-qrcode.min.js') }}"></script>
   @endif
@@ -10,7 +41,6 @@
     @if (!$isAbsence)
       <div class="flex flex-col gap-4">
         <div>
-          {{-- <x-label for="shift" value="{{ $shift_id ? __('Shift') : __('Select Shift') }}" /> --}}
           <x-select id="shift" class="mt-1 block w-full" wire:model="shift_id"
             disabled="{{ $shift_id ? true : false }}">
             <option value="">{{ __('Select Shift') }}</option>
@@ -40,14 +70,19 @@
         {{ __('Date') . ': ' . now()->format('d/m/Y') }}<br>
 
         @if (!is_null($currentLiveCoords))
-          <a href="{{ \App\Helpers::getGoogleMapsUrl($currentLiveCoords[0], $currentLiveCoords[1]) }}" target="_blank"
-            class="underline hover:text-blue-400">
-            {{ __('Your location') . ': ' . $currentLiveCoords[0] . ', ' . $currentLiveCoords[1] }}
-          </a>
+          <div class="flex justify-between">
+            <a href="{{ \App\Helpers::getGoogleMapsUrl($currentLiveCoords[0], $currentLiveCoords[1]) }}" target="_blank"
+              class="underline hover:text-blue-400">
+              {{ __('Your location') . ': ' . $currentLiveCoords[0] . ', ' . $currentLiveCoords[1] }}
+            </a>
+            <button class="text-nowrap h-6" onclick="toggleCurrentMap()" id="toggleCurrentMap">
+              <x-heroicon-s-chevron-down class="mr-2 h-5 w-5" />
+            </button>
+          </div>
         @else
           {{ __('Your location') . ': -, -' }}
         @endif
-
+        <div class="my-6 h-72 w-full md:h-96" id="currentMap" wire:ignore></div>
       </h4>
       <div class="grid grid-cols-2 gap-3 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
         <div
@@ -82,8 +117,9 @@
           </div>
           <x-heroicon-o-arrows-pointing-out class="h-5 w-5" />
         </div>
-        <div
-          class="col-span-2 flex items-center justify-between rounded-md bg-purple-200 px-4 py-2 text-gray-800 dark:bg-purple-900 dark:text-white dark:shadow-gray-700 md:col-span-1 lg:col-span-2 xl:col-span-1">
+        <button
+          class="col-span-2 flex items-center justify-between rounded-md bg-purple-200 px-4 py-2 text-gray-800 dark:bg-purple-900 dark:text-white dark:shadow-gray-700 md:col-span-1 lg:col-span-2 xl:col-span-1"
+          {{ is_null($attendance?->coordinates) ? 'disabled' : 'onclick=toggleMap()' }} id="toggleMap">
           <div>
             <h4 class="text-lg font-semibold md:text-xl">Koordinat Absen</h4>
             @if (is_null($attendance?->coordinates))
@@ -96,8 +132,10 @@
             @endif
           </div>
           <x-heroicon-o-map-pin class="h-6 w-6" />
-        </div>
+        </button>
       </div>
+
+      <div class="my-6 h-52 w-full md:h-64" id="map" wire:ignore></div>
 
       <hr class="my-4">
 
@@ -128,9 +166,18 @@
 
     async function getLocation() {
       if (navigator.geolocation) {
+        const map = L.map('currentMap');
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 21,
+        }).addTo(map);
         navigator.geolocation.watchPosition((position) => {
           console.log(position);
           $wire.$set('currentLiveCoords', [position.coords.latitude, position.coords.longitude]);
+          map.setView([
+            Number(position.coords.latitude),
+            Number(position.coords.longitude),
+          ], 13);
+          L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
         });
       } else {
         document.querySelector('#scanner-error').innerHTML = "Gagal mendeteksi lokasi";
@@ -255,6 +302,18 @@
           errorMsg.innerHTML = '';
         }
       });
+
+      const map = L.map('map').setView([
+        Number({{ $attendance?->lat_lng['lat'] }}),
+        Number({{ $attendance?->lat_lng['lng'] }}),
+      ], 13);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 21,
+      }).addTo(map);
+      L.marker([
+        Number({{ $attendance?->lat_lng['lat'] }}),
+        Number({{ $attendance?->lat_lng['lng'] }}),
+      ]).addTo(map);
     }
   </script>
 @endscript
