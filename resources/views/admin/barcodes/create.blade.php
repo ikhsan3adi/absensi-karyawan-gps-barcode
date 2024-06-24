@@ -103,7 +103,6 @@
             undefined
           @endif
         });
-
       });
 
       let map = document.getElementById('map');
