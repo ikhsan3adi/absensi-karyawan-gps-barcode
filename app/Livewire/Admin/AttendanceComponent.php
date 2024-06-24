@@ -21,15 +21,19 @@ class AttendanceComponent extends Component
     public ?string $division = null;
     public ?string $jobTitle = null;
     public ?string $search = null;
-    public bool $showAttachment = false;
-    public $currentAttachment = [];
+    public bool $showDetail = false;
+    public bool $showLocation = false;
+    public $currentAttendance = [];
 
-    public function showAttendanceAttachment($note, $attachment)
+    public function show($note, $attachment, $lat, $lng)
     {
-        $this->showAttachment = true;
-        $this->currentAttachment = [
+        $this->showLocation = false;
+        $this->showDetail = true;
+        $this->currentAttendance = [
             'note' => $note,
             'attachment' => $attachment,
+            'lat' => $lat,
+            'lng' => $lng,
         ];
     }
 
@@ -112,9 +116,17 @@ class AttendanceComponent extends Component
                             /** @var Collection<Attendance>  */
                             $attendances = Attendance::where('user_id', $user->id)
                                 ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
-                                ->get(['id', 'status', 'date']);
+                                ->get(['id', 'status', 'date', 'coordinates', 'attachment', 'note']);
 
-                            return $attendances->map(fn ($v) => $v->getAttributes())->toArray();
+                            return $attendances->map(
+                                function (Attendance $v) {
+                                    $v->setAttribute('coordinates', $v->lat_lng);
+                                    if ($v->attachment) {
+                                        $v->setAttribute('attachment', $v->attachment_url);
+                                    }
+                                    return $v->getAttributes();
+                                }
+                            )->toArray();
                         }
                     ) ?? []);
                 } else if ($this->month) {
@@ -127,16 +139,17 @@ class AttendanceComponent extends Component
                             $attendances = Attendance::where('user_id', $user->id)
                                 ->whereMonth('date', $my->month)
                                 ->whereYear('date', $my->year)
-                                ->get(['id', 'status', 'date']);
+                                ->get(['id', 'status', 'date', 'coordinates', 'attachment', 'note']);
 
-                            return $attendances->map(fn ($v) => $v->getAttributes())->toArray();
-                            // return [
-                            //     'present' => $attendances->where('status', 'present')->count(),
-                            //     'late' => $attendances->where('status', 'late')->count(),
-                            //     'sick' => $attendances->where('status', 'sick')->count(),
-                            //     'excused' => $attendances->where('status', 'excused')->count(),
-                            //     'absent' => $attendances->where('status', 'absent')->count(),
-                            // ];
+                            return $attendances->map(
+                                function (Attendance $v) {
+                                    $v->setAttribute('coordinates', $v->lat_lng);
+                                    if ($v->attachment) {
+                                        $v->setAttribute('attachment', $v->attachment_url);
+                                    }
+                                    return $v->getAttributes();
+                                }
+                            )->toArray();
                         }
                     ) ?? []);
                 } else {
