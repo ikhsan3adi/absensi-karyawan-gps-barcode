@@ -24,15 +24,23 @@ class AttendanceComponent extends Component
     public bool $showDetail = false;
     public $currentAttendance = [];
 
-    public function show($note, $attachment, $lat, $lng)
+    public function show($attendanceId)
     {
-        $this->showDetail = true;
-        $this->currentAttendance = [
-            'note' => $note,
-            'attachment' => $attachment,
-            'lat' => $lat,
-            'lng' => $lng,
-        ];
+        /** @var Attendance */
+        $attendance = Attendance::find($attendanceId);
+        if ($attendance) {
+            $this->showDetail = true;
+            $this->currentAttendance = $attendance->getAttributes();
+            $this->currentAttendance['coordinates'] = $attendance->lat_lng;
+            $this->currentAttendance['name'] = $attendance->user->name;
+            $this->currentAttendance['nip'] = $attendance->user->nip;
+            if ($attendance->attachment) {
+                $this->currentAttendance['attachment'] = $attendance->attachment_url;
+            }
+            if ($attendance->barcode_id) {
+                $this->currentAttendance['barcode'] = $attendance->barcode;
+            }
+        }
     }
 
     public function mount()

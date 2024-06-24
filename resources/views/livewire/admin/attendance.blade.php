@@ -204,8 +204,7 @@
               @if (!$isPerDayFilter && $attendance && ($attendance['attachment'] || $attendance['note'] || $attendance['coordinates']))
                 <td
                   class="{{ $bgColor }} cursor-pointer text-center text-sm font-medium text-gray-900 dark:text-white">
-                  <button class="w-full px-1 py-3"
-                    wire:click="show('{{ $attendance['note'] }}', '{{ $attendance['attachment'] }}', {{ $attendance['coordinates']['lat'] ?? 'null' }}, {{ $attendance['coordinates']['lng'] ?? 'null' }})"
+                  <button class="w-full px-1 py-3" wire:click="show({{ $attendance['id'] }})"
                     onclick="setLocation({{ $attendance['coordinates']['lat'] ?? 0 }}, {{ $attendance['coordinates']['lng'] ?? 0 }})">
                     {{ $isPerDayFilter ? __($status) : $shortStatus }}
                   </button>
@@ -252,8 +251,7 @@
                 class="cursor-pointer text-center text-sm font-medium text-gray-900 group-hover:bg-gray-100 dark:text-white dark:group-hover:bg-gray-700">
                 <div class="flex items-center justify-center gap-3">
                   @if ($attendance && ($attendance['attachment'] || $attendance['note'] || $attendance['coordinates']))
-                    <x-button type="button"
-                      wire:click="show('{{ $attendance['note'] }}', '{{ $attendance['attachment'] }}', {{ $attendance['coordinates']['lat'] ?? 0 }}, {{ $attendance['coordinates']['lng'] ?? 0 }})"
+                    <x-button type="button" wire:click="show({{ $attendance['id'] }})"
                       onclick="setLocation({{ $attendance['coordinates']['lat'] ?? 0 }}, {{ $attendance['coordinates']['lng'] ?? 0 }})">
                       {{ __('Detail') }}
                     </x-button>
@@ -279,6 +277,24 @@
   <x-modal wire:model="showDetail" onclose="removeMap()">
     <div class="px-6 py-4">
       @if ($currentAttendance)
+        <h3 class="mb-3 text-xl font-semibold">{{ $currentAttendance['name'] }}</h3>
+        <div class="mb-3 w-full">
+          <x-label for="nip" value="{{ __('NIP') }}"></x-label>
+          <x-input type="text" class="w-full" id="nip" disabled
+            value="{{ $currentAttendance['nip'] }}"></x-input>
+        </div>
+        <div class="mb-3 flex w-full gap-3">
+          <div class="w-full">
+            <x-label for="date" value="{{ __('Date') }}"></x-label>
+            <x-input type="text" class="w-full" id="date" disabled
+              value="{{ $currentAttendance['date'] }}"></x-input>
+          </div>
+          <div class="w-full">
+            <x-label for="status" value="{{ __('Status') }}"></x-label>
+            <x-input type="text" class="w-full" id="status" disabled
+              value="{{ __($currentAttendance['status']) }}"></x-input>
+          </div>
+        </div>
         <div class="flex flex-col gap-3">
           @if ($currentAttendance['attachment'])
             <x-label for="attachment" value="{{ __('Attachment') }}"></x-label>
@@ -290,9 +306,30 @@
             <x-textarea type="text" id="note" disabled
               value="{{ $currentAttendance['note'] }}"></x-textarea>
           @endif
-          @if ($currentAttendance['lat'] && $currentAttendance['lat'])
+          @if (
+              $currentAttendance['coordinates'] &&
+                  $currentAttendance['coordinates']['lat'] &&
+                  $currentAttendance['coordinates']['lng']
+          )
             <x-label for="map" value="Koordinat Lokasi Absen"></x-label>
+            <p>{{ $currentAttendance['coordinates']['lat'] }}, {{ $currentAttendance['coordinates']['lng'] }}</p>
             <div class="my-2 h-52 w-full md:h-64" id="map"></div>
+          @endif
+          @if ($currentAttendance['time_in'] || $currentAttendance['time_out'])
+            <div class="grid grid-cols-2 gap-3">
+              <x-label for="time_in" value="Waktu Masuk"></x-label>
+              <x-label for="time_out" value="Waktu Keluar"></x-label>
+              <x-input type="text" id="time_in" disabled
+                value="{{ $currentAttendance['time_in'] ?? '-' }}"></x-input>
+              <x-input type="text" id="time_out" disabled
+                value="{{ $currentAttendance['time_out'] ?? '-' }}"></x-input>
+            </div>
+          @endif
+
+          @if ($currentAttendance['barcode'] ?? false)
+            <x-label for="barcode" value="Barcode"></x-label>
+            <x-input type="text" id="barcode" disabled
+              value="{{ $currentAttendance['barcode']['name'] }}"></x-input>
           @endif
         </div>
       @endif

@@ -155,7 +155,7 @@
             @php
               $isWeekend = $date->isWeekend();
               $status = ($attendances->firstWhere(fn($v, $k) => $v['date'] === $date->format('Y-m-d')) ?? [
-                  'status' => $isWeekend ? '-' : 'absent',
+                  'status' => $isWeekend || !$date->isPast() ? '-' : 'absent',
               ])['status'];
               switch ($status) {
                   case 'present':
