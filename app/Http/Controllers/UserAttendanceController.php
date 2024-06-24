@@ -80,4 +80,9 @@ class UserAttendanceController extends Controller
                 ->with('flash.bannerStyle', 'danger');
         }
     }
+
+    public function history()
+    {
+        return view('attendances.history');
+    }
 }
