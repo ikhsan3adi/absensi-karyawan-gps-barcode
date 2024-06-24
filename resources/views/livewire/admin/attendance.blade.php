@@ -100,6 +100,14 @@
               @endif
             </th>
           @endforeach
+          @if ($isPerDayFilter)
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+              {{ __('Time In') }}
+            </th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+              {{ __('Time Out') }}
+            </th>
+          @endif
           @if (!$isPerDayFilter)
             @foreach (['H', 'T', 'I', 'S', 'A'] as $_st)
               <th scope="col"
@@ -209,6 +217,21 @@
                 </td>
               @endif
             @endforeach
+
+            {{-- Waktu masuk/keluar --}}
+            @if ($isPerDayFilter)
+              @php
+                $attendance = $employee->attendances->isEmpty() ? null : $employee->attendances->first();
+                $timeIn = $attendance ? $attendance['time_in'] : null;
+                $timeOut = $attendance ? $attendance['time_out'] : null;
+              @endphp
+              <td class="{{ $class }} group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
+                {{ $timeIn ?? '-' }}
+              </td>
+              <td class="{{ $class }} group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
+                {{ $timeOut ?? '-' }}
+              </td>
+            @endif
 
             {{-- Total --}}
             @if (!$isPerDayFilter)
