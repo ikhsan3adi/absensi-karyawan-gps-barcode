@@ -11,9 +11,7 @@ use App\Models\User;
 use Database\Factories\DivisionFactory;
 use Database\Factories\EducationFactory;
 use Database\Factories\JobTitleFactory;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +21,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         (new AdminSeeder)->run();
-        User::factory(10)->create();
         foreach (DivisionFactory::$divisions as $value) {
             if (Division::where('name', $value)->exists()) {
                 continue;
