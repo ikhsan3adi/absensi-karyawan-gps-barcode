@@ -211,7 +211,7 @@
                 </td>
               @else
                 <td
-                  class="{{ $bgColor }} cursor-pointer px-1 py-3 text-center text-sm font-medium text-gray-900 dark:text-white">
+                  class="{{ $bgColor }} text-nowrap cursor-pointer px-1 py-3 text-center text-sm font-medium text-gray-900 dark:text-white">
                   {{ $isPerDayFilter ? __($status) : $shortStatus }}
                 </td>
               @endif

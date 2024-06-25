@@ -11,8 +11,8 @@
     <x-input type="month" name="month_filter" id="month_filter" wire:model.live="month" />
   </div>
   <h5 class="mt-3 text-sm">Klik pada tanggal untuk melihat detail</h5>
-  <div class="mt-4 flex flex-col gap-3 lg:flex-row">
-    <div class="grid w-96 grid-cols-7 overflow-x-scroll dark:text-white">
+  <div class="mt-4 flex w-full flex-col gap-3 lg:flex-row">
+    <div class="grid w-96 grid-cols-7 overflow-x-scroll dark:text-white lg:w-[36rem]">
       @foreach (['M', 'S', 'S', 'R', 'K', 'J', 'S'] as $day)
         <div
           class="{{ $day === 'M' ? 'text-red-500' : '' }} {{ $day === 'J' ? 'text-green-600 dark:text-green-500' : '' }} flex h-10 items-center justify-center border border-gray-300 text-center dark:border-gray-600">
@@ -105,7 +105,7 @@
         @endforeach
       @endif
     </div>
-    <div class="grid h-fit grid-cols-2 gap-3 md:grid-cols-4">
+    <div class="grid h-fit w-full grid-cols-2 gap-3 md:grid-cols-4">
       <div
         class="flex items-center justify-between rounded-md bg-green-200 px-4 py-2 text-gray-800 dark:bg-green-900 dark:text-white dark:shadow-gray-700">
         <div>
