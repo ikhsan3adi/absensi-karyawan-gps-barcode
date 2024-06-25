@@ -99,6 +99,11 @@
           <th scope="col">
             {{ __('Job Title') }}
           </th>
+          @if ($isPerDayFilter)
+            <th scope="col">
+              {{ __('Shift') }}
+            </th>
+          @endif
         @endif
         @foreach ($dates as $date)
           <th scope="col" style="padding: 0px 2px; font-size: 14px">
@@ -143,6 +148,11 @@
             <td>
               {{ $employee->jobTitle?->name ?? '-' }}
             </td>
+            @if ($isPerDayFilter)
+              <td>
+                {{ $attendance['shift'] ?? '-' }}
+              </td>
+            @endif
           @endif
           @php
             $presentCount = 0;

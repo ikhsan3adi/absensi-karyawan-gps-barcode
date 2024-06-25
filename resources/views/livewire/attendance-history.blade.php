@@ -185,11 +185,22 @@
             </div>
           @endif
 
-          @if ($currentAttendance['barcode'] ?? false)
-            <x-label for="barcode" value="Barcode"></x-label>
-            <x-input type="text" id="barcode" disabled
-              value="{{ $currentAttendance['barcode']['name'] }}"></x-input>
-          @endif
+          <div class="flex gap-3">
+            @if ($currentAttendance['shift'] ?? false)
+              <div class="w-full">
+                <x-label for="shift" value="Shift"></x-label>
+                <x-input class="w-full" type="text" id="shift" disabled
+                  value="{{ $currentAttendance['shift']['name'] }}"></x-input>
+              </div>
+            @endif
+            @if ($currentAttendance['barcode'] ?? false)
+              <div class="w-full">
+                <x-label for="barcode" value="Barcode"></x-label>
+                <x-input class="w-full" type="text" id="barcode" disabled
+                  value="{{ $currentAttendance['barcode']['name'] }}"></x-input>
+              </div>
+            @endif
+          </div>
         </div>
       @endif
     </div>

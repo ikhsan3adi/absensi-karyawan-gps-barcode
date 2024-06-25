@@ -78,6 +78,11 @@
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
               {{ __('Job Title') }}
             </th>
+            @if ($isPerDayFilter)
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+                {{ __('Shift') }}
+              </th>
+            @endif
           @endif
           @foreach ($dates as $date)
             @php
@@ -146,6 +151,16 @@
               <td class="{{ $class }} text-nowrap group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
                 {{ $employee->jobTitle?->name ?? '-' }}
               </td>
+              @if ($isPerDayFilter)
+                @php
+                  $attendance = $employee->attendances->isEmpty() ? null : $employee->attendances->first();
+                  $timeIn = $attendance ? $attendance['time_in'] : null;
+                  $timeOut = $attendance ? $attendance['time_out'] : null;
+                @endphp
+                <td class="{{ $class }} text-nowrap group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
+                  {{ $attendance['shift'] ?? '-' }}
+                </td>
+              @endif
             @endif
 
             {{-- Absensi --}}
@@ -219,11 +234,6 @@
 
             {{-- Waktu masuk/keluar --}}
             @if ($isPerDayFilter)
-              @php
-                $attendance = $employee->attendances->isEmpty() ? null : $employee->attendances->first();
-                $timeIn = $attendance ? $attendance['time_in'] : null;
-                $timeOut = $attendance ? $attendance['time_out'] : null;
-              @endphp
               <td class="{{ $class }} group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
                 {{ $timeIn ?? '-' }}
               </td>
@@ -326,11 +336,22 @@
             </div>
           @endif
 
-          @if ($currentAttendance['barcode'] ?? false)
-            <x-label for="barcode" value="Barcode"></x-label>
-            <x-input type="text" id="barcode" disabled
-              value="{{ $currentAttendance['barcode']['name'] }}"></x-input>
-          @endif
+          <div class="flex gap-3">
+            @if ($currentAttendance['shift'] ?? false)
+              <div class="w-full">
+                <x-label for="shift" value="Shift"></x-label>
+                <x-input class="w-full" type="text" id="shift" disabled
+                  value="{{ $currentAttendance['shift']['name'] }}"></x-input>
+              </div>
+            @endif
+            @if ($currentAttendance['barcode'] ?? false)
+              <div class="w-full">
+                <x-label for="barcode" value="Barcode"></x-label>
+                <x-input class="w-full" type="text" id="barcode" disabled
+                  value="{{ $currentAttendance['barcode']['name'] }}"></x-input>
+              </div>
+            @endif
+          </div>
         </div>
       @endif
     </div>

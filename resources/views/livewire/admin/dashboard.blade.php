@@ -49,6 +49,9 @@
           <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
             {{ __('Job Title') }}
           </th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+            {{ __('Shift') }}
+          </th>
           <th scope="col"
             class="text-nowrap border border-gray-300 px-1 py-3 text-center text-xs font-medium text-gray-500 dark:border-gray-600 dark:text-gray-300">
             Status
@@ -121,6 +124,9 @@
             </td>
             <td class="{{ $class }} text-nowrap group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
               {{ $employee->jobTitle?->name ?? '-' }}
+            </td>
+            <td class="{{ $class }} text-nowrap group-hover:bg-gray-100 dark:group-hover:bg-gray-700">
+              {{ $attendance->shift?->name ?? '-' }}
             </td>
 
             {{-- Absensi --}}
@@ -209,11 +215,22 @@
             </div>
           @endif
 
-          @if ($currentAttendance['barcode'] ?? false)
-            <x-label for="barcode" value="Barcode"></x-label>
-            <x-input type="text" id="barcode" disabled
-              value="{{ $currentAttendance['barcode']['name'] }}"></x-input>
-          @endif
+          <div class="flex gap-3">
+            @if ($currentAttendance['shift'] ?? false)
+              <div class="w-full">
+                <x-label for="shift" value="Shift"></x-label>
+                <x-input class="w-full" type="text" id="shift" disabled
+                  value="{{ $currentAttendance['shift']['name'] }}"></x-input>
+              </div>
+            @endif
+            @if ($currentAttendance['barcode'] ?? false)
+              <div class="w-full">
+                <x-label for="barcode" value="Barcode"></x-label>
+                <x-input class="w-full" type="text" id="barcode" disabled
+                  value="{{ $currentAttendance['barcode']['name'] }}"></x-input>
+              </div>
+            @endif
+          </div>
         </div>
       @endif
     </div>

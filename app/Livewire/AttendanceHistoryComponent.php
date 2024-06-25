@@ -30,6 +30,9 @@ class AttendanceHistoryComponent extends Component
             if ($attendance->barcode_id) {
                 $this->currentAttendance['barcode'] = $attendance->barcode;
             }
+            if ($attendance->shift_id) {
+                $this->currentAttendance['shift'] = $attendance->shift;
+            }
         }
     }
     public function mount()
