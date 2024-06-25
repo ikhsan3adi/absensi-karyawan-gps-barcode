@@ -91,7 +91,7 @@ class AttendanceComponent extends Component
                 if ($this->date) {
                     $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$this->date",
-                        now()->addHour(),
+                        now()->addMinutes(5),
                         function () use ($user) {
                             $date = Carbon::parse($this->date);
 
@@ -106,6 +106,9 @@ class AttendanceComponent extends Component
                                     if ($v->attachment) {
                                         $v->setAttribute('attachment', $v->attachment_url);
                                     }
+                                    if ($v->shift) {
+                                        $v->setAttribute('shift', $v->shift->name);
+                                    }
                                     return $v->getAttributes();
                                 }
                             )->toArray();
@@ -114,7 +117,7 @@ class AttendanceComponent extends Component
                 } else if ($this->week) {
                     $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$this->week",
-                        now()->addHour(),
+                        now()->addMinutes(5),
                         function () use ($user) {
                             $start = Carbon::parse($this->week)->startOfWeek();
                             $end = Carbon::parse($this->week)->endOfWeek();
@@ -139,7 +142,7 @@ class AttendanceComponent extends Component
                     $my = Carbon::parse($this->month);
                     $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$my->month-$my->year",
-                        now()->addHour(),
+                        now()->addMinutes(5),
                         function () use ($user, $my) {
                             /** @var Collection<Attendance>  */
                             $attendances = Attendance::where('user_id', $user->id)
