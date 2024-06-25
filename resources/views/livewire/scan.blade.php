@@ -14,8 +14,8 @@
       let map = document.getElementById('map');
 
       setTimeout(() => {
-        toggleCurrentMap();
         toggleMap();
+        toggleCurrentMap();
       }, 1000);
 
       function toggleCurrentMap() {
