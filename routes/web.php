@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserAttendanceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -74,4 +75,12 @@ Route::middleware([
         Route::get('/attendances/report', [AttendanceController::class, 'report'])
             ->name('admin.attendances.report');
     });
+});
+
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/livewire/update', $handle);
+});
+
+Livewire::setScriptRoute(function ($handle) {
+    return Route::get(url('/livewire/livewire.js'), $handle);
 });
