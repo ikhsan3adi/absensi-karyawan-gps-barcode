@@ -185,18 +185,30 @@
     }
 
     if (!$wire.isAbsence) {
-      const scanner = new Html5QrcodeScanner(
-        'scanner', {
-          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
-          fps: 15,
-          aspectRatio: 1,
-          qrbox: {
-            width: 280,
-            height: 280
-          },
-          supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+      const scanner = new Html5Qrcode('scanner');
+
+      const config = {
+        formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+        fps: 15,
+        aspectRatio: 1,
+        qrbox: {
+          width: 280,
+          height: 280
+        },
+        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+      };
+
+      async function startScanning() {
+        if (scanner.getState() === Html5QrcodeScannerState.PAUSED) {
+          return scanner.resume();
         }
-      );
+        await scanner.start({
+            facingMode: "environment"
+          },
+          config,
+          onScanSuccess,
+        );
+      }
 
       async function onScanSuccess(decodedText, decodedResult) {
         console.log(`Code matched = ${decodedText}`, decodedResult);
@@ -205,9 +217,8 @@
           scanner.pause(true);
         }
 
-        await scanner.clear();
         if (!(await checkTime())) {
-          scanner.render(onScanSuccess);
+          await startScanning();
           return;
         }
 
@@ -219,7 +230,9 @@
           errorMsg.innerHTML = result;
         }
 
-        scanner.render(onScanSuccess);
+        setTimeout(async () => {
+          await startScanning();
+        }, 500);
       }
 
       async function checkTime() {
@@ -247,6 +260,7 @@
       }
 
       function onAttendanceSuccess() {
+        scanner.stop();
         errorMsg.innerHTML = '';
         document.querySelector('#scanner-result').classList.remove('hidden');
       }
@@ -284,13 +298,13 @@
         if (!shift.value) {
           errorMsg.innerHTML = msg;
         } else {
-          scanner.render(onScanSuccess);
+          startScanning();
           isRendered = true;
         }
       }, 1000);
       shift.addEventListener('change', () => {
         if (!isRendered) {
-          scanner.render(onScanSuccess);
+          startScanning();
           isRendered = true;
           errorMsg.innerHTML = '';
         }
