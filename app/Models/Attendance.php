@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Helpers;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class Attendance extends Model
@@ -72,5 +75,22 @@ class Attendance extends Model
             }
             return Storage::disk(config('jetstream.attachment_disk'))->url($this->attachment);
         });
+    }
+
+    public static function clearUserAttendanceCache(Authenticatable $user, Carbon $date)
+    {
+        if (is_null($user)) return false;
+        $monthYear = "$date->month-$date->year";
+        $week = Helpers::yearWeekString($date->week, $date->year);
+        $ymd = $date->format('Y-m-d');
+
+        try {
+            Cache::forget("attendance-$user->id-$monthYear");
+            Cache::forget("attendance-$user->id-$week");
+            Cache::forget("attendance-$user->id-$ymd");
+            return true;
+        } catch (\Throwable $_) {
+            return false;
+        }
     }
 }

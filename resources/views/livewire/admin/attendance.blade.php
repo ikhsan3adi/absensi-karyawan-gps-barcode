@@ -3,7 +3,6 @@
   $m = Carbon::parse($month);
   $showUserDetail = !$month || $week || $date; // is week or day filter
   $isPerDayFilter = isset($date);
-  $datesWithoutWeekend = '';
 @endphp
 <div>
   @pushOnce('styles')

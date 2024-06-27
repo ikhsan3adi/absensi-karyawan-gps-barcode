@@ -35,4 +35,12 @@ class Helpers
     {
         return "https://maps.google.com/maps?q=$lat,$lng";
     }
+
+    public static function yearWeekString(string|int $week, string|int $year): string
+    {
+        if ($week < 10 && !str_contains($week, '0')) {
+            $week = "0$week";
+        }
+        return "$year-W$week";
+    }
 }
