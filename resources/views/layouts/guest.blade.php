@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{
+    darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system')
+}" x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
+  x-bind:class="{
+      'dark': darkMode === 'dark' ||
+          (darkMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  }">
 
 <head>
   <meta charset="utf-8">
@@ -19,7 +25,7 @@
   @livewireStyles
 </head>
 
-<body x-data="themeSwitcher()" :class="{ 'dark': switchOn }">
+<body class="font-sans antialiased">
   <div class="font-sans text-gray-900 antialiased dark:text-gray-100">
 
     <div class="absolute right-4 top-4">
