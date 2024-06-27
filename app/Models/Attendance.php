@@ -62,9 +62,15 @@ class Attendance extends Model
 
     public function attachmentUrl(): ?Attribute
     {
-        return $this->attachment ?
-            Attribute::get(function (): string {
-                return Storage::disk(config('jetstream.attachment_disk'))->url($this->attachment);
-            }) : null;
+        if (!$this->attachment) {
+            return null;
+        }
+
+        return Attribute::get(function (): string {
+            if (str_contains($this->attachment, 'https://') || str_contains($this->attachment, 'http://')) {
+                return $this->attachment;
+            }
+            return Storage::disk(config('jetstream.attachment_disk'))->url($this->attachment);
+        });
     }
 }
