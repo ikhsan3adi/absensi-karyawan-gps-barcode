@@ -7,7 +7,6 @@ use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class UserAttendanceController extends Controller
 {
@@ -41,7 +40,7 @@ class UserAttendanceController extends Controller
             }
 
             $fromDate = Carbon::parse($request->from);
-            $fromDate->range(Carbon::parse($request->to ?? $fromDate))
+            $fromDate->range($toDate = Carbon::parse($request->to ?? $fromDate))
                 ->forEach(function (Carbon $date) use ($request, $newAttachment) {
                     $existing = Attendance::where('user_id', Auth::user()->id)
                         ->where('date', $date->format('Y-m-d'))
@@ -71,6 +70,11 @@ class UserAttendanceController extends Controller
                         ]);
                     }
                 });
+
+            Attendance::clearUserAttendanceCache(Auth::user(), $fromDate);
+            if (!$fromDate->isSameMonth($toDate)) {
+                Attendance::clearUserAttendanceCache(Auth::user(), $toDate);
+            }
 
             return redirect(route('home'))
                 ->with('flash.banner', __('Created successfully.'));

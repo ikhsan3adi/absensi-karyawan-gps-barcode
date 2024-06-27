@@ -60,6 +60,7 @@ class ScanComponent extends Component
 
         if ($attendance) {
             $this->setAttendance($attendance->fresh());
+            Attendance::clearUserAttendanceCache(Auth::user(), Carbon::parse($attendance->date));
             return true;
         }
     }
@@ -97,7 +98,7 @@ class ScanComponent extends Component
         ]);
     }
 
-    public function setAttendance(Attendance $attendance)
+    protected function setAttendance(Attendance $attendance)
     {
         $this->attendance = $attendance;
         $this->shift_id = $attendance->shift_id;
