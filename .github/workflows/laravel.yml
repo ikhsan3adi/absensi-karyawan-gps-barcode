@@ -54,7 +54,7 @@ jobs:
       run: npm ci && npm run build
 
     - name: Delete node_modules
-      run: sudo rm -rf node_modules
+      run: rm -rf node_modules
 
     - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
       run: php artisan test
@@ -63,4 +63,4 @@ jobs:
       run: php artisan migrate:fresh
 
     - name: Execute seeders
-      run: php artisan db:seed
+      run: php artisan db:seed FakeDataSeeder
