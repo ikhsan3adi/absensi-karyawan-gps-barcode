@@ -45,7 +45,7 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
     - name: Generate key
-      run: php artisan key:generate
+      run: php artisan key:generate --force
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
@@ -60,7 +60,7 @@ jobs:
       run: php artisan test
 
     - name: Execute migrations
-      run: php artisan migrate:fresh
+      run: php artisan migrate:fresh --force
 
     - name: Execute seeders
-      run: php artisan db:seed FakeDataSeeder
+      run: php artisan db:seed FakeDataSeeder --force
