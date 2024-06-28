@@ -5,7 +5,7 @@
       <div class="flex">
         <!-- Logo -->
         <div class="flex shrink-0 items-center">
-          <a href="{{ route('home') }}">
+          <a href="{{ Auth::user()->group == 'admin' ? route('admin.dashboard') : route('home') }}">
             <x-application-mark class="block h-9 w-auto" />
           </a>
         </div>
