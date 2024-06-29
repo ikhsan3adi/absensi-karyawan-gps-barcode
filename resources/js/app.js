@@ -1,5 +1,20 @@
 import './bootstrap';
 
+Alpine.store('darkMode', {
+    on: localStorage.getItem('isDark') === 'true',
+    init() {
+        this.on = localStorage.getItem('isDark') === 'true' ?? window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (this.on) document.documentElement.classList.add('dark');
+    },
+    toggle() {
+        this.on = !this.on;
+        localStorage.setItem('isDark', this.on);
+        this.on ?
+            document.documentElement.classList.add('dark') :
+            document.documentElement.classList.remove('dark');
+    }
+});
+
 let map;
 
 window.initializeMap = ({ onUpdate, location }) => {
