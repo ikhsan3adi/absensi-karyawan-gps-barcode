@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\ExtendedCarbon;
 use App\Helpers;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -80,8 +81,9 @@ class Attendance extends Model
     public static function clearUserAttendanceCache(Authenticatable $user, Carbon $date)
     {
         if (is_null($user)) return false;
+        $date = new ExtendedCarbon($date);
         $monthYear = "$date->month-$date->year";
-        $week = Helpers::yearWeekString($date->week, $date->year);
+        $week = $date->yearWeekString();
         $ymd = $date->format('Y-m-d');
 
         try {
