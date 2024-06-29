@@ -44,7 +44,7 @@
           <x-select id="shift" class="mt-1 block w-full" wire:model="shift_id"
             disabled="{{ $shift_id ? true : false }}">
             <option value="">{{ __('Select Shift') }}</option>
-            @foreach (App\Models\Shift::all() as $shift)
+            @foreach ($shifts as $shift)
               <option value="{{ $shift->id }}" {{ $shift->id == $shift_id ? 'selected' : '' }}>
                 {{ $shift->name . ' | ' . $shift->start_time . ' - ' . $shift->end_time }}
               </option>

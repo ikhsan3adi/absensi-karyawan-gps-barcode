@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\ExtendedCarbon;
 use App\Helpers;
 use App\Models\Attendance;
 use App\Models\Barcode;
@@ -16,6 +17,7 @@ class ScanComponent extends Component
 {
     public ?Attendance $attendance = null;
     public $shift_id = null;
+    public $shifts = null;
     public ?array $currentLiveCoords = null;
     public string $successMsg = '';
     public bool $isAbsence = false;
@@ -118,11 +120,21 @@ class ScanComponent extends Component
 
     public function mount()
     {
+        $this->shifts = Shift::all();
+
         /** @var Attendance */
         $attendance = Attendance::where('user_id', Auth::user()->id)
             ->where('date', date('Y-m-d'))->first();
         if ($attendance) {
             $this->setAttendance($attendance);
+        } else {
+            // get closest shift from current time
+            $closest = ExtendedCarbon::now()
+                ->closestFromDateArray($this->shifts->pluck('start_time')->toArray());
+
+            $this->shift_id = $this->shifts
+                ->where(fn (Shift $q) => $q->start_time == $closest->format('H:i:s'))
+                ->first()->id;
         }
     }
 
