@@ -71,22 +71,22 @@
   <script type="text/javascript">
     let barcodes = {{ $barcodes->map(fn($barcode) => $barcode->id) }};
 
-    let isDark = window.themeSwitcher().switchOn;
+    let isDark = $store.darkMode.on;
 
     barcodes.forEach(element => {
       new QRCode(document.getElementById("qrcode" + element), {
         text: '{{ $barcode->value }}',
-        colorDark: window.themeSwitcher().switchOn ? "#ffffff" : "#000000",
-        colorLight: window.themeSwitcher().switchOn ? "#000000" : "#ffffff",
+        colorDark: $store.darkMode.on ? "#ffffff" : "#000000",
+        colorLight: $store.darkMode.on ? "#000000" : "#ffffff",
         correctLevel: QRCode.CorrectLevel.M
       });
     });
     setInterval(() => {
-      if (isDark == window.themeSwitcher().switchOn &&
+      if (isDark == $store.darkMode.on &&
         document.getElementById("qrcode" + barcodes[0]).hasAttribute("title")) {
         return;
       }
-      isDark = window.themeSwitcher().switchOn;
+      isDark = $store.darkMode.on;
       barcodes.forEach(element => {
         if (!document.getElementById("qrcode" + element)) {
           return;
@@ -94,8 +94,8 @@
         document.getElementById("qrcode" + element).innerHTML = "";
         new QRCode(document.getElementById("qrcode" + element), {
           text: '{{ $barcode->value }}',
-          colorDark: window.themeSwitcher().switchOn ? "#ffffff" : "#000000",
-          colorLight: window.themeSwitcher().switchOn ? "#000000" : "#ffffff",
+          colorDark: $store.darkMode.on ? "#ffffff" : "#000000",
+          colorLight: $store.darkMode.on ? "#000000" : "#ffffff",
           correctLevel: QRCode.CorrectLevel.M,
         });
       });
