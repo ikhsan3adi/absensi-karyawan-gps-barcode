@@ -12,8 +12,8 @@ class FakeDataSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
         (new DatabaseSeeder)->run();
+        User::factory(10)->create();
         (new AttendanceSeeder)->run();
     }
 }

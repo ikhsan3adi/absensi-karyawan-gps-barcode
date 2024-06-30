@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Division;
+use App\Models\Education;
+use App\Models\JobTitle;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -43,7 +46,9 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            // 'current_team_id' => null,
+            'education_id' => Education::inRandomOrder()->first()?->id,
+            'division_id' => Division::inRandomOrder()->first()?->id,
+            'job_title_id' => JobTitle::inRandomOrder()->first()?->id,
         ];
     }
 
