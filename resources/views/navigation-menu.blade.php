@@ -28,6 +28,9 @@
             <x-nav-link href="{{ route('admin.masters') }}" :active="request()->routeIs('admin.masters')">
               {{ __('Master Data') }}
             </x-nav-link>
+            <x-nav-link href="{{ route('admin.import-export') }}" :active="request()->routeIs('admin.import-export')">
+              {{ __('Import & Export') }}
+            </x-nav-link>
           @else
             <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
               {{ __('Home') }}
@@ -132,6 +135,9 @@
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.masters') }}" :active="request()->routeIs('admin.masters')">
           {{ __('Master Data') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link href="{{ route('admin.import-export') }}" :active="request()->routeIs('admin.import-export')">
+          {{ __('Import & Export') }}
         </x-responsive-nav-link>
       @else
         <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">

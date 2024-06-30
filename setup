@@ -1,0 +1,7 @@
+php -r "file_exists('.env') || copy('.env.example', '.env');"
+composer install --no-progress --no-dev
+php artisan key:generate
+npm ci
+npm run build
+php artisan migrate:fresh
+php artisan db:seed DatabaseSeeder

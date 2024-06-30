@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BarcodeController;
 use App\Http\Controllers\Admin\MasterDataController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\ImportExportController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserAttendanceController;
 use Illuminate\Support\Facades\Auth;
@@ -74,6 +75,20 @@ Route::middleware([
         // Presence/Absensi
         Route::get('/attendances/report', [AttendanceController::class, 'report'])
             ->name('admin.attendances.report');
+
+        // Import/Export
+        Route::get('/import-export', [ImportExportController::class, 'index'])
+            ->name('admin.import-export');
+
+        Route::post('/users/import', [ImportExportController::class, 'importUsers'])
+            ->name('admin.users.import');
+        Route::post('/attendances/import', [ImportExportController::class, 'importAttendances'])
+            ->name('admin.attendances.import');
+
+        Route::get('/users/export', [ImportExportController::class, 'exportUsers'])
+            ->name('admin.users.export');
+        Route::get('/attendances/export', [ImportExportController::class, 'exportAttendances'])
+            ->name('admin.attendances.export');
     });
 });
 

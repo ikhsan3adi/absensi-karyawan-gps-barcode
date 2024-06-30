@@ -31,7 +31,7 @@ return new class extends Migration
             $table->foreignId('job_title_id')->nullable()->constrained('job_titles');
 
             $table->string('password');
-            // $table->string('raw_password')->nullable();
+            $table->string('raw_password')->nullable();
 
             $table->enum('group', ['user', 'admin']);
             $table->timestamp('email_verified_at')->nullable();
