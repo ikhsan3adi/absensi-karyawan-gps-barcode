@@ -171,7 +171,9 @@
                   $currentAttendance['coordinates']['lng']
           )
             <x-label for="map" value="Koordinat Lokasi Absen"></x-label>
-            <p>{{ $currentAttendance['coordinates']['lat'] }}, {{ $currentAttendance['coordinates']['lng'] }}</p>
+            <p class="dark:text-gray-300">
+              {{ $currentAttendance['coordinates']['lat'] }}, {{ $currentAttendance['coordinates']['lng'] }}
+            </p>
             <div class="my-2 h-52 w-full md:h-64" id="map"></div>
           @endif
           @if ($currentAttendance['time_in'] || $currentAttendance['time_out'])
