@@ -3,6 +3,8 @@
 namespace App\Imports;
 
 use App\Models\Division;
+use App\Models\Education;
+use App\Models\JobTitle;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -21,9 +23,12 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
      */
     public function model(array $row)
     {
-        $division_id = Division::where('name', $row['division'])->first()?->id;
-        $job_title_id = Division::where('name', $row['job_title'])->first()?->id;
-        $education_id = Division::where('name', $row['education'])->first()?->id;
+        $division_id = Division::where('name', $row['division'])->first()?->id
+            ?? Division::create(['name' => $row['division']])?->id;
+        $job_title_id = JobTitle::where('name', $row['job_title'])->first()?->id
+            ?? JobTitle::create(['name' => $row['job_title']])?->id;
+        $education_id = Education::where('name', $row['education'])->first()?->id
+            ?? Education::create(['name' => $row['education']])?->id;
         $user = (new User)->forceFill([
             'nip' => $row['nip'],
             'name' => $row['name'],
