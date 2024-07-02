@@ -30,6 +30,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
         $education_id = Education::where('name', $row['education'])->first()?->id
             ?? Education::create(['name' => $row['education']])?->id;
         $user = (new User)->forceFill([
+            'id' => $row['id'],
             'nip' => $row['nip'],
             'name' => $row['name'],
             'email' => $row['email'],
