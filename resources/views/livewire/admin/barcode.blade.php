@@ -9,9 +9,9 @@
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
     @foreach ($barcodes as $barcode)
       <div
-        class="pointer-events-none flex flex-col rounded-lg bg-white p-4 shadow hover:bg-gray-100 dark:bg-gray-800 dark:shadow-gray-600 hover:dark:bg-gray-700">
+        class="flex flex-col rounded-lg bg-white p-4 shadow hover:bg-gray-100 dark:bg-gray-800 dark:shadow-gray-600 hover:dark:bg-gray-700">
 
-        <div class="pointer-events-auto mt-4 flex items-center justify-center gap-2">
+        <div class="mt-4 flex items-center justify-center gap-2">
           <x-secondary-button href="{{ route('admin.barcodes.download', $barcode->id) }}">
             Download
           </x-secondary-button>
@@ -22,21 +22,17 @@
             Delete
           </x-danger-button>
         </div>
-        <a href="{{ route('admin.barcodes.show', $barcode->id) }}" class="pointer-events-auto">
-          <div class="container flex items-center justify-center p-4">
-            <div id="qrcode{{ $barcode->id }}" class="h-64 w-64 bg-transparent">
-            </div>
+        <div class="container flex items-center justify-center p-4">
+          <div id="qrcode{{ $barcode->id }}" class="h-64 w-64 bg-transparent">
           </div>
-        </a>
-        <a href="{{ route('admin.barcodes.show', $barcode->id) }}" class="pointer-events-auto">
-          <h3 class="mb-3 text-center text-lg font-semibold leading-tight text-gray-800 dark:text-white">
-            {{ $barcode->name }}
-          </h3>
-        </a>
+        </div>
+        <h3 class="mb-3 text-center text-lg font-semibold leading-tight text-gray-800 dark:text-white">
+          {{ $barcode->name }}
+        </h3>
         <ul class="list-disc pl-4 dark:text-gray-400">
           <li>
-              target="_blank" class="pointer-events-auto hover:text-blue-500 hover:underline">
             <a href="https://www.google.com/maps/search/?api=1&query={{ $barcode->latitude }},{{ $barcode->longitude }}"
+              target="_blank" class="hover:text-blue-500 hover:underline">
               {{ __('Coords') . ': ' . $barcode->latitude . ', ' . $barcode->longitude }}
             </a>
           </li>
