@@ -22,6 +22,6 @@ class BarcodeValueInputComponent extends Component
 
     public function generate()
     {
-        $this->value = fake()->ean13();
+        $this->value = rand(1234567890123, 9999999999999);
     }
 }
