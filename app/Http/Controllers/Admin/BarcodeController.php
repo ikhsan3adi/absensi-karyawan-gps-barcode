@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\BarcodeGenerator;
-use App\Helpers;
 use App\Http\Controllers\Controller;
 use App\Models\Barcode;
 use Illuminate\Http\Request;
@@ -47,7 +46,8 @@ class BarcodeController extends Controller
             Barcode::create([
                 'name' => $request->name,
                 'value' => $request->value,
-                'coordinates' => Helpers::createPointQuery($request->lat, $request->lng),
+                'latitude' => doubleval($request->lat),
+                'longitude' => doubleval($request->lng),
                 'radius' => $request->radius,
             ]);
             return redirect()->route('admin.barcodes')->with('flash.banner', __('Created successfully.'));
@@ -72,7 +72,8 @@ class BarcodeController extends Controller
             $barcode->update([
                 'name' => $request->name,
                 'value' => $request->value,
-                'coordinates' => Helpers::createPointQuery($request->lat, $request->lng),
+                'latitude' => doubleval($request->lat),
+                'longitude' => doubleval($request->lng),
                 'radius' => $request->radius,
             ]);
             return redirect()->route('admin.barcodes')->with('flash.banner', __('Updated successfully.'));

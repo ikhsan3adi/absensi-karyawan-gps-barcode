@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Helpers;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,12 +14,19 @@ class Barcode extends Model
     protected $fillable = [
         'name',
         'value',
-        'coordinates',
+        'latitude',
+        'longitude',
         'radius',
     ];
 
-    function getLatLngAttribute(): array
+    function getLatLngAttribute(): array|null
     {
-        return Helpers::unpackPoint($this->coordinates);
+        if (is_null($this->latitude) || is_null($this->longitude)) {
+            return null;
+        }
+        return  [
+            'lat' => $this->latitude,
+            'lng' => $this->longitude
+        ];
     }
 }

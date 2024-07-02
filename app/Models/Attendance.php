@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\ExtendedCarbon;
-use App\Helpers;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
@@ -25,7 +24,8 @@ class Attendance extends Model
         'time_in',
         'time_out',
         'shift_id',
-        'coordinates',
+        'latitude',
+        'longitude',
         'status',
         'note',
         'attachment',
@@ -39,10 +39,6 @@ class Attendance extends Model
             'time_out' => 'datetime:H:i:s',
         ];
     }
-
-    protected $hidden = [
-        'coordinates',
-    ];
 
     public function user()
     {
@@ -59,9 +55,15 @@ class Attendance extends Model
         return $this->belongsTo(Shift::class);
     }
 
-    function getLatLngAttribute(): array
+    function getLatLngAttribute(): array|null
     {
-        return Helpers::unpackPoint($this->coordinates);
+        if (is_null($this->latitude) || is_null($this->longitude)) {
+            return null;
+        }
+        return [
+            'lat' => $this->latitude,
+            'lng' => $this->longitude
+        ];
     }
 
     public function attachmentUrl(): ?Attribute

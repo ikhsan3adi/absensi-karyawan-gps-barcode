@@ -103,8 +103,8 @@
               </div>
             </div>
 
-            <input type="hidden" id="lat" name="lat" value="{{ $attendance?->lat_lng['lat'] }}">
-            <input type="hidden" id="lng" name="lng" value="{{ $attendance?->lat_lng['lng'] }}">
+            <input type="hidden" id="lat" name="lat" value="{{ $attendance?->latitude }}">
+            <input type="hidden" id="lng" name="lng" value="{{ $attendance?->longitude }}">
 
             <div class="mb-3 mt-4 flex items-center justify-end">
               <x-button class="ms-4">

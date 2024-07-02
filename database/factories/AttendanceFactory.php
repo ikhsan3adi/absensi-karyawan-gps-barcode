@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Helpers;
 use App\Models\Barcode;
 use App\Models\Shift;
 use App\Models\User;
@@ -57,10 +56,8 @@ class AttendanceFactory extends Factory
                 'time_out' => $time_out,
                 'status' => $late ? 'late' : 'present',
                 'shift_id' => $shift->id,
-                'coordinates' => Helpers::createPointQuery(
-                    $barcode->lat_lng['lat'],
-                    $barcode->lat_lng['lng']
-                ),
+                'latitude' => $barcode->latitude,
+                'longitude' => $barcode->longitude,
                 'note' => null,
             ];
         });

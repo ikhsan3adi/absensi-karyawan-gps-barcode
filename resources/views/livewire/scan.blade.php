@@ -119,15 +119,15 @@
         </div>
         <button
           class="col-span-2 flex items-center justify-between rounded-md bg-purple-200 px-4 py-2 text-gray-800 dark:bg-purple-900 dark:text-white dark:shadow-gray-700 md:col-span-1 lg:col-span-2 xl:col-span-1"
-          {{ is_null($attendance?->coordinates) ? 'disabled' : 'onclick=toggleMap()' }} id="toggleMap">
+          {{ is_null($attendance?->lat_lng) ? 'disabled' : 'onclick=toggleMap()' }} id="toggleMap">
           <div>
             <h4 class="text-lg font-semibold md:text-xl">Koordinat Absen</h4>
-            @if (is_null($attendance?->coordinates))
+            @if (is_null($attendance?->lat_lng))
               Belum Absen
             @else
-              <a href="{{ \App\Helpers::getGoogleMapsUrl($attendance?->lat_lng['lat'], $attendance?->lat_lng['lng']) }}"
+              <a href="{{ \App\Helpers::getGoogleMapsUrl($attendance?->latitude, $attendance?->longitude) }}"
                 target="_blank" class="underline hover:text-blue-400">
-                {{ $attendance?->lat_lng['lat'] . ', ' . $attendance?->lat_lng['lng'] }}
+                {{ $attendance?->latitude . ', ' . $attendance?->longitude }}
               </a>
             @endif
           </div>
@@ -318,15 +318,15 @@
       });
 
       const map = L.map('map').setView([
-        Number({{ $attendance?->lat_lng['lat'] }}),
-        Number({{ $attendance?->lat_lng['lng'] }}),
+        Number({{ $attendance?->latitude }}),
+        Number({{ $attendance?->longitude }}),
       ], 13);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 21,
       }).addTo(map);
       L.marker([
-        Number({{ $attendance?->lat_lng['lat'] }}),
-        Number({{ $attendance?->lat_lng['lng'] }}),
+        Number({{ $attendance?->latitude }}),
+        Number({{ $attendance?->longitude }}),
       ]).addTo(map);
     }
   </script>

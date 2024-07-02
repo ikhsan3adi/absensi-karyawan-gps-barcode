@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('value')->unique();
-            $table->geography('coordinates', 'POINT'); // lokasi barcode
+            $table->double('latitude')->default(0); // lokasi barcode sumbu Y
+            $table->double('longitude')->default(0); // lokasi barcode sumbu X
             $table->float('radius'); // jarak maksimal absen dari lokasi barcode (dalam meter)
             $table->timestamps();
         });

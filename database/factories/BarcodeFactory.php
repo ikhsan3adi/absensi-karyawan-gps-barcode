@@ -23,15 +23,8 @@ class BarcodeFactory extends Factory
                 ->randomElement(['Barcode 1', 'Barcode 2', 'Barcode 3', 'Barcode 4', 'Barcode 5']),
             'value' => fake()->ean13(),
             'radius' => 50,
-            'coordinates' => $this->generateCoordinates(),
+            'latitude' => fake()->latitude(-90, 90),
+            'longitude' => fake()->longitude(-90, 90),
         ];
-    }
-
-    function generateCoordinates()
-    {
-        $lat = fake()->latitude(-90, 90);
-        $lng = fake()->longitude(-90, 90);
-        $sql = "ST_GeomFromText('POINT(" . $lat . ' ' . $lng . ")', 4326)";
-        return DB::raw($sql);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -51,10 +50,8 @@ class UserAttendanceController extends Controller
                             'status' => $request->status,
                             'note' => $request->note,
                             'attachment' => $newAttachment ?? $existing->attachment,
-                            'coordinates' => $request->lat ? Helpers::createPointQuery(
-                                floatval($request->lat),
-                                floatval($request->lng)
-                            ) : null,
+                            'latitude' => doubleval($request->lat) ?? $existing->latitude,
+                            'longitude' => doubleval($request->lng) ?? $existing->longitude,
                         ]);
                     } else {
                         Attendance::create([
@@ -63,10 +60,8 @@ class UserAttendanceController extends Controller
                             'date' => $date->format('Y-m-d'),
                             'note' => $request->note,
                             'attachment' => $newAttachment ?? null,
-                            'coordinates' => $request->lat ? Helpers::createPointQuery(
-                                floatval($request->lat),
-                                floatval($request->lng)
-                            ) : null,
+                            'latitude' => $request->lat ? doubleval($request->lat) : null,
+                            'longitude' => $request->lng ? doubleval($request->lng) : null,
                         ]);
                     }
                 });

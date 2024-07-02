@@ -22,6 +22,8 @@ class AttendanceHistoryComponent extends Component
             $this->showDetail = true;
             $this->currentAttendance = $attendance->getAttributes();
             $this->currentAttendance['coordinates'] = $attendance->lat_lng;
+            $this->currentAttendance['lat'] = $attendance->latitude;
+            $this->currentAttendance['lng'] = $attendance->longitude;
             $this->currentAttendance['name'] = $attendance->user->name;
             $this->currentAttendance['nip'] = $attendance->user->nip;
             if ($attendance->attachment) {
@@ -57,11 +59,13 @@ class AttendanceHistoryComponent extends Component
                 $attendances = Attendance::where('user_id', $user->id)
                     ->whereMonth('date', $date->month)
                     ->whereYear('date', $date->year)
-                    ->get(['id', 'status', 'date', 'coordinates', 'attachment', 'note']);
+                    ->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
 
                 return $attendances->map(
                     function (Attendance $v) {
                         $v->setAttribute('coordinates', $v->lat_lng);
+                        $v->setAttribute('lat', $v->latitude);
+                        $v->setAttribute('lng', $v->longitude);
                         if ($v->attachment) {
                             $v->setAttribute('attachment', $v->attachment_url);
                         }

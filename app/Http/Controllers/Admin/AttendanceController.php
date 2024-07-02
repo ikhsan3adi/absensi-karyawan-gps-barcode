@@ -68,6 +68,8 @@ class AttendanceController extends Controller
                             return $attendances->map(
                                 function (Attendance $v) {
                                     $v->setAttribute('coordinates', $v->lat_lng);
+                                    $v->setAttribute('lat', $v->latitude);
+                                    $v->setAttribute('lng', $v->longitude);
                                     if ($v->attachment) {
                                         $v->setAttribute('attachment', $v->attachment_url);
                                     }

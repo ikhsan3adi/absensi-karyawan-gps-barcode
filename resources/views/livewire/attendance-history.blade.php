@@ -80,7 +80,7 @@
         @endphp
         @if ($attendance && ($attendance['attachment'] || $attendance['note'] || $attendance['coordinates']))
           <button class="{{ $bgColor }} h-14 w-full py-1 text-center" wire:click="show({{ $attendance['id'] }})"
-            onclick="setLocation({{ $attendance['coordinates']['lat'] ?? 0 }}, {{ $attendance['coordinates']['lng'] ?? 0 }})">
+            onclick="setLocation({{ $attendance['lat'] ?? 0 }}, {{ $attendance['lng'] ?? 0 }})">
             <span
               class="{{ $date->isSunday() ? 'text-red-500' : '' }} {{ $date->isFriday() ? 'text-green-600 dark:text-green-500' : '' }}">
               {{ $date->format('d') }}
@@ -165,14 +165,10 @@
             <x-label for="note" value="Keterangan"></x-label>
             <x-textarea type="text" id="note" disabled value="{{ $currentAttendance['note'] }}"></x-textarea>
           @endif
-          @if (
-              $currentAttendance['coordinates'] &&
-                  $currentAttendance['coordinates']['lat'] &&
-                  $currentAttendance['coordinates']['lng']
-          )
+          @if ($currentAttendance['lat'] && $currentAttendance['lng'])
             <x-label for="map" value="Koordinat Lokasi Absen"></x-label>
             <p class="dark:text-gray-300">
-              {{ $currentAttendance['coordinates']['lat'] }}, {{ $currentAttendance['coordinates']['lng'] }}
+              {{ $currentAttendance['lat'] }}, {{ $currentAttendance['lng'] }}
             </p>
             <div class="my-2 h-52 w-full md:h-64" id="map"></div>
           @endif

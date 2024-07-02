@@ -19,7 +19,8 @@ class DashboardComponent extends Component
         if ($attendance) {
             $this->showDetail = true;
             $this->currentAttendance = $attendance->getAttributes();
-            $this->currentAttendance['coordinates'] = $attendance->lat_lng;
+            $this->currentAttendance['lat'] = $attendance->latitude;
+            $this->currentAttendance['lng'] = $attendance->longitude;
             $this->currentAttendance['name'] = $attendance->user->name;
             $this->currentAttendance['nip'] = $attendance->user->nip;
             if ($attendance->attachment) {

@@ -35,9 +35,9 @@
         </a>
         <ul class="list-disc pl-4 dark:text-gray-400">
           <li>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ $barcode->lat_lng['lat'] }},{{ $barcode->lat_lng['lng'] }}"
               target="_blank" class="pointer-events-auto hover:text-blue-500 hover:underline">
-              {{ __('Coords') . ': ' . $barcode->lat_lng['lat'] . ', ' . $barcode->latLng['lng'] }}
+            <a href="https://www.google.com/maps/search/?api=1&query={{ $barcode->latitude }},{{ $barcode->longitude }}"
+              {{ __('Coords') . ': ' . $barcode->latitude . ', ' . $barcode->longitude }}
             </a>
           </li>
           <li> {{ __('Radius (meter)') }}: {{ $barcode->radius }}</li>

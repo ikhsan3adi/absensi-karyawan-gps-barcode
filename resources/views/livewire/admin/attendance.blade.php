@@ -219,7 +219,7 @@
                 <td
                   class="{{ $bgColor }} cursor-pointer text-center text-sm font-medium text-gray-900 dark:text-white">
                   <button class="w-full px-1 py-3" wire:click="show({{ $attendance['id'] }})"
-                    onclick="setLocation({{ $attendance['coordinates']['lat'] ?? 0 }}, {{ $attendance['coordinates']['lng'] ?? 0 }})">
+                    onclick="setLocation({{ $attendance['lat'] ?? 0 }}, {{ $attendance['lng'] ?? 0 }})">
                     {{ $isPerDayFilter ? __($status) : $shortStatus }}
                   </button>
                 </td>
@@ -261,7 +261,7 @@
                 <div class="flex items-center justify-center gap-3">
                   @if ($attendance && ($attendance['attachment'] || $attendance['note'] || $attendance['coordinates']))
                     <x-button type="button" wire:click="show({{ $attendance['id'] }})"
-                      onclick="setLocation({{ $attendance['coordinates']['lat'] ?? 0 }}, {{ $attendance['coordinates']['lng'] ?? 0 }})">
+                      onclick="setLocation({{ $attendance['lat'] ?? 0 }}, {{ $attendance['lng'] ?? 0 }})">
                       {{ __('Detail') }}
                     </x-button>
                   @else
@@ -315,14 +315,10 @@
             <x-textarea type="text" id="note" disabled
               value="{{ $currentAttendance['note'] }}"></x-textarea>
           @endif
-          @if (
-              $currentAttendance['coordinates'] &&
-                  $currentAttendance['coordinates']['lat'] &&
-                  $currentAttendance['coordinates']['lng']
-          )
+          @if ($currentAttendance['lat'] && $currentAttendance['lng'])
             <x-label for="map" value="Koordinat Lokasi Absen"></x-label>
             <p class="dark:text-gray-300">
-              {{ $currentAttendance['coordinates']['lat'] }}, {{ $currentAttendance['coordinates']['lng'] }}
+              {{ $currentAttendance['lat'] }}, {{ $currentAttendance['lng'] }}
             </p>
             <div class="my-2 h-52 w-full md:h-64" id="map"></div>
           @endif

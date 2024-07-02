@@ -2,11 +2,9 @@
 
 namespace App\Imports;
 
-use App\Helpers;
 use App\Models\Attendance;
 use App\Models\Shift;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -22,10 +20,9 @@ class AttendancesImport implements ToModel, WithHeadingRow, WithValidation, Skip
      */
     public function model(array $row)
     {
-        $coordinates = null;
+        [$lat, $lng] = [null, null];
         if (isset($row['coordinates'])) {
             [$lat, $lng] = explode(',', $row['coordinates']);
-            $coordinates = Helpers::createPointQuery(floatval($lat), floatval($lng));
         }
         $shift_id = Shift::where('name', $row['shift'])->first()?->id ?? $row['shift_id'];
 
@@ -36,7 +33,8 @@ class AttendancesImport implements ToModel, WithHeadingRow, WithValidation, Skip
             'time_in' => $row['time_in'],
             'time_out' => $row['time_out'],
             'shift_id' => $shift_id,
-            'coordinates' => $coordinates,
+            'latitude' => doubleval($lat),
+            'longitude' => doubleval($lng),
             'status' => $this->getStatus($row['status']) ?? $row['raw_status'],
             'note' => $row['note'],
             'attachment' => $row['attachment'],

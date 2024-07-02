@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\ExtendedCarbon;
-use App\Helpers;
 use App\Models\Attendance;
 use App\Models\Barcode;
 use App\Models\Shift;
@@ -90,10 +89,8 @@ class ScanComponent extends Component
             'time_in' => $timeIn,
             'time_out' => null,
             'shift_id' => $shift->id,
-            'coordinates' => Helpers::createPointQuery(
-                floatval($this->currentLiveCoords[0]),
-                floatval($this->currentLiveCoords[1])
-            ),
+            'latitude' => doubleval($this->currentLiveCoords[0]),
+            'longitude' => doubleval($this->currentLiveCoords[1]),
             'status' => $status,
             'note' => null,
             'attachment' => null,
