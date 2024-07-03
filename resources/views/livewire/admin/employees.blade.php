@@ -11,7 +11,7 @@
     <thead class="bg-gray-50 dark:bg-gray-900">
       <tr>
         <th scope="col" class="relative px-2 py-2">
-          <span class="sr-only">Avatar</span>
+          No.
         </th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
           {{ __('Name') }}
@@ -24,10 +24,6 @@
         </th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
           {{ __('Phone Number') }}
-        </th>
-        <th scope="col"
-          class="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 sm:table-cell">
-          {{ __('Gender') }}
         </th>
         <th scope="col"
           class="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 sm:table-cell">
@@ -47,11 +43,9 @@
           $wireClick = "wire:click=show('$user->id')";
         @endphp
         <tr wire:key="{{ $user->id }}" class="group">
-          <td class="{{ $class }} p-2 text-sm font-medium text-gray-900 dark:text-white" {{ $wireClick }}>
-            <div class="h-8 w-8">
-              <img class="h-8 w-8 rounded-full object-cover" src="{{ $user->profile_photo_url }}"
-                alt="{{ $user->name }}" />
-            </div>
+          <td class="{{ $class }} p-2 text-center text-sm font-medium text-gray-900 dark:text-white"
+            {{ $wireClick }}>
+            {{ $loop->iteration }}
           </td>
           <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
             {{ $wireClick }}>
@@ -68,11 +62,6 @@
           <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
             {{ $wireClick }}>
             {{ $user->phone }}
-          </td>
-          <td
-            class="{{ $class }} hidden px-6 py-4 text-sm font-medium text-gray-900 dark:text-white sm:table-cell"
-            {{ $wireClick }}>
-            {{ __($user->gender) }}
           </td>
           <td
             class="{{ $class }} hidden px-6 py-4 text-sm font-medium text-gray-900 dark:text-white sm:table-cell"

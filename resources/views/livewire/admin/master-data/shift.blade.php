@@ -48,7 +48,6 @@
       @endforeach
     </tbody>
   </table>
-  <div class="h-1 w-full border-b-4 border-gray-200 dark:border-gray-700"></div>
 
   <x-confirmation-modal wire:model="confirmingDeletion">
     <x-slot name="title">

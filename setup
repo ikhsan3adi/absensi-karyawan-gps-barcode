@@ -1,6 +1,7 @@
 php -r "file_exists('.env') || copy('.env.example', '.env');"
-composer install --no-progress --no-dev
+composer install --no-dev --no-interaction --prefer-dist
 php artisan key:generate
+php artisan storage:link
 npm ci
 npm run build
 php artisan migrate:fresh

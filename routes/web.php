@@ -65,8 +65,14 @@ Route::middleware([
             ->names(['index' => 'admin.employees']);
 
         // Master Data
-        Route::get('/masterdata', MasterDataController::class)
-            ->name('admin.masters');
+        Route::get('/masterdata/division', [MasterDataController::class, 'division'])
+            ->name('admin.masters.division');
+        Route::get('/masterdata/job-title', [MasterDataController::class, 'jobTitle'])
+            ->name('admin.masters.job-title');
+        Route::get('/masterdata/education', [MasterDataController::class, 'education'])
+            ->name('admin.masters.education');
+        Route::get('/masterdata/shift', [MasterDataController::class, 'shift'])
+            ->name('admin.masters.shift');
 
         // Presence/Absensi
         Route::get('/attendances', [AttendanceController::class, 'index'])
