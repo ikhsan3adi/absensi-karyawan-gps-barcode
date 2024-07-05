@@ -89,7 +89,10 @@ class AttendanceComponent extends Component
             $dates = $start->range($end)->toArray();
         }
         $employees = User::where('group', 'user')
-            ->when($this->search, fn ($q) => $q->where('name', 'like', '%' . $this->search . '%')->orWhere('nip', 'like', '%' . $this->search . '%'))
+            ->when($this->search, function ($q) {
+                return $q->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('nip', 'like', '%' . $this->search . '%');
+            })
             ->when($this->division, fn ($q) => $q->where('division_id', $this->division))
             ->when($this->jobTitle, fn ($q) => $q->where('job_title_id', $this->jobTitle))
             ->paginate(20)->through(function (User $user) {
@@ -98,12 +101,11 @@ class AttendanceComponent extends Component
                         "attendance-$user->id-$this->date",
                         now()->addDay(),
                         function () use ($user) {
-                            $date = Carbon::parse($this->date);
-
                             /** @var Collection<Attendance>  */
-                            $attendances = Attendance::where('user_id', $user->id)
-                                ->where('date', $date->toDateString())
-                                ->get();
+                            $attendances = Attendance::filter(
+                                userId: $user->id,
+                                date: $this->date,
+                            )->get();
 
                             return $attendances->map(
                                 function (Attendance $v) {
@@ -126,13 +128,11 @@ class AttendanceComponent extends Component
                         "attendance-$user->id-$this->week",
                         now()->addDay(),
                         function () use ($user) {
-                            $start = Carbon::parse($this->week)->startOfWeek();
-                            $end = Carbon::parse($this->week)->endOfWeek();
-
                             /** @var Collection<Attendance>  */
-                            $attendances = Attendance::where('user_id', $user->id)
-                                ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
-                                ->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
+                            $attendances = Attendance::filter(
+                                userId: $user->id,
+                                week: $this->week,
+                            )->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
 
                             return $attendances->map(
                                 function (Attendance $v) {
@@ -152,12 +152,12 @@ class AttendanceComponent extends Component
                     $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$my->month-$my->year",
                         now()->addDay(),
-                        function () use ($user, $my) {
+                        function () use ($user) {
                             /** @var Collection<Attendance>  */
-                            $attendances = Attendance::where('user_id', $user->id)
-                                ->whereMonth('date', $my->month)
-                                ->whereYear('date', $my->year)
-                                ->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
+                            $attendances = Attendance::filter(
+                                month: $this->month,
+                                userId: $user->id,
+                            )->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
 
                             return $attendances->map(
                                 function (Attendance $v) {
@@ -174,7 +174,8 @@ class AttendanceComponent extends Component
                     ) ?? []);
                 } else {
                     /** @var Collection */
-                    $attendances = Attendance::paginate(20);
+                    $attendances = Attendance::where('user_id', $user->id)
+                        ->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
                 }
                 $user->attendances = $attendances;
                 return $user;

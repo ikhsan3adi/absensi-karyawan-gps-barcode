@@ -24,19 +24,13 @@ class AttendancesExport implements FromView
      */
     public function view(): View
     {
-        $attendances = Attendance::when($this->month, function (Builder $query) {
-            $date = Carbon::parse($this->month);
-            $query->whereMonth('date', $date->month)->whereYear('date', $date->year);
-        })->when($this->year && !$this->month, function (Builder $query) {
-            $date = Carbon::parse($this->year);
-            $query->whereYear('date', $date->year);
-        })->when($this->division, function (Builder $query) {
-            $query->where('user.division_id', $this->division);
-        })->when($this->jobTitle, function (Builder $query) {
-            $query->where('user.job_title_id', $this->jobTitle);
-        })->when($this->education, function (Builder $query) {
-            $query->where('user.education_id', $this->education);
-        })->get();
+        $attendances = Attendance::filter(
+            month: $this->month,
+            year: $this->year,
+            division: $this->division,
+            jobTitle: $this->jobTitle,
+            education: $this->education
+        )->get();
 
         return view('admin.import-export.export-attendances', ['attendances' => $attendances]);
     }

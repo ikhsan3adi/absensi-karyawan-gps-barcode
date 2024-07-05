@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\ExtendedCarbon;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,6 +65,45 @@ class Attendance extends Model
             'lat' => $this->latitude,
             'lng' => $this->longitude
         ];
+    }
+
+    public static function filter(
+        $date = null,
+        $week = null,
+        $month = null,
+        $year = null,
+        $userId = null,
+        $division = null,
+        $jobTitle = null,
+        $education = null
+    ) {
+        return self::when($date, function (Builder $query) use ($date) {
+            $query->where('date', Carbon::parse($date)->toDateString());
+        })->when($week && !$date, function (Builder $query) use ($week) {
+            $start = Carbon::parse($week)->startOfWeek();
+            $end = Carbon::parse($week)->endOfWeek();
+            $query->whereBetween('date', [$start->toDateString(), $end->toDateString()]);
+        })->when($month && !$week && !$date, function (Builder $query) use ($month) {
+            $date = Carbon::parse($month);
+            $query->whereMonth('date', $date->month)->whereYear('date', $date->year);
+        })->when($year && !$month && !$week && !$date, function (Builder $query) use ($year) {
+            $date = Carbon::parse($year);
+            $query->whereYear('date', $date->year);
+        })->when($userId, function (Builder $query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->when($division && !$userId, function (Builder $query) use ($division) {
+            $query->whereHas('user', function (Builder $query) use ($division) {
+                $query->where('division_id', $division);
+            });
+        })->when($jobTitle && !$userId, function (Builder $query) use ($jobTitle) {
+            $query->whereHas('user', function (Builder $query) use ($jobTitle) {
+                $query->where('job_title_id', $jobTitle);
+            });
+        })->when($education && !$userId, function (Builder $query) use ($education) {
+            $query->whereHas('user', function (Builder $query) use ($education) {
+                $query->where('education_id', $education);
+            });
+        });
     }
 
     public function attachmentUrl(): ?Attribute
