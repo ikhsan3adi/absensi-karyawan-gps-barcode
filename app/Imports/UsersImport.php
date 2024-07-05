@@ -16,6 +16,10 @@ use Maatwebsite\Excel\Validators\Failure;
 
 class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {
+    public function __construct(public bool $save = true)
+    {
+    }
+
     /**
      * @param array $row
      *
@@ -30,7 +34,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
         $education_id = Education::where('name', $row['education'])->first()?->id
             ?? Education::create(['name' => $row['education']])?->id;
         $user = (new User)->forceFill([
-            'id' => $row['id'],
+            'id' => isset($row['id']) ? $row['id'] : null,
             'nip' => $row['nip'],
             'name' => $row['name'],
             'email' => $row['email'],
@@ -48,7 +52,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
             'created_at' => $row['created_at'],
             'updated_at' => $row['updated_at'],
         ]);
-        $user->save();
+        if ($this->save) {
+            $user->save();
+        }
         return $user;
     }
 

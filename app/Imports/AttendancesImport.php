@@ -13,6 +13,10 @@ use Maatwebsite\Excel\Validators\Failure;
 
 class AttendancesImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {
+    public function __construct(public bool $save = true)
+    {
+    }
+
     /**
      * @param array $row
      *
@@ -41,7 +45,9 @@ class AttendancesImport implements ToModel, WithHeadingRow, WithValidation, Skip
             'created_at' => $row['created_at'],
             'updated_at' => $row['updated_at'],
         ]);
-        $attendance->save();
+        if ($this->save) {
+            $attendance->save();
+        }
         return $attendance;
     }
 
