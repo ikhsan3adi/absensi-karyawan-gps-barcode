@@ -167,7 +167,7 @@
   <x-modal wire:model="showDetail" onclose="removeMap()">
     <div class="px-6 py-4">
       @if ($currentAttendance)
-        <h3 class="mb-3 text-xl font-semibold">{{ $currentAttendance['name'] }}</h3>
+        <h3 class="mb-3 text-xl font-semibold dark:text-white">{{ $currentAttendance['name'] }}</h3>
         <div class="mb-3 w-full">
           <x-label for="nip" value="{{ __('NIP') }}"></x-label>
           <x-input type="text" class="w-full" id="nip" disabled

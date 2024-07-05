@@ -1,6 +1,7 @@
 <table>
   <thead>
     <tr>
+      <th>#</th>
       <th>Date</th>
       <th>Name</th>
       <th>NIP</th>
@@ -23,6 +24,7 @@
   <tbody>
     @foreach ($attendances as $attendance)
       <tr>
+        <td>{{ $loop->iteration }}</td>
         <td>{{ $attendance->date?->format('Y-m-d') }}</td>
         <td>{{ $attendance->user?->name }}</td>
         <td data-type="s">{{ $attendance->user?->nip }}</td>
