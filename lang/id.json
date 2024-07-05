@@ -417,5 +417,7 @@
     "You may delete any of your existing tokens if they are no longer needed.": "Anda bisa menghapus token yang ada bila tidak lagi dibutuhkan.",
     "You may not delete your personal team.": "Anda tidak boleh menghapus tim pribadi Anda.",
     "You may not leave a team that you created.": "Anda tidak dapat meninggalkan tim yang Anda buat.",
-    "Your email address is unverified.": "Alamat email Anda belum diverifikasi."
+    "Your email address is unverified.": "Alamat email Anda belum diverifikasi.",
+    "Confirm & Export": "Konfirmasi & Ekspor",
+    "Confirm & Import": "Konfirmasi & Impor"
 }

@@ -54,12 +54,12 @@ class AttendanceHistoryComponent extends Component
         $attendances = new Collection(Cache::remember(
             "attendance-$user->id-$date->month-$date->year",
             now()->addDay(),
-            function () use ($user, $date) {
+            function () use ($user) {
                 /** @var Collection<Attendance>  */
-                $attendances = Attendance::where('user_id', $user->id)
-                    ->whereMonth('date', $date->month)
-                    ->whereYear('date', $date->year)
-                    ->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
+                $attendances = Attendance::filter(
+                    month: $this->month,
+                    userId: $user->id,
+                )->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
 
                 return $attendances->map(
                     function (Attendance $v) {

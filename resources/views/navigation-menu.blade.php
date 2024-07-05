@@ -11,7 +11,7 @@
         </div>
 
         <!-- Navigation Links -->
-        <div class="hidden space-x-2 sm:-my-px sm:ms-6 sm:flex md:ms-10 md:space-x-8">
+        <div class="hidden space-x-2 sm:-my-px sm:ms-6 sm:flex md:ms-10 md:space-x-5 lg:space-x-8">
           @if (Auth::user()->group == 'admin')
             <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
               {{ __('Dashboard') }}
@@ -19,10 +19,10 @@
             <x-nav-link href="{{ route('admin.barcodes') }}" :active="request()->routeIs('admin.barcodes')">
               {{ __('Barcode') }}
             </x-nav-link>
-            <x-nav-link href="{{ route('admin.attendances') }}" :active="request()->routeIs('admin.attendances')">
+            <x-nav-link class="hidden md:inline-flex" href="{{ route('admin.attendances') }}" :active="request()->routeIs('admin.attendances')">
               {{ __('Attendance') }}
             </x-nav-link>
-            <x-nav-link href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
+            <x-nav-link class="hidden md:inline-flex" href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
               {{ __('Employee') }}
             </x-nav-link>
             <x-nav-dropdown :active="request()->routeIs('admin.masters.*')" triggerClasses="text-nowrap">
@@ -31,6 +31,12 @@
                 <x-heroicon-o-chevron-down class="ms-2 h-5 w-5 text-gray-400" />
               </x-slot>
               <x-slot name="content">
+                <x-dropdown-link class="md:hidden" href="{{ route('admin.attendances') }}" :active="request()->routeIs('admin.attendances')">
+                  {{ __('Attendance') }}
+                </x-dropdown-link>
+                <x-dropdown-link class="md:hidden" href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
+                  {{ __('Employee') }}
+                </x-dropdown-link>
                 <x-dropdown-link href="{{ route('admin.masters.division') }}" :active="request()->routeIs('admin.masters.division')">
                   {{ __('Division') }}
                 </x-dropdown-link>
@@ -45,9 +51,20 @@
                 </x-dropdown-link>
               </x-slot>
             </x-nav-dropdown>
-            <x-nav-link href="{{ route('admin.import-export') }}" :active="request()->routeIs('admin.import-export')">
-              {{ __('Import & Export') }}
-            </x-nav-link>
+            <x-nav-dropdown :active="request()->routeIs('admin.import-export.*')" triggerClasses="text-nowrap">
+              <x-slot name="trigger">
+                {{ __('Import & Export') }}
+                <x-heroicon-o-chevron-down class="ms-2 h-5 w-5 text-gray-400" />
+              </x-slot>
+              <x-slot name="content">
+                <x-dropdown-link href="{{ route('admin.import-export.users') }}" :active="request()->routeIs('admin.import-export.users')">
+                  {{ __('Employee') }}
+                </x-dropdown-link>
+                <x-dropdown-link href="{{ route('admin.import-export.attendances') }}" :active="request()->routeIs('admin.import-export.attendances')">
+                  {{ __('Attendance') }}
+                </x-dropdown-link>
+              </x-slot>
+            </x-nav-dropdown>
           @else
             <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
               {{ __('Home') }}
@@ -162,8 +179,11 @@
         <x-responsive-nav-link href="{{ route('admin.masters.shift') }}" :active="request()->routeIs('admin.masters.shift')">
           {{ __('Shift') }}
         </x-responsive-nav-link>
-        <x-responsive-nav-link href="{{ route('admin.import-export') }}" :active="request()->routeIs('admin.import-export')">
-          {{ __('Import & Export') }}
+        <x-responsive-nav-link href="{{ route('admin.import-export.users') }}" :active="request()->routeIs('admin.import-export')">
+          Import & Export Karyawan
+        </x-responsive-nav-link>
+        <x-responsive-nav-link href="{{ route('admin.import-export.attendances') }}" :active="request()->routeIs('admin.import-export')">
+          Import & Export Absensi
         </x-responsive-nav-link>
       @else
         <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">

@@ -83,8 +83,10 @@ Route::middleware([
             ->name('admin.attendances.report');
 
         // Import/Export
-        Route::get('/import-export', [ImportExportController::class, 'index'])
-            ->name('admin.import-export');
+        Route::get('/import-export/users', [ImportExportController::class, 'users'])
+            ->name('admin.import-export.users');
+        Route::get('/import-export/attendances', [ImportExportController::class, 'attendances'])
+            ->name('admin.import-export.attendances');
 
         Route::post('/users/import', [ImportExportController::class, 'importUsers'])
             ->name('admin.users.import');
