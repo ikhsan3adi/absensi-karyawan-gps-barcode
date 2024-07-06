@@ -178,6 +178,9 @@
             Number(position.coords.longitude),
           ], 13);
           L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+        }, (err) => {
+          console.error(`ERROR(${err.code}): ${err.message}`);
+          alert('{{ __('Please enable your location') }}');
         });
       } else {
         document.querySelector('#scanner-error').innerHTML = "Gagal mendeteksi lokasi";

@@ -127,6 +127,9 @@
             console.log(position);
             document.getElementById('lat').value = position.coords.latitude;
             document.getElementById('lng').value = position.coords.longitude;
+          }, (err) => {
+            console.error(`ERROR(${err.code}): ${err.message}`);
+            alert('{{ __('Please enable your location') }}');
           });
         }
       }
