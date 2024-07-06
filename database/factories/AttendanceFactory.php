@@ -67,7 +67,7 @@ class AttendanceFactory extends Factory
     {
         return $this->state(function (array $attributes) use ($sick) {
             return [
-                'status' => $sick ? 'sick' : 'absent',
+                'status' => $sick ? 'sick' : 'excused',
                 'note' => $this->faker->sentence(),
                 'attachment' => $this->faker->imageUrl(),
             ];
