@@ -44,7 +44,7 @@ class UserForm extends Form
                 'max:255',
                 Rule::unique('users')->ignore($this->user)
             ],
-            'phone' => ['required',  'numeric', 'min:5', 'max:99999999999999999'],
+            'phone' => ['required',  'string', 'min:5', 'max:255'],
             'password' => ['nullable', 'string', 'min:4', 'max:255'],
             'gender' => ['required', 'in:male,female'],
             'city' => ['required', 'string', 'max:255'],
