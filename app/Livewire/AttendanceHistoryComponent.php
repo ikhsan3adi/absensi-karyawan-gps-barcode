@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\AttendanceDetailTrait;
 use App\Models\Attendance;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -10,33 +11,10 @@ use Livewire\Component;
 
 class AttendanceHistoryComponent extends Component
 {
-    public ?string $month;
-    public bool $showDetail = false;
-    public $currentAttendance = [];
+    use AttendanceDetailTrait;
 
-    public function show($attendanceId)
-    {
-        /** @var Attendance */
-        $attendance = Attendance::find($attendanceId);
-        if ($attendance) {
-            $this->showDetail = true;
-            $this->currentAttendance = $attendance->getAttributes();
-            $this->currentAttendance['coordinates'] = $attendance->lat_lng;
-            $this->currentAttendance['lat'] = $attendance->latitude;
-            $this->currentAttendance['lng'] = $attendance->longitude;
-            $this->currentAttendance['name'] = $attendance->user->name;
-            $this->currentAttendance['nip'] = $attendance->user->nip;
-            if ($attendance->attachment) {
-                $this->currentAttendance['attachment'] = $attendance->attachment_url;
-            }
-            if ($attendance->barcode_id) {
-                $this->currentAttendance['barcode'] = $attendance->barcode;
-            }
-            if ($attendance->shift_id) {
-                $this->currentAttendance['shift'] = $attendance->shift;
-            }
-        }
-    }
+    public ?string $month;
+
     public function mount()
     {
         $this->month = date('Y-m');

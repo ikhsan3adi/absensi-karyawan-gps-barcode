@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Livewire\Traits\AttendanceDetailTrait;
 use App\Models\Attendance;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,31 +10,7 @@ use Livewire\Component;
 
 class DashboardComponent extends Component
 {
-    public bool $showDetail = false;
-    public $currentAttendance = [];
-
-    public function show($attendanceId)
-    {
-        /** @var Attendance */
-        $attendance = Attendance::find($attendanceId);
-        if ($attendance) {
-            $this->showDetail = true;
-            $this->currentAttendance = $attendance->getAttributes();
-            $this->currentAttendance['lat'] = $attendance->latitude;
-            $this->currentAttendance['lng'] = $attendance->longitude;
-            $this->currentAttendance['name'] = $attendance->user->name;
-            $this->currentAttendance['nip'] = $attendance->user->nip;
-            if ($attendance->attachment) {
-                $this->currentAttendance['attachment'] = $attendance->attachment_url;
-            }
-            if ($attendance->barcode_id) {
-                $this->currentAttendance['barcode'] = $attendance->barcode;
-            }
-            if ($attendance->shift_id) {
-                $this->currentAttendance['shift'] = $attendance->shift;
-            }
-        }
-    }
+    use AttendanceDetailTrait;
 
     public function render()
     {
