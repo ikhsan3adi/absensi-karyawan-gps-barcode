@@ -20,10 +20,10 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.0",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "fakerphp/faker": "^1.23"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.23",
         "laravel-lang/common": "^6.3",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
