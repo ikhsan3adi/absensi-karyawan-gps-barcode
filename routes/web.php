@@ -100,10 +100,6 @@ Route::middleware([
     });
 });
 
-Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('/livewire/update', $handle);
-});
-
 Livewire::setScriptRoute(function ($handle) {
     return Route::get(url('/livewire/livewire.js'), $handle);
 });
