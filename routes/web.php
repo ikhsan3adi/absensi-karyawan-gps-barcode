@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers;
 use App\Http\Controllers\Admin\BarcodeController;
 use App\Http\Controllers\Admin\MasterDataController;
 use App\Http\Controllers\Admin\AttendanceController;
@@ -100,6 +101,11 @@ Route::middleware([
     });
 });
 
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post(Helpers::getNonRootBaseUrlPath() . '/livewire/update', $handle);
+});
+
 Livewire::setScriptRoute(function ($handle) {
-    return Route::get(url('/livewire/livewire.js'), $handle);
+    $path = config('app.debug') ? '/livewire/livewire.js' : '/livewire/livewire.min.js';
+    return Route::get(url($path), $handle);
 });
