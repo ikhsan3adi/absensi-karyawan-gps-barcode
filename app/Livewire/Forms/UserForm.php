@@ -67,7 +67,9 @@ class UserForm extends Form
         $this->nip = $user->nip;
         $this->email = $user->email;
         $this->phone = $user->phone;
-        $this->password = $user->raw_password;
+        if ($this->isAllowed()) {
+            $this->password = $user->raw_password;
+        }
         $this->gender = $user->gender;
         $this->city = $user->city;
         $this->address = $user->address;

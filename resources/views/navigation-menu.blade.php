@@ -49,6 +49,7 @@
                 <x-dropdown-link href="{{ route('admin.masters.shift') }}" :active="request()->routeIs('admin.masters.shift')">
                   {{ __('Shift') }}
                 </x-dropdown-link>
+                <hr>
                 <x-dropdown-link href="{{ route('admin.masters.admin') }}" :active="request()->routeIs('admin.masters.admin')">
                   {{ __('Admin') }}
                 </x-dropdown-link>
@@ -61,7 +62,7 @@
               </x-slot>
               <x-slot name="content">
                 <x-dropdown-link href="{{ route('admin.import-export.users') }}" :active="request()->routeIs('admin.import-export.users')">
-                  {{ __('Employee') }}
+                  {{ __('Employee') }}/{{ __('Admin') }}
                 </x-dropdown-link>
                 <x-dropdown-link href="{{ route('admin.import-export.attendances') }}" :active="request()->routeIs('admin.import-export.attendances')">
                   {{ __('Attendance') }}
@@ -183,10 +184,10 @@
           {{ __('Shift') }}
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.masters.admin') }}" :active="request()->routeIs('admin.masters.admin')">
-          {{ __('Admin') }}
+          {{ __('Admin Management') }}
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.import-export.users') }}" :active="request()->routeIs('admin.import-export')">
-          Import & Export Karyawan
+          Import & Export Karyawan/Admin
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.import-export.attendances') }}" :active="request()->routeIs('admin.import-export')">
           Import & Export Absensi

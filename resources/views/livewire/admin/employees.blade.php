@@ -7,79 +7,81 @@
       <x-heroicon-o-plus class="mr-2 h-4 w-4" /> Tambah Karyawan
     </x-button>
   </div>
-  <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
-    <thead class="bg-gray-50 dark:bg-gray-900">
-      <tr>
-        <th scope="col" class="relative px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-300">
-          No.
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-          {{ __('Name') }}
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-          {{ __('NIP') }}
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-          {{ __('Email') }}
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-          {{ __('Phone Number') }}
-        </th>
-        <th scope="col"
-          class="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 sm:table-cell">
-          {{ __('City') }}
-        </th>
-        <th scope="col" class="relative px-6 py-3">
-          <span class="sr-only">Actions</span>
-        </th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-      @php
-        $class = 'cursor-pointer group-hover:bg-gray-100 dark:group-hover:bg-gray-700';
-      @endphp
-      @foreach ($users as $user)
-        @php
-          $wireClick = "wire:click=show('$user->id')";
-        @endphp
-        <tr wire:key="{{ $user->id }}" class="group">
-          <td class="{{ $class }} p-2 text-center text-sm font-medium text-gray-900 dark:text-white"
-            {{ $wireClick }}>
-            {{ $loop->iteration }}
-          </td>
-          <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
-            {{ $wireClick }}>
-            {{ $user->name }}
-          </td>
-          <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
-            {{ $wireClick }}>
-            {{ $user->nip }}
-          </td>
-          <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
-            {{ $wireClick }}>
-            {{ $user->email }}
-          </td>
-          <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
-            {{ $wireClick }}>
-            {{ $user->phone }}
-          </td>
-          <td
-            class="{{ $class }} hidden px-6 py-4 text-sm font-medium text-gray-900 dark:text-white sm:table-cell"
-            {{ $wireClick }}>
-            {{ $user->city }}
-          </td>
-          <td class="relative flex justify-end gap-2 px-6 py-4">
-            <x-button wire:click="edit('{{ $user->id }}')">
-              Edit
-            </x-button>
-            <x-danger-button wire:click="confirmDeletion('{{ $user->id }}', '{{ $user->name }}')">
-              Delete
-            </x-danger-button>
-          </td>
+  <div class="overflow-x-scroll">
+    <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
+      <thead class="bg-gray-50 dark:bg-gray-900">
+        <tr>
+          <th scope="col" class="relative px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-300">
+            No.
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+            {{ __('Name') }}
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+            {{ __('NIP') }}
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+            {{ __('Email') }}
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+            {{ __('Phone Number') }}
+          </th>
+          <th scope="col"
+            class="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 sm:table-cell">
+            {{ __('City') }}
+          </th>
+          <th scope="col" class="relative px-6 py-3">
+            <span class="sr-only">Actions</span>
+          </th>
         </tr>
-      @endforeach
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+        @php
+          $class = 'cursor-pointer group-hover:bg-gray-100 dark:group-hover:bg-gray-700';
+        @endphp
+        @foreach ($users as $user)
+          @php
+            $wireClick = "wire:click=show('$user->id')";
+          @endphp
+          <tr wire:key="{{ $user->id }}" class="group">
+            <td class="{{ $class }} p-2 text-center text-sm font-medium text-gray-900 dark:text-white"
+              {{ $wireClick }}>
+              {{ $loop->iteration }}
+            </td>
+            <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
+              {{ $wireClick }}>
+              {{ $user->name }}
+            </td>
+            <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
+              {{ $wireClick }}>
+              {{ $user->nip }}
+            </td>
+            <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
+              {{ $wireClick }}>
+              {{ $user->email }}
+            </td>
+            <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
+              {{ $wireClick }}>
+              {{ $user->phone }}
+            </td>
+            <td
+              class="{{ $class }} hidden px-6 py-4 text-sm font-medium text-gray-900 dark:text-white sm:table-cell"
+              {{ $wireClick }}>
+              {{ $user->city }}
+            </td>
+            <td class="relative flex justify-end gap-2 px-6 py-4">
+              <x-button wire:click="edit('{{ $user->id }}')">
+                Edit
+              </x-button>
+              <x-danger-button wire:click="confirmDeletion('{{ $user->id }}', '{{ $user->name }}')">
+                Delete
+              </x-danger-button>
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
   <div class="mt-3">
     {{ $users->links() }}
   </div>
