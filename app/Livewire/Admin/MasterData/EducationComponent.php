@@ -31,7 +31,7 @@ class EducationComponent extends Component
 
     public function create()
     {
-        if (Auth::user()->group != 'admin') {
+        if (Auth::user()->isNotAdmin) {
             return abort(403);
         }
         $this->validate();
@@ -52,7 +52,7 @@ class EducationComponent extends Component
 
     public function update()
     {
-        if (Auth::user()->group != 'admin') {
+        if (Auth::user()->isNotAdmin) {
             return abort(403);
         }
         $this->validate();
@@ -72,7 +72,7 @@ class EducationComponent extends Component
 
     public function delete()
     {
-        if (Auth::user()->group != 'admin') {
+        if (Auth::user()->isNotAdmin) {
             return abort(403);
         }
         $education = Education::find($this->selectedId);

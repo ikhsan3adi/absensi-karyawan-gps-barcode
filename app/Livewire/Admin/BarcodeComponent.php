@@ -24,7 +24,7 @@ class BarcodeComponent extends Component
 
     public function delete()
     {
-        if (Auth::user()->group != 'admin') {
+        if (Auth::user()->isNotAdmin) {
             return abort(403);
         }
         $barcode = Barcode::find($this->selectedId);

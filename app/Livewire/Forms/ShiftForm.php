@@ -40,7 +40,7 @@ class ShiftForm extends Form
 
     public function store()
     {
-        if (Auth::user()->group != 'admin') {
+        if (Auth::user()->isNotAdmin) {
             return abort(403);
         }
         $this->validate();
@@ -50,7 +50,7 @@ class ShiftForm extends Form
 
     public function update()
     {
-        if (Auth::user()->group != 'admin') {
+        if (Auth::user()->isNotAdmin) {
             return abort(403);
         }
         $this->validate();
@@ -60,7 +60,7 @@ class ShiftForm extends Form
 
     public function delete()
     {
-        if (Auth::user()->group != 'admin') {
+        if (Auth::user()->isNotAdmin) {
             return abort(403);
         }
         $this->shift->delete();

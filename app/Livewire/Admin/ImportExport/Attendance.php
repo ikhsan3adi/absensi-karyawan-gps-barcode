@@ -82,7 +82,7 @@ class Attendance extends Component
 
     public function import()
     {
-        if (Auth::user()->group !== 'admin') {
+        if (Auth::user()->isNotAdmin) {
             abort(403);
         }
         try {
@@ -99,7 +99,7 @@ class Attendance extends Component
 
     public function export()
     {
-        if (Auth::user()->group !== 'admin') {
+        if (Auth::user()->isNotAdmin) {
             abort(403);
         }
 

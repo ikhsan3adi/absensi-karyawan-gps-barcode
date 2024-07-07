@@ -98,6 +98,11 @@ class User extends Authenticatable
         return $this->group === 'superadmin';
     }
 
+    final public function getIsNotAdminAttribute(): bool
+    {
+        return !$this->isAdmin;
+    }
+
     public function education()
     {
         return $this->belongsTo(Education::class);
