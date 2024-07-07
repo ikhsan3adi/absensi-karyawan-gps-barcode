@@ -8,17 +8,17 @@ use Illuminate\Contracts\View\View;
 
 class UsersExport implements FromView
 {
-    private $group = 'user';
-
-    public function setGroup(string $group)
+    /**
+     * @param array<string> $groups
+     */
+    public function __construct(private array $groups = ['user'])
     {
-        $this->group = $group;
     }
 
     public function view(): View
     {
         return view('admin.import-export.export-users', [
-            'users' => User::where('group', $this->group)->get(),
+            'users' => User::whereIn('group', $this->groups)->get(),
         ]);
     }
 }

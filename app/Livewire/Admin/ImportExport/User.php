@@ -17,6 +17,7 @@ class User extends Component
 
     public bool $previewing = false;
     public ?string $mode = null;
+    public $groups = ['user'];
     public $file = null;
 
     protected $rules = [
@@ -27,6 +28,11 @@ class User extends Component
     {
         $this->previewing = !$this->previewing;
         $this->mode = $this->previewing ? 'export' : null;
+    }
+
+    public function updated()
+    {
+        $this->validateGroups();
     }
 
     public function render()
@@ -42,7 +48,9 @@ class User extends Component
                     return $userImport->model($v->toArray());
                 });
         } else if ($this->previewing && $this->mode == 'export') {
-            $users = UserModel::all();
+            $users = empty($this->groups) ?
+                new \Illuminate\Support\Collection :
+                UserModel::whereIn('group', $this->groups)->get();
         } else {
             $this->previewing = false;
             $this->mode = null;
@@ -74,6 +82,18 @@ class User extends Component
         if (Auth::user()->isNotAdmin) {
             abort(403);
         }
-        return Excel::download(new UsersExport, 'users.xlsx');
+        $this->validateGroups();
+        return Excel::download(
+            new UsersExport($this->groups),
+            'users.xlsx'
+        );
+    }
+
+    private function validateGroups()
+    {
+        $this->validate([
+            'groups.*' => ['string', 'in:user,admin,superadmin'],
+            'groups' => ['required', 'array']
+        ]);
     }
 }

@@ -3,28 +3,49 @@
     @if ($mode != 'import')
       <div>
         <h3 class="mb-4 text-lg font-semibold leading-tight text-gray-800 dark:text-gray-200">
-          Ekspor Data Karyawan
+          Ekspor Data Karyawan/Admin
         </h3>
-        <div class="flex flex-col items-center justify-stretch gap-4">
-          @if ($mode == 'export')
-            <x-secondary-button wire:click="preview" class="w-full justify-center">
-              {{ __('Cancel') }}
+        <form wire:submit.prevent="export">
+          <div>
+            <x-label for="user" class="flex items-center">
+              <x-checkbox value="user" id="user" wire:model.live="groups" />
+              <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Employee') }}</span>
+            </x-label>
+          </div>
+          <div class="mt-4">
+            <x-label for="admin" class="flex items-center">
+              <x-checkbox value="admin" id="admin" wire:model.live="groups" />
+              <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Admin') }}</span>
+            </x-label>
+          </div>
+          <div class="mt-4">
+            <x-label for="superadmin" class="flex items-center">
+              <x-checkbox value="superadmin" id="superadmin" wire:model.live="groups" />
+              <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Super Admin') }}</span>
+            </x-label>
+          </div>
+          @error('groups')
+            <x-input-error for="groups" class="mt-4" message="{{ $message }}" />
+          @enderror
+          <div class="mt-4 flex flex-col items-center justify-stretch gap-4">
+            <x-secondary-button type="button" wire:click="preview" class="w-full justify-center">
+              @if ($mode == 'export')
+                {{ __('Cancel') }}
+              @else
+                {{ __('Preview') }}
+              @endif
             </x-secondary-button>
-          @else
-            <x-secondary-button wire:click="preview" class="w-full justify-center">
-              {{ __('Preview') }}
-            </x-secondary-button>
-          @endif
-          <x-button wire:click="export" class="w-full justify-center">
-            {{ $mode == 'export' ? __('Confirm & Export') : __('Export') }}
-          </x-button>
-        </div>
+            <x-button wire:click="export" class="w-full justify-center">
+              {{ $mode == 'export' ? __('Confirm & Export') : __('Export') }}
+            </x-button>
+          </div>
+        </form>
       </div>
     @endif
     @if ($mode != 'export')
       <div>
         <h3 class="mb-4 text-lg font-semibold leading-tight text-gray-800 dark:text-gray-200">
-          Impor Data Karyawan
+          Impor Data Karyawan/Admin
         </h3>
         <form x-data="{ file: null }" method="post" wire:submit.prevent="import" enctype="multipart/form-data">
           @csrf

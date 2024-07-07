@@ -39,15 +39,13 @@
             @endforeach
           </x-select>
           <div class="flex flex-col items-center justify-stretch gap-4">
-            @if ($mode == 'export')
-              <x-secondary-button type="button" wire:click="preview" class="w-full justify-center">
+            <x-secondary-button type="button" wire:click="preview" class="w-full justify-center">
+              @if ($mode == 'export')
                 {{ __('Cancel') }}
-              </x-secondary-button>
-            @else
-              <x-secondary-button type="button" wire:click="preview" class="w-full justify-center">
+              @else
                 {{ __('Preview') }}
-              </x-secondary-button>
-            @endif
+              @endif
+            </x-secondary-button>
             <x-button class="w-full justify-center" wire:loading.attr="disabled">
               {{ __('Export') }}
             </x-button>
