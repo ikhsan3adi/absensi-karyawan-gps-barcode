@@ -30,6 +30,7 @@ class UserForm extends Form
 
     public function rules()
     {
+        $requiredOrNullable = $this->group === 'user' ? 'required' : 'nullable';
         return [
             'name' => [
                 'required',
@@ -37,7 +38,7 @@ class UserForm extends Form
                 'max:255',
                 Rule::unique('users')->ignore($this->user)
             ],
-            'nip' => ['required', 'string', 'max:255'],
+            'nip' => [$requiredOrNullable, 'string', 'max:255'],
             'email' => [
                 'required',
                 'email',
@@ -46,10 +47,10 @@ class UserForm extends Form
             ],
             'phone' => ['required',  'string', 'min:5', 'max:255'],
             'password' => ['nullable', 'string', 'min:4', 'max:255'],
-            'gender' => ['required', 'in:male,female'],
-            'city' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'group' => ['nullable', 'string', 'max:255'],
+            'gender' => [$requiredOrNullable, 'in:male,female'],
+            'city' => [$requiredOrNullable, 'string', 'max:255'],
+            'address' => [$requiredOrNullable, 'string', 'max:255'],
+            'group' => ['nullable', 'string', 'max:255', Rule::in(User::$groups)],
             'birth_date' => ['nullable', 'date'],
             'birth_place' => ['nullable', 'string', 'max:255'],
             'division_id' => ['nullable', 'exists:divisions,id'],
@@ -66,7 +67,7 @@ class UserForm extends Form
         $this->nip = $user->nip;
         $this->email = $user->email;
         $this->phone = $user->phone;
-        // $this->password = $user->password;
+        $this->password = $user->raw_password;
         $this->gender = $user->gender;
         $this->city = $user->city;
         $this->address = $user->address;
@@ -83,7 +84,7 @@ class UserForm extends Form
 
     public function store()
     {
-        if (Auth::user()->group != 'admin') {
+        if (!$this->isAllowed()) {
             return abort(403);
         }
         $this->validate();
@@ -91,6 +92,7 @@ class UserForm extends Form
         $user = User::create([
             ...$this->all(),
             'password' => Hash::make($this->password ?? 'password'),
+            'raw_password' => $this->password ?? 'password',
         ]);
         if (isset($this->photo)) $user->updateProfilePhoto($this->photo);
         $this->reset();
@@ -98,13 +100,14 @@ class UserForm extends Form
 
     public function update()
     {
-        if (Auth::user()->group != 'admin') {
+        if (!$this->isAllowed()) {
             return abort(403);
         }
         $this->validate();
         $this->user->update([
             ...$this->all(),
-            'password' => Hash::make($this->password ?? 'password')
+            'password' => $this->password ? Hash::make($this->password) : $this->user?->password,
+            'raw_password' => $this->password ?? $this->user?->raw_password,
         ]);
         if (isset($this->photo)) $this->user->updateProfilePhoto($this->photo);
         $this->reset();
@@ -112,16 +115,27 @@ class UserForm extends Form
 
     public function deleteProfilePhoto()
     {
-        $this->user->deleteProfilePhoto();
+        if (!$this->isAllowed()) {
+            return abort(403);
+        }
+        return $this->user->deleteProfilePhoto();
     }
 
     public function delete()
     {
-        if (Auth::user()->group != 'admin') {
+        if (!$this->isAllowed()) {
             return abort(403);
         }
         $this->user->delete();
         $this->deleteProfilePhoto();
         $this->reset();
+    }
+
+    private function isAllowed()
+    {
+        if ($this->group === 'user') {
+            return Auth::user()?->isAdmin;
+        }
+        return Auth::user()?->isSuperadmin || (Auth::user()?->isAdmin && Auth::user()?->id === $this->user?->id);
     }
 }

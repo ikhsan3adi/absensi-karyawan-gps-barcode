@@ -25,4 +25,9 @@ class MasterDataController extends Controller
     {
         return view('admin.master-data.shift');
     }
+
+    public function admin()
+    {
+        return view('admin.master-data.admin');
+    }
 }

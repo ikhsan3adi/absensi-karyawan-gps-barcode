@@ -22,7 +22,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/', fn () => Auth::user()->group == 'admin' ? redirect('/admin') : redirect('/home'));
+    Route::get('/', fn () => Auth::user()->isAdmin ? redirect('/admin') : redirect('/home'));
 
     // USER AREA
     Route::middleware('user')->group(function () {
@@ -61,7 +61,7 @@ Route::middleware([
             ->name('admin.barcodes.download');
 
         // User/Employee/Karyawan
-        Route::resource('/employee', EmployeeController::class)
+        Route::resource('/employees', EmployeeController::class)
             ->only(['index'])
             ->names(['index' => 'admin.employees']);
 
@@ -74,6 +74,8 @@ Route::middleware([
             ->name('admin.masters.education');
         Route::get('/masterdata/shift', [MasterDataController::class, 'shift'])
             ->name('admin.masters.shift');
+        Route::get('/masterdata/admin', [MasterDataController::class, 'admin'])
+            ->name('admin.masters.admin');
 
         // Presence/Absensi
         Route::get('/attendances', [AttendanceController::class, 'index'])

@@ -17,7 +17,7 @@ class UserMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Check if the user is authenticated and belongs to the 'user' group
-        if (Auth::check() && Auth::user()->group === 'user') {
+        if (Auth::check() && Auth::user()->isUser) {
             return $next($request);
         }
 

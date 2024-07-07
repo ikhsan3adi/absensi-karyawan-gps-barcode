@@ -1,11 +1,13 @@
 <div>
   <div class="mb-4 flex-col items-center gap-5 sm:flex-row md:flex md:justify-between lg:mr-4">
     <h3 class="mb-4 text-lg font-semibold leading-tight text-gray-800 dark:text-gray-200 md:mb-0">
-      Data Karyawan
+      Data Admin
     </h3>
-    <x-button wire:click="showCreating">
-      <x-heroicon-o-plus class="mr-2 h-4 w-4" /> Tambah Karyawan
-    </x-button>
+    @if (Auth::user()->isSuperadmin)
+      <x-button wire:click="showCreating">
+        <x-heroicon-o-plus class="mr-2 h-4 w-4" /> Tambah Admin
+      </x-button>
+    @endif
   </div>
   <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
     <thead class="bg-gray-50 dark:bg-gray-900">
@@ -17,17 +19,13 @@
           {{ __('Name') }}
         </th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-          {{ __('NIP') }}
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
           {{ __('Email') }}
         </th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
-          {{ __('Phone Number') }}
+          {{ __('Group') }}
         </th>
-        <th scope="col"
-          class="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 sm:table-cell">
-          {{ __('City') }}
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
+          {{ __('Phone Number') }}
         </th>
         <th scope="col" class="relative px-6 py-3">
           <span class="sr-only">Actions</span>
@@ -53,28 +51,25 @@
           </td>
           <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
             {{ $wireClick }}>
-            {{ $user->nip }}
+            {{ $user->email }}
           </td>
           <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
             {{ $wireClick }}>
-            {{ $user->email }}
+            {{ $user->group }}
           </td>
           <td class="{{ $class }} px-6 py-4 text-sm font-medium text-gray-900 dark:text-white"
             {{ $wireClick }}>
             {{ $user->phone }}
           </td>
-          <td
-            class="{{ $class }} hidden px-6 py-4 text-sm font-medium text-gray-900 dark:text-white sm:table-cell"
-            {{ $wireClick }}>
-            {{ $user->city }}
-          </td>
           <td class="relative flex justify-end gap-2 px-6 py-4">
-            <x-button wire:click="edit('{{ $user->id }}')">
-              Edit
-            </x-button>
-            <x-danger-button wire:click="confirmDeletion('{{ $user->id }}', '{{ $user->name }}')">
-              Delete
-            </x-danger-button>
+            @if (Auth::user()->isSuperadmin || Auth::user()->id == $user->id)
+              <x-button wire:click="edit('{{ $user->id }}')">
+                Edit
+              </x-button>
+              <x-danger-button wire:click="confirmDeletion('{{ $user->id }}', '{{ $user->name }}')">
+                Delete
+              </x-danger-button>
+            @endif
           </td>
         </tr>
       @endforeach
@@ -86,7 +81,7 @@
 
   <x-confirmation-modal wire:model="confirmingDeletion">
     <x-slot name="title">
-      Hapus Karyawan
+      Hapus Admin
     </x-slot>
 
     <x-slot name="content">
@@ -106,7 +101,7 @@
 
   <x-dialog-modal wire:model="creating">
     <x-slot name="title">
-      Karyawan Baru
+      Admin Baru
     </x-slot>
 
     <form wire:submit="create">
@@ -153,7 +148,7 @@
           </div>
         @endif
         <div class="mt-4">
-          <x-label for="name">Nama Karyawan</x-label>
+          <x-label for="name">Nama Admin</x-label>
           <x-input id="name" class="mt-1 block w-full" type="text" wire:model="form.name" />
           @error('form.name')
             <x-input-error for="form.name" class="mt-2" message="{{ $message }}" />
@@ -181,53 +176,35 @@
           <div class="w-full">
             <x-label for="password">{{ __('Password') }}</x-label>
             <x-input id="password" class="mt-1 block w-full" type="password" wire:model="form.password"
-              placeholder="New Password" />
-            <p class="text-sm dark:text-gray-400">Default password: <b>password</b></p>
+              placeholder="New Password" required />
+            <p class="text-sm dark:text-gray-400">Default password: <b>admin</b></p>
             @error('form.password')
               <x-input-error for="form.password" class="mt-2" message="{{ $message }}" />
             @enderror
           </div>
-        </div>
-        <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
           <div class="w-full">
-            <x-label for="gender">{{ __('Gender') }}</x-label>
-            <div class="my-3 flex flex-row gap-5">
-              <div class="flex items-center">
-                <input type="radio" id="gender-male" wire:model="form.gender" value="male" />
-                <x-label for="gender-male" class="ml-2">{{ __('Male') }}</x-label>
-              </div>
-              <div class="flex items-center">
-                <input type="radio" id="gender-female" wire:model="form.gender" value="female" />
-                <x-label for="gender-female" class="ml-2">{{ __('Female') }}</x-label>
-              </div>
-            </div>
-            @error('form.gender')
-              <x-input-error for="form.gender" class="mt-2" message="{{ $message }}" />
+            <x-label for="form.group" value="{{ __('Group') }}" />
+            <x-select id="form.group" class="mt-1 block w-full" wire:model="form.group" required>
+              @foreach ($groups as $group)
+                @if ($group != 'user')
+                  <option value="{{ $group }}" {{ $group == $form->group ? 'selected' : '' }}>
+                    {{ $group }}
+                  </option>
+                @endif
+              @endforeach
+            </x-select>
+            @error('form.group')
+              <x-input-error for="form.group" class="mt-2" message="{{ $message }}" />
             @enderror
           </div>
+        </div>
+        <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
           <div class="w-full">
             <x-label for="phone">{{ __('Phone') }}</x-label>
             <x-input id="phone" class="mt-1 block w-full" type="number" wire:model="form.phone"
               placeholder="+628123456789" />
             @error('form.phone')
               <x-input-error for="form.phone" class="mt-2" message="{{ $message }}" />
-            @enderror
-          </div>
-        </div>
-        <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
-          <div class="w-full">
-            <x-label for="birth_date">{{ __('Birth Date') }}</x-label>
-            <x-input id="birth_date" class="mt-1 block w-full" type="date" wire:model="form.birth_date" />
-            @error('form.birth_date')
-              <x-input-error for="form.birth_date" class="mt-2" message="{{ $message }}" />
-            @enderror
-          </div>
-          <div class="w-full">
-            <x-label for="birth_place">{{ __('Birth Place') }}</x-label>
-            <x-input id="birth_place" class="mt-1 block w-full" type="text" wire:model="form.birth_place"
-              placeholder="Jakarta" />
-            @error('form.birth_place')
-              <x-input-error for="form.birth_place" class="mt-2" message="{{ $message }}" />
             @enderror
           </div>
         </div>
@@ -277,20 +254,6 @@
             <x-input-error for="form.job_title_id" class="mt-2" message="{{ $message }}" />
           @enderror
         </div>
-        <div class="mt-4">
-          <x-label for="form.education_id" value="{{ __('Last Education') }}" />
-          <x-select id="form.education_id" class="mt-1 block w-full" wire:model="form.education_id">
-            <option value="">{{ __('Select Education') }}</option>
-            @foreach (App\Models\Education::all() as $education)
-              <option value="{{ $education->id }}" {{ $education->id == $form->education_id ? 'selected' : '' }}>
-                {{ $education->name }}
-              </option>
-            @endforeach
-          </x-select>
-          @error('form.education_id')
-            <x-input-error for="form.education_id" class="mt-2" message="{{ $message }}" />
-          @enderror
-        </div>
       </x-slot>
 
       <x-slot name="footer">
@@ -307,7 +270,7 @@
 
   <x-dialog-modal wire:model="editing">
     <x-slot name="title">
-      Edit Karyawan
+      Edit Admin
     </x-slot>
 
     <form wire:submit.prevent="update" id="user-edit">
@@ -356,7 +319,7 @@
           </div>
         @endif
         <div class="mt-4">
-          <x-label for="name">Nama Karyawan</x-label>
+          <x-label for="name">Nama Admin</x-label>
           <x-input id="name" class="mt-1 block w-full" type="text" wire:model="form.name" />
           @error('form.name')
             <x-input-error for="form.name" class="mt-2" message="{{ $message }}" />
@@ -392,44 +355,11 @@
         </div>
         <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
           <div class="w-full">
-            <x-label for="gender">{{ __('Gender') }}</x-label>
-            <div class="my-3 flex flex-row gap-5">
-              <div class="flex items-center">
-                <input type="radio" id="gender-male" wire:model="form.gender" value="male" />
-                <x-label for="gender-male" class="ml-2">{{ __('Male') }}</x-label>
-              </div>
-              <div class="flex items-center">
-                <input type="radio" id="gender-female" wire:model="form.gender" value="female" />
-                <x-label for="gender-female" class="ml-2">{{ __('Female') }}</x-label>
-              </div>
-            </div>
-            @error('form.gender')
-              <x-input-error for="form.gender" class="mt-2" message="{{ $message }}" />
-            @enderror
-          </div>
-          <div class="w-full">
             <x-label for="phone">{{ __('Phone') }}</x-label>
             <x-input id="phone" class="mt-1 block w-full" type="text" wire:model="form.phone"
               placeholder="+628123456789" />
             @error('form.phone')
               <x-input-error for="form.phone" class="mt-2" message="{{ $message }}" />
-            @enderror
-          </div>
-        </div>
-        <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:gap-3">
-          <div class="w-full">
-            <x-label for="birth_date">{{ __('Birth Date') }}</x-label>
-            <x-input id="birth_date" class="mt-1 block w-full" type="date" wire:model="form.birth_date" />
-            @error('form.birth_date')
-              <x-input-error for="form.birth_date" class="mt-2" message="{{ $message }}" />
-            @enderror
-          </div>
-          <div class="w-full">
-            <x-label for="birth_place">{{ __('Birth Place') }}</x-label>
-            <x-input id="birth_place" class="mt-1 block w-full" type="text" wire:model="form.birth_place"
-              placeholder="Jakarta" />
-            @error('form.birth_place')
-              <x-input-error for="form.birth_place" class="mt-2" message="{{ $message }}" />
             @enderror
           </div>
         </div>
@@ -479,20 +409,6 @@
             <x-input-error for="form.job_title_id" class="mt-2" message="{{ $message }}" />
           @enderror
         </div>
-        <div class="mt-4">
-          <x-label for="form.education_id" value="{{ __('Last Education') }}" />
-          <x-select id="form.education_id" class="mt-1 block w-full" wire:model="form.education_id">
-            <option value="">{{ __('Select Education') }}</option>
-            @foreach (App\Models\Education::all() as $education)
-              <option value="{{ $education->id }}" {{ $education->id == $form->education_id ? 'selected' : '' }}>
-                {{ $education->name }}
-              </option>
-            @endforeach
-          </x-select>
-          @error('form.education_id')
-            <x-input-error for="form.education_id" class="mt-2" message="{{ $message }}" />
-          @enderror
-        </div>
       </x-slot>
 
       <x-slot name="footer">
@@ -516,8 +432,8 @@
       @endphp
       <div class="px-6 py-4">
         <div class="my-4 flex items-center justify-center">
-          <img class="h-32 w-32 rounded-full object-cover" src="{{ $user->profile_photo_url }}"
-            alt="{{ $user->name }}" />
+          <img class="h-32 w-32 rounded-full object-cover" src="{{ $form->user->profile_photo_url }}"
+            alt="{{ $form->user->name }}" title="{{ $form->user->name }}" />
         </div>
 
         <div class="text-center text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -538,8 +454,8 @@
             <p>{{ $form->user->phone }}</p>
           </div>
           <div class="mt-4">
-            <x-label for="gender" value="{{ __('Gender') }}" />
-            <p>{{ __($form->user->gender) }}</p>
+            <x-label for="group" value="{{ __('Group') }}" />
+            <p>{{ __($form->user->group) }}</p>
           </div>
           <div class="mt-4">
             <x-label for="birth_date" value="{{ __('Birth Date') }}" />
@@ -577,10 +493,10 @@
             <x-label for="division_id" value="{{ __('Division') }}" />
             <p>{{ $division }}</p>
           </div>
-          <div class="mt-4">
+          {{-- <div class="mt-4">
             <x-label for="education_id" value="{{ __('Last Education') }}" />
             <p>{{ $education }}</p>
-          </div>
+          </div> --}}
         </div>
       </div>
     @endif

@@ -81,7 +81,22 @@ class User extends Authenticatable
         ];
     }
 
-    public static $groups = ['user', 'admin'];
+    public static $groups = ['user', 'admin', 'superadmin'];
+
+    final public function getIsUserAttribute(): bool
+    {
+        return $this->group === 'user';
+    }
+
+    final public function getIsAdminAttribute(): bool
+    {
+        return $this->group === 'admin' || $this->isSuperadmin;
+    }
+
+    final public function getIsSuperadminAttribute(): bool
+    {
+        return $this->group === 'superadmin';
+    }
 
     public function education()
     {

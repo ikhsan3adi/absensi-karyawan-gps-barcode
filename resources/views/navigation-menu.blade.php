@@ -5,14 +5,14 @@
       <div class="flex">
         <!-- Logo -->
         <div class="flex shrink-0 items-center">
-          <a href="{{ Auth::user()->group == 'admin' ? route('admin.dashboard') : route('home') }}">
+          <a href="{{ Auth::user()->isAdmin ? route('admin.dashboard') : route('home') }}">
             <x-application-mark class="block h-9 w-auto" />
           </a>
         </div>
 
         <!-- Navigation Links -->
         <div class="hidden space-x-2 sm:-my-px sm:ms-6 sm:flex md:ms-10 md:space-x-5 lg:space-x-8">
-          @if (Auth::user()->group == 'admin')
+          @if (Auth::user()->isAdmin)
             <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
               {{ __('Dashboard') }}
             </x-nav-link>
@@ -48,6 +48,9 @@
                 </x-dropdown-link>
                 <x-dropdown-link href="{{ route('admin.masters.shift') }}" :active="request()->routeIs('admin.masters.shift')">
                   {{ __('Shift') }}
+                </x-dropdown-link>
+                <x-dropdown-link href="{{ route('admin.masters.admin') }}" :active="request()->routeIs('admin.masters.admin')">
+                  {{ __('Admin') }}
                 </x-dropdown-link>
               </x-slot>
             </x-nav-dropdown>
@@ -154,7 +157,7 @@
   <!-- Responsive Navigation Menu -->
   <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
     <div class="space-y-1 pb-3 pt-2">
-      @if (Auth::user()->group == 'admin')
+      @if (Auth::user()->isAdmin)
         <x-responsive-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
           {{ __('Dashboard') }}
         </x-responsive-nav-link>
@@ -178,6 +181,9 @@
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.masters.shift') }}" :active="request()->routeIs('admin.masters.shift')">
           {{ __('Shift') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link href="{{ route('admin.masters.admin') }}" :active="request()->routeIs('admin.masters.admin')">
+          {{ __('Admin') }}
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.import-export.users') }}" :active="request()->routeIs('admin.import-export')">
           Import & Export Karyawan

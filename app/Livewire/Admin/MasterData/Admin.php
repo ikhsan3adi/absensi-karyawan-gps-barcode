@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Admin\MasterData;
 
 use App\Livewire\Forms\UserForm;
 use App\Models\User;
@@ -9,17 +9,23 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
-class EmployeeComponent extends Component
+class Admin extends Component
 {
     use WithPagination, InteractsWithBanner, WithFileUploads;
 
     public UserForm $form;
+    public $groups = [];
     public $deleteName = null;
     public $creating = false;
     public $editing = false;
     public $confirmingDeletion = false;
     public $selectedId = null;
     public $showDetail = null;
+
+    public function __construct()
+    {
+        $this->groups = User::$groups;
+    }
 
     public function show($id)
     {
@@ -32,7 +38,7 @@ class EmployeeComponent extends Component
         $this->form->resetErrorBag();
         $this->form->reset();
         $this->creating = true;
-        $this->form->password = 'password';
+        $this->form->password = 'admin';
     }
 
     public function create()
@@ -81,7 +87,7 @@ class EmployeeComponent extends Component
 
     public function render()
     {
-        $users = User::where('group', 'user')->orderBy('name')->paginate(20);
-        return view('livewire.admin.employees', ['users' => $users]);
+        $users = User::where('group', '!=', 'user')->orderBy('group', 'desc')->paginate(20);
+        return view('livewire.admin.master-data.admin', ['users' => $users]);
     }
 }

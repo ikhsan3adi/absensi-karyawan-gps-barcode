@@ -66,7 +66,7 @@ class UserFactory extends Factory
     /**
      * Indicate that the user should be admin.
      */
-    public function admin(): static
+    public function admin(bool $superadmin = false): static
     {
         return $this->state(fn (array $attributes) => [
             'nip' => '0000000000000000',
@@ -75,7 +75,7 @@ class UserFactory extends Factory
             'birth_place' => null,
             'address' => '',
             'city' => '',
-            'group' => 'admin',
+            'group' => $superadmin ? 'superadmin' : 'admin',
             'gender' => 'male',
         ]);
     }
