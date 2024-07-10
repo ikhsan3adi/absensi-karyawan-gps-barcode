@@ -41,8 +41,7 @@
     @if (!$isAbsence)
       <div class="flex flex-col gap-4">
         <div>
-          <x-select id="shift" class="mt-1 block w-full" wire:model="shift_id"
-            disabled="{{ $shift_id ? true : false }}">
+          <x-select id="shift" class="mt-1 block w-full" wire:model="shift_id" disabled="{{ !is_null($attendance) }}">
             <option value="">{{ __('Select Shift') }}</option>
             @foreach ($shifts as $shift)
               <option value="{{ $shift->id }}" {{ $shift->id == $shift_id ? 'selected' : '' }}>
