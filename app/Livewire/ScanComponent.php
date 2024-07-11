@@ -130,7 +130,7 @@ class ScanComponent extends Component
                 ->closestFromDateArray($this->shifts->pluck('start_time')->toArray());
 
             $this->shift_id = $this->shifts
-                ->where(fn (Shift $q) => $q->start_time == $closest->format('H:i:s'))
+                ->where(fn (Shift $shift) => $shift->start_time == $closest->format('H:i:s'))
                 ->first()->id;
         }
     }

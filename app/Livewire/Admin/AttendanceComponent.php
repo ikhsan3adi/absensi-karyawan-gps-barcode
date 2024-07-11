@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Livewire\Traits\AttendanceDetailTrait;
 use App\Models\Attendance;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -17,13 +18,13 @@ class AttendanceComponent extends Component
     use AttendanceDetailTrait;
     use WithPagination, InteractsWithBanner;
 
+    # filter
     public ?string $month;
     public ?string $week = null;
     public ?string $date = null;
     public ?string $division = null;
     public ?string $jobTitle = null;
     public ?string $search = null;
-
 
     public function mount()
     {
@@ -66,12 +67,12 @@ class AttendanceComponent extends Component
             $dates = $start->range($end)->toArray();
         }
         $employees = User::where('group', 'user')
-            ->when($this->search, function ($q) {
+            ->when($this->search, function (Builder $q) {
                 return $q->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('nip', 'like', '%' . $this->search . '%');
             })
-            ->when($this->division, fn ($q) => $q->where('division_id', $this->division))
-            ->when($this->jobTitle, fn ($q) => $q->where('job_title_id', $this->jobTitle))
+            ->when($this->division, fn (Builder $q) => $q->where('division_id', $this->division))
+            ->when($this->jobTitle, fn (Builder $q) => $q->where('job_title_id', $this->jobTitle))
             ->paginate(20)->through(function (User $user) {
                 if ($this->date) {
                     $attendances = new Collection(Cache::remember(

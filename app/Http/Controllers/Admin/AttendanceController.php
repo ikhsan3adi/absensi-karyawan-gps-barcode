@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -49,8 +50,8 @@ class AttendanceController extends Controller
             $dates = $start->range($end)->toArray();
         }
         $employees = User::where('group', 'user')
-            ->when($request->division, fn ($q) => $q->where('division_id', $request->division))
-            ->when($request->jobTitle, fn ($q) => $q->where('job_title_id', $request->jobTitle))
+            ->when($request->division, fn (Builder $q) => $q->where('division_id', $request->division))
+            ->when($request->jobTitle, fn (Builder $q) => $q->where('job_title_id', $request->jobTitle))
             ->get()
             ->map(function ($user) use ($request) {
                 if ($request->date) {
