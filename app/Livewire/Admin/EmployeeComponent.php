@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Livewire\Forms\UserForm;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -20,6 +21,12 @@ class EmployeeComponent extends Component
     public $confirmingDeletion = false;
     public $selectedId = null;
     public $showDetail = null;
+
+    # filter
+    public ?string $division = null;
+    public ?string $jobTitle = null;
+    public ?string $education = null;
+    public ?string $search = null;
 
     public function show($id)
     {
@@ -81,7 +88,18 @@ class EmployeeComponent extends Component
 
     public function render()
     {
-        $users = User::where('group', 'user')->orderBy('name')->paginate(20);
+        $users = User::where('group', 'user')
+            ->when($this->search, function (Builder $q) {
+                return $q->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('nip', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%')
+                    ->orWhere('phone', 'like', '%' . $this->search . '%');
+            })
+            ->when($this->division, fn (Builder $q) => $q->where('division_id', $this->division))
+            ->when($this->jobTitle, fn (Builder $q) => $q->where('job_title_id', $this->jobTitle))
+            ->when($this->education, fn (Builder $q) => $q->where('education_id', $this->education))
+            ->orderBy('name')
+            ->paginate(20);
         return view('livewire.admin.employees', ['users' => $users]);
     }
 }

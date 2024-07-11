@@ -7,11 +7,55 @@
       <x-heroicon-o-plus class="mr-2 h-4 w-4" /> Tambah Karyawan
     </x-button>
   </div>
+  <div class="mb-1 text-sm dark:text-white">Filter:</div>
+  <div class="mb-4 grid grid-cols-3 flex-wrap items-center gap-5 md:gap-8 lg:flex">
+    <x-select id="division" wire:model.live="division">
+      <option value="">{{ __('Select Division') }}</option>
+      @foreach (App\Models\Division::all() as $_division)
+        <option value="{{ $_division->id }}" {{ $_division->id == $division ? 'selected' : '' }}>
+          {{ $_division->name }}
+        </option>
+      @endforeach
+    </x-select>
+    <x-select id="jobTitle" wire:model.live="jobTitle">
+      <option value="">{{ __('Select Job Title') }}</option>
+      @foreach (App\Models\JobTitle::all() as $_jobTitle)
+        <option value="{{ $_jobTitle->id }}" {{ $_jobTitle->id == $jobTitle ? 'selected' : '' }}>
+          {{ $_jobTitle->name }}
+        </option>
+      @endforeach
+    </x-select>
+    <x-select id="education" wire:model.live="education">
+      <option value="">{{ __('Last Education') }}</option>
+      @foreach (App\Models\Education::all() as $_education)
+        <option value="{{ $_education->id }}" {{ $_education->id == $education ? 'selected' : '' }}>
+          {{ $_education->name }}
+        </option>
+      @endforeach
+    </x-select>
+    <div class="col-span-3 flex items-center gap-2 lg:col-span-1">
+      <x-input type="text" class="w-full lg:w-72" name="search" id="seacrh" wire:model="search"
+        placeholder="{{ __('Search') }}" />
+      <div class="flex gap-2">
+        <x-button class="flex justify-center sm:w-32" type="button" wire:click="$refresh" wire:loading.attr="disabled">
+          {{ __('Search') }}
+        </x-button>
+        @if ($search)
+          <x-secondary-button class="flex justify-center sm:w-32" type="button" wire:click="$set('search', '')"
+            wire:loading.attr="disabled">
+            {{ __('Reset') }}
+          </x-secondary-button>
+        @endif
+      </div>
+
+    </div>
+  </div>
   <div class="overflow-x-scroll">
     <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
       <thead class="bg-gray-50 dark:bg-gray-900">
         <tr>
-          <th scope="col" class="relative px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-300">
+          <th scope="col"
+            class="relative px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-300">
             No.
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">
