@@ -1,66 +1,79 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Aplikasi Web Absensi Karyawan QR Code GPS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Aplikasi Web Absensi Karyawan QR Code GPS](./screenshots/hero.png)
 
-## About Laravel
+Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Teknologi yang Digunakan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* [Laravel 11](https://laravel.com/)
+* [Laravel Jetstream](https://jetstream.laravel.com/)
+* [Endroid QR Code](https://github.com/endroid/qr-code)
+* [Leaflet.js](https://leafletjs.com/)
+* [OpenStreetMap](https://www.openstreetmap.org/)
+* MySQL/MariaDB
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Instalasi
 
-## Learning Laravel
+### Prasyarat
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* [Composer](https://getcomposer.org)
+* [NPM & Node.js](https://nodejs.org)
+* PHP 8.2 atau lebih tinggi
+* MySQL/MariaDB
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Clone/download repository ini
+2. Jalankan perintah `composer run-script post-root-package-install` untuk membuat file `.env`
+3. Jalankan perintah `composer install` untuk menginstalasi dependency
+4. Jalankan perintah `npm install` untuk menginstalasi dependency Javascript
+5. Jalankan perintah `php artisan key:generate --ansi --force` untuk membuat key aplikasi
+6. Jalankan perintah `php artisan migrate` untuk membuat tabel databasex
+7. Jalankan perintah `npm run build` untuk membuat file css dan javascript yang diperlukan
+8. Jalankan perintah `php artisan serve` untuk menjalankan aplikasi
 
-## Laravel Sponsors
+### Seeder
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Pilih salah satu opsi berikut:
 
-### Premium Partners
+* Jalankan perintah `php artisan db:seed DatabaseSeeder` untuk menyiapkan data awal
+* Jalankan perintah `php artisan db:seed FakeDataSeeder` untuk menyiapkan data awal beserta data dummy (absensi & karyawan)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Fitur & Pratinjau
 
-## Contributing
+### User/Karyawan
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Scan Page | Scan Page (Mobile) |
+|---|---|
+|![Scan](./screenshots/presensi-scan.png)|![Scan mobile](./screenshots/presensi-scan-mobile.png)|
 
-## Code of Conduct
+| Pengajuan Absensi | Riwayat Absensi Karyawan |
+|---|---|
+|![Pengajuan Absensi](./screenshots/pengajuan-izin.jpeg)|![Riwayat Absensi](./screenshots/presensi-user.jpeg)|
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Admin & Superadmin
 
-## Security Vulnerabilities
+| Dashboard Admin | Dashboard Admin Dark |
+|---|---|
+|![Dashboard](./screenshots/dashboard-light.jpeg)|![Dashboard Dark](./screenshots/dashboard-dark.jpeg)|
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Barcode | Create/Edit Barcode |
+|---|---|
+|![Barcode](./screenshots/barcode.jpeg)|![Create Edit Barcode](./screenshots/create-edit-barcode.jpeg)|
 
-## License
+| Absensi Karyawan | | |
+|---|---|---|
+| Absensi per hari | Absensi per minggu | Absensi per bulan |
+|![Absensi per hari](./screenshots/absensi-hari.png)|![Absensi per minggu](./screenshots/absensi-minggu.png)|![Absensi per bulan](./screenshots/absensi-bulan.png)|
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Data Karyawan | Create/Edit Data Karyawan |
+|---|---|
+|![Data Karyawan](./screenshots/karyawan.jpeg)|![Create Edit Data Karyawan](./screenshots/create-edit-karyawan.png)|
+
+|Export/Import from/to XLSX| |
+|---|---|
+| Export/Import Data Karyawan & User | Export/Import Data Karyawan & User + Preview Data |
+|![Export/Import Data Karyawan](./screenshots/export-user.jpeg)|![Export/Import Data Karyawan + Preview](./screenshots/export-user-preview.jpeg)|
+| Export/Import Data Absensi & User | Export/Import Data Absensi & User + Preview Data |
+|![Export/Import Data Absensi](./screenshots/export-absensi.jpeg)|![Export/Import Data Absensi + Preview](./screenshots/export-absensi-preview.png)|
