@@ -19,7 +19,7 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
 * [Composer](https://getcomposer.org)
 * [NPM & Node.js](https://nodejs.org)
-* PHP 8.2 atau lebih tinggi
+* PHP 8.3 atau lebih tinggi
 * MySQL/MariaDB
 
 ---
@@ -77,3 +77,7 @@ Pilih salah satu opsi berikut:
 |![Export/Import Data Karyawan](./screenshots/export-user.jpeg)|![Export/Import Data Karyawan + Preview](./screenshots/export-user-preview.jpeg)|
 | Export/Import Data Absensi & User | Export/Import Data Absensi & User + Preview Data |
 |![Export/Import Data Absensi](./screenshots/export-absensi.jpeg)|![Export/Import Data Absensi + Preview](./screenshots/export-absensi-preview.png)|
+
+## Donasi ❤
+
+[![Donate saweria](https://img.shields.io/badge/Donate-Saweria-red?style=for-the-badge&link=https%3A%2F%2Fsaweria.co%2Fxiboxann)](https://saweria.co/xiboxann)
