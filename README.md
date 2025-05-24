@@ -81,3 +81,5 @@ Pilih salah satu opsi berikut:
 ## Donasi ❤
 
 [![Donate saweria](https://img.shields.io/badge/Donate-Saweria-red?style=for-the-badge&link=https%3A%2F%2Fsaweria.co%2Fxiboxann)](https://saweria.co/xiboxann)
+
+Atau, beri star...⭐⭐⭐⭐
