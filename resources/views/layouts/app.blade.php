@@ -42,6 +42,8 @@
     </main>
   </div>
 
+  <x-sigsegv-core-dumped />
+
   @stack('modals')
 
   @livewireScripts

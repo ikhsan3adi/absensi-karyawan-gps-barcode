@@ -20,7 +20,7 @@
 </head>
 
 <body class="font-sans antialiased">
-  <div class="font-sans text-gray-900 antialiased dark:text-gray-100">
+  <div class="font-sans text-gray-900 dark:text-gray-100">
 
     <div class="absolute right-4 top-4">
       <x-theme-toggle x-data />
@@ -28,6 +28,8 @@
 
     {{ $slot }}
   </div>
+
+  <x-sigsegv-core-dumped />
 
   @livewireScripts
 </body>
