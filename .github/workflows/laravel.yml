@@ -31,6 +31,10 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+
     - uses: shivammathur/setup-php@v2
       with:
         php-version: latest
@@ -44,14 +48,14 @@ jobs:
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    - name: Generate key
+    - name: Generate Key
       run: php artisan key:generate --force
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
 
-    - name: Install NPM dependencies and Build Assets
-      run: npm ci && npm run build
+    - name: Install Bun Dependencies and Build Assets
+      run: bun ci && bun run build
 
     - name: Delete node_modules
       run: rm -rf node_modules

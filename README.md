@@ -18,7 +18,7 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 ### Prasyarat
 
 * [Composer](https://getcomposer.org)
-* [NPM & Node.js](https://nodejs.org)
+* [NPM & Node.js](https://nodejs.org) atau [Bun](https://bun.com/)
 * PHP 8.3 atau lebih tinggi
 * MySQL/MariaDB
 
@@ -44,39 +44,39 @@ Pilih salah satu opsi berikut:
 
 ### User/Karyawan
 
-| Scan Page | Scan Page (Mobile) |
-|---|---|
-|![Scan](./screenshots/presensi-scan.png)|![Scan mobile](./screenshots/presensi-scan-mobile.png)|
+| Scan Page                                | Scan Page (Mobile)                                     |
+| ---------------------------------------- | ------------------------------------------------------ |
+| ![Scan](./screenshots/presensi-scan.png) | ![Scan mobile](./screenshots/presensi-scan-mobile.png) |
 
-| Pengajuan Absensi | Riwayat Absensi Karyawan |
-|---|---|
-|![Pengajuan Absensi](./screenshots/pengajuan-izin.jpeg)|![Riwayat Absensi](./screenshots/presensi-user.jpeg)|
+| Pengajuan Absensi                                       | Riwayat Absensi Karyawan                             |
+| ------------------------------------------------------- | ---------------------------------------------------- |
+| ![Pengajuan Absensi](./screenshots/pengajuan-izin.jpeg) | ![Riwayat Absensi](./screenshots/presensi-user.jpeg) |
 
 ### Admin & Superadmin
 
-| Dashboard Admin | Dashboard Admin Dark |
-|---|---|
-|![Dashboard](./screenshots/dashboard-light.jpeg)|![Dashboard Dark](./screenshots/dashboard-dark.jpeg)|
+| Dashboard Admin                                  | Dashboard Admin Dark                                 |
+| ------------------------------------------------ | ---------------------------------------------------- |
+| ![Dashboard](./screenshots/dashboard-light.jpeg) | ![Dashboard Dark](./screenshots/dashboard-dark.jpeg) |
 
-| Barcode | Create/Edit Barcode |
-|---|---|
-|![Barcode](./screenshots/barcode.jpeg)|![Create Edit Barcode](./screenshots/create-edit-barcode.jpeg)|
+| Barcode                                | Create/Edit Barcode                                            |
+| -------------------------------------- | -------------------------------------------------------------- |
+| ![Barcode](./screenshots/barcode.jpeg) | ![Create Edit Barcode](./screenshots/create-edit-barcode.jpeg) |
 
-| Absensi Karyawan | | |
-|---|---|---|
-| Absensi per hari | Absensi per minggu | Absensi per bulan |
-|![Absensi per hari](./screenshots/absensi-hari.png)|![Absensi per minggu](./screenshots/absensi-minggu.png)|![Absensi per bulan](./screenshots/absensi-bulan.png)|
+| Absensi Karyawan                                    |                                                         |                                                       |
+| --------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------- |
+| Absensi per hari                                    | Absensi per minggu                                      | Absensi per bulan                                     |
+| ![Absensi per hari](./screenshots/absensi-hari.png) | ![Absensi per minggu](./screenshots/absensi-minggu.png) | ![Absensi per bulan](./screenshots/absensi-bulan.png) |
 
-| Data Karyawan | Create/Edit Data Karyawan |
-|---|---|
-|![Data Karyawan](./screenshots/karyawan.jpeg)|![Create Edit Data Karyawan](./screenshots/create-edit-karyawan.png)|
+| Data Karyawan                                 | Create/Edit Data Karyawan                                            |
+| --------------------------------------------- | -------------------------------------------------------------------- |
+| ![Data Karyawan](./screenshots/karyawan.jpeg) | ![Create Edit Data Karyawan](./screenshots/create-edit-karyawan.png) |
 
-|Export/Import from/to XLSX| |
-|---|---|
-| Export/Import Data Karyawan & User | Export/Import Data Karyawan & User + Preview Data |
-|![Export/Import Data Karyawan](./screenshots/export-user.jpeg)|![Export/Import Data Karyawan + Preview](./screenshots/export-user-preview.jpeg)|
-| Export/Import Data Absensi & User | Export/Import Data Absensi & User + Preview Data |
-|![Export/Import Data Absensi](./screenshots/export-absensi.jpeg)|![Export/Import Data Absensi + Preview](./screenshots/export-absensi-preview.png)|
+| Export/Import from/to XLSX                                       |                                                                                   |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Export/Import Data Karyawan & User                               | Export/Import Data Karyawan & User + Preview Data                                 |
+| ![Export/Import Data Karyawan](./screenshots/export-user.jpeg)   | ![Export/Import Data Karyawan + Preview](./screenshots/export-user-preview.jpeg)  |
+| Export/Import Data Absensi & User                                | Export/Import Data Absensi & User + Preview Data                                  |
+| ![Export/Import Data Absensi](./screenshots/export-absensi.jpeg) | ![Export/Import Data Absensi + Preview](./screenshots/export-absensi-preview.png) |
 
 ## Donasi ❤
 
