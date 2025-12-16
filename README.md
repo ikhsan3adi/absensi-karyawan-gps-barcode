@@ -6,21 +6,21 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
 ## Teknologi yang Digunakan
 
-* [Laravel 11](https://laravel.com/)
-* [Laravel Jetstream](https://jetstream.laravel.com/)
-* [Endroid QR Code](https://github.com/endroid/qr-code)
-* [Leaflet.js](https://leafletjs.com/)
-* [OpenStreetMap](https://www.openstreetmap.org/)
-* MySQL/MariaDB
+- [Laravel 11](https://laravel.com/)
+- [Laravel Jetstream](https://jetstream.laravel.com/)
+- [Endroid QR Code](https://github.com/endroid/qr-code)
+- [Leaflet.js](https://leafletjs.com/)
+- [OpenStreetMap](https://www.openstreetmap.org/)
+- MySQL/MariaDB
 
 ## Instalasi
 
 ### Prasyarat
 
-* [Composer](https://getcomposer.org)
-* [NPM & Node.js](https://nodejs.org) atau [Bun](https://bun.com/)
-* PHP 8.3 atau lebih tinggi
-* MySQL/MariaDB
+- [Composer](https://getcomposer.org)
+- [NPM & Node.js](https://nodejs.org) atau [Bun](https://bun.com/)
+- PHP 8.3
+- MySQL/MariaDB
 
 ---
 
@@ -37,8 +37,8 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
 Pilih salah satu opsi berikut:
 
-* Jalankan perintah `php artisan db:seed DatabaseSeeder` untuk menyiapkan data awal
-* Jalankan perintah `php artisan db:seed FakeDataSeeder` untuk menyiapkan data awal beserta data dummy (absensi & karyawan)
+- Jalankan perintah `php artisan db:seed DatabaseSeeder` untuk menyiapkan data awal
+- Jalankan perintah `php artisan db:seed FakeDataSeeder` untuk menyiapkan data awal beserta data dummy (absensi & karyawan)
 
 ## Fitur & Pratinjau
 

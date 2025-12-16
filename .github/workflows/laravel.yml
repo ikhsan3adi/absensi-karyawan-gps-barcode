@@ -2,7 +2,7 @@ name: Laravel Tests
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: ["master", "main"]
   pull_request:
 
 env:
@@ -31,40 +31,40 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-    - uses: oven-sh/setup-bun@v2
-      with:
-        bun-version: latest
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: latest
-        extensions: gd, intl, zip
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3.28
+          extensions: gd, intl, zip
 
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    - name: Generate Key
-      run: php artisan key:generate --force
+      - name: Generate Key
+        run: php artisan key:generate --force
 
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
 
-    - name: Install Bun Dependencies and Build Assets
-      run: bun ci && bun run build
+      - name: Install Bun Dependencies and Build Assets
+        run: bun ci && bun run build
 
-    - name: Delete node_modules
-      run: rm -rf node_modules
+      - name: Delete node_modules
+        run: rm -rf node_modules
 
-    - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-      run: php artisan test
+      - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
+        run: php artisan test
 
-    - name: Execute migrations
-      run: php artisan migrate:fresh --force
+      - name: Execute migrations
+        run: php artisan migrate:fresh --force
 
-    - name: Execute seeders
-      run: php artisan db:seed FakeDataSeeder --force
+      - name: Execute seeders
+        run: php artisan db:seed FakeDataSeeder --force
