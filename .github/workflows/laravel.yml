@@ -54,8 +54,17 @@ jobs:
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
 
+      - name: Restore bun install cache
+        id: cache-bun-install
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       - name: Install Bun Dependencies and Build Assets
-        run: bun ci && bun run build
+        run: bun install && bun run build
 
       - name: Delete node_modules
         run: rm -rf node_modules
