@@ -65,6 +65,9 @@ class AttendanceComponent extends Component
             $start = Carbon::parse($this->month)->startOfMonth();
             $end = Carbon::parse($this->month)->endOfMonth();
             $dates = $start->range($end)->toArray();
+        } else {
+            $this->date = date('Y-m-d');
+            $dates = [Carbon::parse($this->date)];
         }
         $employees = User::where('group', 'user')
             ->when($this->search, function (Builder $q) {
