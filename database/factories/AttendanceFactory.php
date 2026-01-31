@@ -66,10 +66,14 @@ class AttendanceFactory extends Factory
     public function excused(bool $sick = false): static
     {
         return $this->state(function (array $attributes) use ($sick) {
+            $sentence = $this->faker->sentence();
             return [
                 'status' => $sick ? 'sick' : 'excused',
-                'note' => $this->faker->sentence(),
-                'attachment' => $this->faker->imageUrl(),
+                'note' => $sentence,
+                'attachment' => 
+                    'https://placehold.co/640x480/'
+                    . substr($this->faker->hexColor(), 1) . '/' . substr($this->faker->hexColor(), 1)
+                    . '/png?text=' . urlencode($sentence),
             ];
         });
     }
