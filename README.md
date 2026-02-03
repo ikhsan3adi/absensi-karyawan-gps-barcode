@@ -80,7 +80,7 @@ Pilih salah satu opsi berikut:
 
 ## Donasi ❤
 
-[![Donate saweria](https://img.shields.io/badge/Donate-Trakteer-red?style=for-the-badge&link=https%3A%2F%2Fsaweria.co%2Fxiboxann)](https://trakteer.id/ikhsan3adi/tip)
+[![Donate trakteer](https://img.shields.io/badge/Donate-Trakteer-red?style=for-the-badge&link=https%3A%2F%2Ftrakteer.id%2Fikhsan3adi%2Ftip)](https://trakteer.id/ikhsan3adi/tip)
 [![Donate saweria](https://img.shields.io/badge/Donate-Saweria-red?style=for-the-badge&link=https%3A%2F%2Fsaweria.co%2Fxiboxann)](https://saweria.co/xiboxann)
 
 Atau, beri star...⭐⭐⭐⭐
