@@ -25,13 +25,30 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 ---
 
 1. Clone/download repository ini
-2. Jalankan perintah `composer run-script post-root-package-install` untuk membuat file `.env`
-3. Jalankan perintah `composer install` untuk menginstalasi dependency
-4. Jalankan perintah `npm install` untuk menginstalasi dependency Javascript
-5. Jalankan perintah `php artisan key:generate --ansi --force` untuk membuat key aplikasi
-6. Jalankan perintah `php artisan migrate` untuk membuat tabel databasex
-7. Jalankan perintah `npm run build` untuk membuat file css dan javascript yang diperlukan
-8. Jalankan perintah `php artisan serve` untuk menjalankan aplikasi
+
+2. Jalankan perintah
+
+    ```sh
+    composer run-script post-root-package-install # untuk membuat file `.env`
+
+    composer install                              # untuk instalasi dependency php
+
+    npm install                                   # untuk instalasi dependency javascript
+
+    php artisan key:generate --ansi --force       # untuk membuat key aplikasi
+
+    php artisan storage:link                      # untuk menghubungkan storage ke public
+
+    php artisan migrate                           # untuk membuat tabel database
+
+    npm run build                                 # untuk membuat file css dan javascript yang diperlukan
+    ```
+
+    Menjalankan aplikasi
+
+    ```sh
+    php artisan serve                             # untuk menjalankan aplikasi (local)
+    ```
 
 ### Seeder
 
