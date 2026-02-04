@@ -65,13 +65,18 @@
 
 @script
   <script type="text/javascript">
-    let barcodes = {{ $barcodes->map(fn($barcode) => $barcode->id) }};
+    let barcodes = @json(
+      $barcodes->map(fn($barcode) => [
+          'id' => $barcode->id,
+          'value' => $barcode->value
+      ])
+    );
 
     let isDark = $store.darkMode.on;
 
-    barcodes.forEach(element => {
-      new QRCode(document.getElementById("qrcode" + element), {
-        text: '{{ $barcode->value }}',
+    barcodes.forEach(({ id, value }) => {
+      new QRCode(document.getElementById("qrcode" + id), {
+        text: value,
         colorDark: $store.darkMode.on ? "#ffffff" : "#000000",
         colorLight: $store.darkMode.on ? "#000000" : "#ffffff",
         correctLevel: QRCode.CorrectLevel.M
@@ -79,17 +84,17 @@
     });
     setInterval(() => {
       if (isDark == $store.darkMode.on &&
-        document.getElementById("qrcode" + barcodes[0]).hasAttribute("title")) {
+        document.getElementById("qrcode" + barcodes[0]['id']).hasAttribute("title")) {
         return;
       }
       isDark = $store.darkMode.on;
-      barcodes.forEach(element => {
-        if (!document.getElementById("qrcode" + element)) {
+      barcodes.forEach(({ id, value }) => {
+        if (!document.getElementById("qrcode" + id)) {
           return;
         }
-        document.getElementById("qrcode" + element).innerHTML = "";
-        new QRCode(document.getElementById("qrcode" + element), {
-          text: '{{ $barcode->value }}',
+        document.getElementById("qrcode" + id).innerHTML = "";
+        new QRCode(document.getElementById("qrcode" + id), {
+          text: value,
           colorDark: $store.darkMode.on ? "#ffffff" : "#000000",
           colorLight: $store.darkMode.on ? "#000000" : "#ffffff",
           correctLevel: QRCode.CorrectLevel.M,
