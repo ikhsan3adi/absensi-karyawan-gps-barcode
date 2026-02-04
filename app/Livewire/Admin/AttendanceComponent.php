@@ -16,14 +16,19 @@ use Livewire\WithPagination;
 class AttendanceComponent extends Component
 {
     use AttendanceDetailTrait;
-    use WithPagination, InteractsWithBanner;
+    use InteractsWithBanner, WithPagination;
 
-    # filter
+    // filter
     public ?string $month;
+
     public ?string $week = null;
+
     public ?string $date = null;
+
     public ?string $division = null;
+
     public ?string $jobTitle = null;
+
     public ?string $search = null;
 
     public function mount()
@@ -55,24 +60,35 @@ class AttendanceComponent extends Component
 
     public function render()
     {
-        if ($this->date) {
-            $dates = [Carbon::parse($this->date)];
-        } else if ($this->week) {
-            $start = Carbon::parse($this->week)->startOfWeek();
-            $end = Carbon::parse($this->week)->endOfWeek();
-            $dates = $start->range($end)->toArray();
-        } else if ($this->month) {
-            $start = Carbon::parse($this->month)->startOfMonth();
-            $end = Carbon::parse($this->month)->endOfMonth();
-            $dates = $start->range($end)->toArray();
-        } else {
+        try {
+            if ($this->date) {
+                $dates = [Carbon::parse($this->date)];
+            } elseif ($this->week) {
+                $start = Carbon::parse($this->week)->startOfWeek();
+                $end = Carbon::parse($this->week)->endOfWeek();
+                $dates = $start->range($end)->toArray();
+            } elseif ($this->month) {
+                $start = Carbon::parse($this->month)->startOfMonth();
+                $end = Carbon::parse($this->month)->endOfMonth();
+                $dates = $start->range($end)->toArray();
+            } else {
+                $this->date = date('Y-m-d');
+                $dates = [Carbon::parse($this->date)];
+            }
+        } catch (\Exception $e) {
+            // If parsing fails, use fallback if available, otherwise default to today
+            if (session()->has('attendance_employees_fallback')) {
+                return view('livewire.admin.attendance', session('attendance_employees_fallback'));
+            }
+
             $this->date = date('Y-m-d');
             $dates = [Carbon::parse($this->date)];
         }
+
         $employees = User::where('group', 'user')
             ->when($this->search, function (Builder $q) {
-                return $q->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('nip', 'like', '%' . $this->search . '%');
+                return $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('nip', 'like', '%'.$this->search.'%');
             })
             ->when($this->division, fn (Builder $q) => $q->where('division_id', $this->division))
             ->when($this->jobTitle, fn (Builder $q) => $q->where('job_title_id', $this->jobTitle))
@@ -82,7 +98,7 @@ class AttendanceComponent extends Component
                         "attendance-$user->id-$this->date",
                         now()->addDay(),
                         function () use ($user) {
-                            /** @var Collection<Attendance>  */
+                            /** @var Collection<Attendance> */
                             $attendances = Attendance::filter(
                                 userId: $user->id,
                                 date: $this->date,
@@ -99,17 +115,18 @@ class AttendanceComponent extends Component
                                     if ($v->shift) {
                                         $v->setAttribute('shift', $v->shift->name);
                                     }
+
                                     return $v->getAttributes();
                                 }
                             )->toArray();
                         }
                     ) ?? []);
-                } else if ($this->week) {
+                } elseif ($this->week) {
                     $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$this->week",
                         now()->addDay(),
                         function () use ($user) {
-                            /** @var Collection<Attendance>  */
+                            /** @var Collection<Attendance> */
                             $attendances = Attendance::filter(
                                 userId: $user->id,
                                 week: $this->week,
@@ -123,18 +140,19 @@ class AttendanceComponent extends Component
                                     if ($v->attachment) {
                                         $v->setAttribute('attachment', $v->attachment_url);
                                     }
+
                                     return $v->getAttributes();
                                 }
                             )->toArray();
                         }
                     ) ?? []);
-                } else if ($this->month) {
+                } elseif ($this->month) {
                     $my = Carbon::parse($this->month);
                     $attendances = new Collection(Cache::remember(
                         "attendance-$user->id-$my->month-$my->year",
                         now()->addDay(),
                         function () use ($user) {
-                            /** @var Collection<Attendance>  */
+                            /** @var Collection<Attendance> */
                             $attendances = Attendance::filter(
                                 month: $this->month,
                                 userId: $user->id,
@@ -148,6 +166,7 @@ class AttendanceComponent extends Component
                                     if ($v->attachment) {
                                         $v->setAttribute('attachment', $v->attachment_url);
                                     }
+
                                     return $v->getAttributes();
                                 }
                             )->toArray();
@@ -159,8 +178,13 @@ class AttendanceComponent extends Component
                         ->get(['id', 'status', 'date', 'latitude', 'longitude', 'attachment', 'note']);
                 }
                 $user->attendances = $attendances;
+
                 return $user;
             });
-        return view('livewire.admin.attendance', ['employees' => $employees, 'dates' => $dates]);
+
+        $data = ['employees' => $employees, 'dates' => $dates];
+        session(['attendance_employees_fallback' => $data]);
+
+        return view('livewire.admin.attendance', $data);
     }
 }

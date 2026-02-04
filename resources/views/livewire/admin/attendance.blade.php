@@ -1,6 +1,5 @@
 @php
   use Illuminate\Support\Carbon;
-  $m = Carbon::parse($month);
   $showUserDetail = !$month || $week || $date; // is week or day filter
   $isPerDayFilter = isset($date);
 @endphp

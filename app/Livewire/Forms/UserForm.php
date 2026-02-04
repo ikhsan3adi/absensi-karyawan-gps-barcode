@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
+use App\Traits\SafeDateParser;
+
 class UserForm extends Form
 {
+    use SafeDateParser;
     public ?User $user = null;
 
     public $name = '';
@@ -74,9 +77,7 @@ class UserForm extends Form
         $this->city = $user->city;
         $this->address = $user->address;
         $this->group = $user->group;
-        $this->birth_date = $user->birth_date
-            ? \Illuminate\Support\Carbon::parse($user->birth_date)->format('Y-m-d')
-            : null;
+        $this->birth_date = $this->safeParseDate($user->birth_date)?->format('Y-m-d');
         $this->birth_place = $user->birth_place;
         $this->division_id = $user->division_id;
         $this->education_id = $user->education_id;

@@ -33,7 +33,7 @@ class AttendanceHistoryComponent extends Component
             "attendance-$user->id-$date->month-$date->year",
             now()->addDay(),
             function () use ($user) {
-                /** @var Collection<Attendance>  */
+                /** @var Collection<Attendance> */
                 $attendances = Attendance::filter(
                     month: $this->month,
                     userId: $user->id,
@@ -47,12 +47,14 @@ class AttendanceHistoryComponent extends Component
                         if ($v->attachment) {
                             $v->setAttribute('attachment', $v->attachment_url);
                         }
+
                         return $v->getAttributes();
                     }
                 )->toArray();
             }
         ) ?? []);
         $attendanceToday = $attendances->firstWhere(fn ($v, $_) => $v['date'] === Carbon::now()->format('Y-m-d'));
+
         return view('livewire.attendance-history', [
             'attendances' => $attendances,
             'attendanceToday' => $attendanceToday,
