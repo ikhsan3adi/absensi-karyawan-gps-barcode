@@ -26,28 +26,42 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
 1. Clone/download repository ini
 
-2. Jalankan perintah
+2. Buat database (jika tidak menggunakan SQLite)
+   
+   ```sql
+   -- nama database sesuaikan dengan yang ada di .env
+   CREATE DATABASE db_absensi_karyawan;
+   ```
+
+3. Jalankan perintah
 
     ```sh
-    composer run-script post-root-package-install # untuk membuat file `.env`
+    # untuk membuat file `.env`
+    composer run-script post-root-package-install
 
-    composer install                              # untuk instalasi dependency php
+    # untuk instalasi dependency php
+    composer install
 
-    npm install                                   # untuk instalasi dependency javascript
+    # untuk instalasi dependency javascript
+    npm install # atau bun install
 
-    php artisan key:generate --ansi --force       # untuk membuat key aplikasi
+    # untuk membuat key aplikasi
+    php artisan key:generate --ansi --force
 
-    php artisan storage:link                      # untuk menghubungkan storage ke public
+    # untuk menghubungkan storage ke public
+    php artisan storage:link
 
-    php artisan migrate                           # untuk membuat tabel database
+    # untuk membuat tabel database [BUAT DATABASE DAHULU]
+    php artisan migrate
 
-    npm run build                                 # untuk membuat file css dan javascript yang diperlukan
+    # untuk membuat file css dan javascript yang diperlukan
+    npm run build # atau bun run build
     ```
 
-    Menjalankan aplikasi
+    Menjalankan aplikasi (local)
 
     ```sh
-    php artisan serve                             # untuk menjalankan aplikasi (local)
+    php artisan serve
     ```
 
 ### Seeder

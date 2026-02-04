@@ -562,8 +562,8 @@
       @endphp
       <div class="px-6 py-4">
         <div class="my-4 flex items-center justify-center">
-          <img class="h-32 w-32 rounded-full object-cover" src="{{ $user->profile_photo_url }}"
-            alt="{{ $user->name }}" />
+          <img class="h-32 w-32 rounded-full object-cover" src="{{ $form->user->profile_photo_url }}"
+            alt="{{ $form->user->name }}" />
         </div>
 
         <div class="text-center text-lg font-medium text-gray-900 dark:text-gray-100">
