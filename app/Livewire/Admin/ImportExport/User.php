@@ -4,29 +4,32 @@ namespace App\Livewire\Admin\ImportExport;
 
 use App\Exports\UsersExport;
 use App\Imports\UsersImport;
+use App\Models\User as UserModel;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Models\User as UserModel;
 use Livewire\WithFileUploads;
+use Maatwebsite\Excel\Facades\Excel;
 
 class User extends Component
 {
     use InteractsWithBanner, WithFileUploads;
 
     public bool $previewing = false;
+
     public ?string $mode = null;
+
     public $groups = ['user'];
+
     public $file = null;
 
     protected $rules = [
-        'file' => 'required|mimes:csv,xls,xlsx,ods'
+        'file' => 'required|mimes:csv,xls,xlsx,ods',
     ];
 
     public function preview()
     {
-        $this->previewing = !$this->previewing;
+        $this->previewing = ! $this->previewing;
         $this->mode = $this->previewing ? 'export' : null;
     }
 
@@ -39,15 +42,20 @@ class User extends Component
     {
         $users = null;
         if ($this->file) {
-            $this->mode = 'import';
-            $this->previewing = true;
-            $userImport = new UsersImport(save: false);
-            $users = Excel::toCollection($userImport, $this->file)
-                ->first()
-                ->map(function (\Illuminate\Support\Collection $v) use ($userImport) {
-                    return $userImport->model($v->toArray());
-                });
-        } else if ($this->previewing && $this->mode == 'export') {
+            try {
+                $userImport = new UsersImport(save: false);
+                $users = Excel::toCollection($userImport, $this->file)
+                    ->first()
+                    ->map(function (\Illuminate\Support\Collection $v) use ($userImport) {
+                        return $userImport->model($v->toArray());
+                    });
+                $this->mode = 'import';
+                $this->previewing = true;
+            } catch (\Throwable $th) {
+                $this->file = null;
+                $this->dangerBanner(__('errors'));
+            }
+        } elseif ($this->previewing && $this->mode == 'export') {
             $users = empty($this->groups) ?
                 new \Illuminate\Support\Collection :
                 UserModel::whereIn('group', $this->groups)->get();
@@ -55,8 +63,9 @@ class User extends Component
             $this->previewing = false;
             $this->mode = null;
         }
+
         return view('livewire.admin.import-export.user', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -83,6 +92,7 @@ class User extends Component
             abort(403);
         }
         $this->validateGroups();
+
         return Excel::download(
             new UsersExport($this->groups),
             'users.xlsx'
@@ -93,7 +103,7 @@ class User extends Component
     {
         $this->validate([
             'groups.*' => ['string', 'in:user,admin,superadmin'],
-            'groups' => ['required', 'array']
+            'groups' => ['required', 'array'],
         ]);
     }
 }
