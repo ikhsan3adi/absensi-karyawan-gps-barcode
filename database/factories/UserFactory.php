@@ -31,6 +31,10 @@ class UserFactory extends Factory
     {
         $gender = fake()->randomElement(['male', 'female']);
 
+        $educations = Education::get('id');
+        $divisions = Division::get('id');
+        $jobTitles = JobTitle::get('id');
+
         return [
             'nip' => fake()->numerify('#################'),
             'name' => fake()->name($gender),
@@ -49,9 +53,9 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'education_id' => Education::get('id')->random()->id,
-            'division_id' => Division::get('id')->random()->id,
-            'job_title_id' => JobTitle::get('id')->random()->id,
+            'education_id' => $educations->isNotEmpty() ? $educations->random()->id : null,
+            'division_id' => $divisions->isNotEmpty() ? $divisions->random()->id : null,
+            'job_title_id' => $jobTitles->isNotEmpty() ? $jobTitles->random()->id : null,
         ];
     }
 
