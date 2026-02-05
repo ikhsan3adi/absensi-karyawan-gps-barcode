@@ -30,6 +30,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $gender = fake()->randomElement(['male', 'female']);
+
         return [
             'nip' => fake()->numerify('#################'),
             'name' => fake()->name($gender),
@@ -48,9 +49,9 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'education_id' => Education::inRandomOrder()->first()?->id,
-            'division_id' => Division::inRandomOrder()->first()?->id,
-            'job_title_id' => JobTitle::inRandomOrder()->first()?->id,
+            'education_id' => Education::get('id')->random()->id,
+            'division_id' => Division::get('id')->random()->id,
+            'job_title_id' => JobTitle::get('id')->random()->id,
         ];
     }
 
@@ -85,16 +86,16 @@ class UserFactory extends Factory
      * ! NOT USED
      * Indicate that the user should have a personal team.
      */
-    public function withPersonalTeam(callable $callback = null): static
+    public function withPersonalTeam(?callable $callback = null): static
     {
-        if (!Features::hasTeamFeatures()) {
+        if (! Features::hasTeamFeatures()) {
             return $this->state([]);
         }
 
         return $this->has(
             Team::factory()
                 ->state(fn (array $attributes, User $user) => [
-                    'name' => $user->name . '\'s Team',
+                    'name' => $user->name.'\'s Team',
                     'user_id' => $user->id,
                     'personal_team' => true,
                 ])

@@ -7,7 +7,6 @@ use App\Models\Division;
 use App\Models\Education;
 use App\Models\JobTitle;
 use App\Models\Shift;
-use App\Models\User;
 use Database\Factories\DivisionFactory;
 use Database\Factories\EducationFactory;
 use Database\Factories\JobTitleFactory;
@@ -20,7 +19,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        (new AdminSeeder)->run();
         foreach (DivisionFactory::$divisions as $value) {
             if (Division::where('name', $value)->exists()) {
                 continue;
@@ -39,6 +37,7 @@ class DatabaseSeeder extends Seeder
             }
             JobTitle::create(['name' => $value]);
         }
+        (new AdminSeeder)->run();
         Barcode::factory(1)->create(['name' => 'Barcode 1']);
         Shift::factory(2)->create();
     }

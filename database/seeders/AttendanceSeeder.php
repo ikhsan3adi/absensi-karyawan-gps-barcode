@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Attendance;
 use App\Models\User;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Carbon;
 
 class AttendanceSeeder extends Seeder
 {
@@ -15,17 +14,19 @@ class AttendanceSeeder extends Seeder
      */
     public function run(): void
     {
-        $start = Carbon::now()->subDays(31);
-        $end = Carbon::now();
+        $start = Carbon::now()->subDays(60);
+        $end = Carbon::now()->addDay();
         $dates = $start->range($end)->toArray();
 
         $statuses = ['present', 'present', 'present', 'present', 'late', 'excused', 'sick'];
 
         foreach ($dates as $date) {
-            if ($date->isWeekend()) continue;
+            if ($date->isWeekend()) {
+                continue;
+            }
 
             /** @var User[] */
-            $users = User::inRandomOrder()->where('group', 'user')->limit(5)->get();
+            $users = User::inRandomOrder()->where('group', 'user')->get();
 
             foreach ($users as $user) {
                 $status = fake()->randomElement($statuses);
