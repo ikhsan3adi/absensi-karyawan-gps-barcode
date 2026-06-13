@@ -86,6 +86,12 @@ class EmployeeComponent extends Component
         $this->banner(__('Deleted successfully.'));
     }
 
+    public function resetDevice($userId)
+    {
+        User::find($userId)?->update(['device_token' => null]);
+        $this->banner('Perangkat berhasil direset.');
+    }
+
     public function render()
     {
         $users = User::where('group', 'user')

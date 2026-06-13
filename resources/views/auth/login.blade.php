@@ -14,6 +14,7 @@
 
     <form method="POST" action="{{ route('login') }}">
       @csrf
+      <input type="hidden" id="device_token" name="device_token" value="">
 
       <div>
         <x-label for="email" value="{{ __('Email or Phone') }}" />
@@ -46,6 +47,19 @@
         </x-button>
       </div>
     </form>
+
+    @pushOnce('scripts')
+      <script>
+        (function() {
+          let token = localStorage.getItem('device_token');
+          if (!token) {
+            token = crypto.randomUUID();
+            localStorage.setItem('device_token', token);
+          }
+          document.getElementById('device_token').value = token;
+        })();
+      </script>
+    @endPushOnce
 
     @if (Route::has('password.request'))
       <a class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
