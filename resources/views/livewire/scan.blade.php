@@ -91,7 +91,7 @@
             <div class="flex flex-col sm:flex-row">
               <span>
                 @if ($isAbsence)
-                  {{ __($attendance?->status) ?? '-' }}
+                  {{ $attendance ? __("status_" . $attendance->status) : '-' }}
                 @else
                   {{ $attendance?->time_in ? Carbon::parse($attendance?->time_in)->format('H:i:s') : 'Belum Absen' }}
                 @endif
@@ -109,7 +109,7 @@
           <div>
             <h4 class="text-lg font-semibold md:text-xl">Absen Keluar</h4>
             @if ($isAbsence)
-              {{ __($attendance?->status) ?? '-' }}
+              {{ $attendance ? __("status_" . $attendance->status) : '-' }}
             @else
               {{ $attendance?->time_out ? Carbon::parse($attendance?->time_out)->format('H:i:s') : 'Belum Absen' }}
             @endif
@@ -151,6 +151,13 @@
             class="flex flex-col-reverse items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-center font-medium text-white shadow-md shadow-gray-400 hover:bg-blue-600 dark:shadow-gray-700 md:flex-row md:gap-3">
             Riwayat Absen
             <x-heroicon-o-clock class="h-6 w-6 text-white" />
+          </div>
+        </a>
+        <a href="{{ route('leave-history') }}">
+          <div
+            class="flex flex-col-reverse items-center justify-center gap-2 rounded-md bg-indigo-500 px-4 py-2 text-center font-medium text-white shadow-md shadow-gray-400 hover:bg-indigo-600 dark:shadow-gray-700 md:flex-row md:gap-3">
+            Riwayat Izin
+            <x-heroicon-o-document-text class="h-6 w-6 text-white" />
           </div>
         </a>
       </div>

@@ -127,7 +127,7 @@
               <td class="{{ $tdClass }}">
                 {{ $attendance->lat_lng ? $attendance->latitude . ',' . $attendance->longitude : null }}
               </td>
-              <td class="{{ $tdClass }} text-nowrap">{{ __($attendance->status) }}</td>
+              <td class="{{ $tdClass }} text-nowrap">{{ __("status_" . $attendance->status) }}</td>
               <td class="{{ $tdClass }}">
                 <div class="w-48">{{ Str::limit($attendance->note, 30, '...') }}</div>
               </td>

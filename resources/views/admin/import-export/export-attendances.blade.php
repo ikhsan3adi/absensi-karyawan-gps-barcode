@@ -35,7 +35,7 @@
         <td data-type="s">
           {{ $attendance->lat_lng ? $attendance->latitude . ',' . $attendance->longitude : null }}
         </td>
-        <td>{{ __($attendance->status) }}</td>
+        <td>{{ __("status_" . $attendance->status) }}</td>
         <td>{{ $attendance->note }}</td>
         <td>{{ $attendance->attachment }}</td>
         <td>{{ $attendance->created_at }}</td>
