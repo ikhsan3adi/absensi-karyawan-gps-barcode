@@ -112,7 +112,7 @@
             </th>
           @endif
           @if (!$isPerDayFilter)
-            @foreach (['H', 'T', 'I', 'S', 'PC', 'A'] as $_st)
+            @foreach (['H', 'T', 'I', 'S', 'TT', 'A'] as $_st)
               <th scope="col"
                 class="text-nowrap border border-gray-300 px-1 py-3 text-center text-xs font-medium text-gray-500 dark:border-gray-600 dark:text-gray-300">
                 {{ $_st }}
@@ -203,7 +203,7 @@
                         $sickCount++;
                         break;
                     case 'incomplete':
-                        $shortStatus = 'PC';
+                        $shortStatus = 'TT';
                         $bgColor =
                             'bg-orange-200 dark:bg-orange-800 hover:bg-orange-300 dark:hover:bg-orange-700 border border-orange-300 dark:border-orange-600';
                         $incompleteCount++;
@@ -226,13 +226,13 @@
                   class="{{ $bgColor }} cursor-pointer text-center text-sm font-medium text-gray-900 dark:text-white">
                   <button class="w-full px-1 py-3" wire:click="show({{ $attendance['id'] }})"
                     onclick="setLocation({{ $attendance['lat'] ?? 0 }}, {{ $attendance['lng'] ?? 0 }})">
-                    {{ $isPerDayFilter ? __($status) : $shortStatus }}
+                    {{ $isPerDayFilter ? __("status_{$status}") : $shortStatus }}
                   </button>
                 </td>
               @else
                 <td
                   class="{{ $bgColor }} text-nowrap cursor-pointer px-1 py-3 text-center text-sm font-medium text-gray-900 dark:text-white">
-                  {{ $isPerDayFilter ? __($status) : $shortStatus }}
+                  {{ $isPerDayFilter ? __("status_{$status}") : $shortStatus }}
                 </td>
               @endif
             @endforeach

@@ -91,7 +91,7 @@
             <div class="flex flex-col sm:flex-row">
               <span>
                 @if ($isAbsence)
-                  {{ __($attendance?->status) ?? '-' }}
+                  {{ $attendance ? __("status_" . $attendance->status) : '-' }}
                 @else
                   {{ $attendance?->time_in ? Carbon::parse($attendance?->time_in)->format('H:i:s') : 'Belum Absen' }}
                 @endif
@@ -109,7 +109,7 @@
           <div>
             <h4 class="text-lg font-semibold md:text-xl">Absen Keluar</h4>
             @if ($isAbsence)
-              {{ __($attendance?->status) ?? '-' }}
+              {{ $attendance ? __("status_" . $attendance->status) : '-' }}
             @else
               {{ $attendance?->time_out ? Carbon::parse($attendance?->time_out)->format('H:i:s') : 'Belum Absen' }}
             @endif

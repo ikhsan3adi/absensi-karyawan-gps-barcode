@@ -29,7 +29,7 @@
     </div>
     <div
       class="rounded-md bg-orange-200 px-8 py-4 text-gray-800 dark:bg-orange-900 dark:text-white dark:shadow-gray-700">
-      <span class="text-2xl font-semibold md:text-3xl">Pulang Cepat: {{ $incompleteCount }}</span>
+      <span class="text-2xl font-semibold md:text-3xl">{{ __("status_incomplete") . ': ' . $incompleteCount }}</span>
     </div>
     <div class="rounded-md bg-red-200 px-8 py-4 text-gray-800 dark:bg-red-900 dark:text-white dark:shadow-gray-700">
       <span class="text-2xl font-semibold md:text-3xl">Tidak Hadir: {{ $absentCount }}</span><br>
@@ -136,7 +136,7 @@
             {{-- Absensi --}}
             <td
               class="{{ $bgColor }} text-nowrap px-1 py-3 text-center text-sm font-medium text-gray-900 dark:text-white">
-              {{ __($status) }}
+              {{ __("status_{$status}") }}
             </td>
 
             {{-- Waktu masuk/keluar --}}

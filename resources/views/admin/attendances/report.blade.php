@@ -199,7 +199,7 @@
               }
             @endphp
             <td style="padding: 0px; text-align: center;">
-              {{ $isPerDayFilter ? __($status) : $shortStatus }}
+              {{ $isPerDayFilter ? __("status_{$status}") : $shortStatus }}
             </td>
           @endforeach
 
