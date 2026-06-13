@@ -18,10 +18,29 @@ class LeaveRequestComponent extends Component
     public string $filter = 'pending';
     public ?string $rejectReason = null;
     public ?int $rejectingId = null;
+    public bool $showDetailModal = false;
+    public ?int $selectedRequestId = null;
+    public bool $confirmingApproval = false;
+    public ?int $approvingId = null;
+    public string $approvingName = '';
 
-    public function approve($id)
+    public function viewDetail($id)
+    {
+        $this->selectedRequestId = $id;
+        $this->showDetailModal = true;
+    }
+
+    public function confirmApprove($id)
     {
         $leaveRequest = LeaveRequest::with('user')->findOrFail($id);
+        $this->approvingId = $id;
+        $this->approvingName = $leaveRequest->user->name;
+        $this->confirmingApproval = true;
+    }
+
+    public function executeApprove()
+    {
+        $leaveRequest = LeaveRequest::with('user')->findOrFail($this->approvingId);
         $leaveRequest->update([
             'status' => 'approved',
             'reviewed_by' => Auth::user()->id,
@@ -46,6 +65,9 @@ class LeaveRequestComponent extends Component
                 );
             });
 
+        $this->confirmingApproval = false;
+        $this->approvingId = null;
+        $this->approvingName = '';
         $this->banner('Pengajuan izin telah disetujui.');
     }
 
@@ -89,8 +111,14 @@ class LeaveRequestComponent extends Component
             ->latest()
             ->paginate(20);
 
+        $detailRequest = $this->showDetailModal && $this->selectedRequestId
+            ? LeaveRequest::with(['user', 'reviewer'])->find($this->selectedRequestId)
+            : null;
+
         return view('livewire.admin.leave-requests', [
             'requests' => $requests,
+            'pendingCount' => LeaveRequest::where('status', 'pending')->count(),
+            'detailRequest' => $detailRequest,
         ]);
     }
 }

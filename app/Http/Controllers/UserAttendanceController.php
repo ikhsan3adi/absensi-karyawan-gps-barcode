@@ -64,4 +64,23 @@ class UserAttendanceController extends Controller
     {
         return view('attendances.history');
     }
+
+    public function leaveHistory(Request $request)
+    {
+        $filter = $request->get('filter', 'all');
+
+        $leaveRequests = LeaveRequest::where('user_id', Auth::user()->id)
+            ->when($filter !== 'all', fn ($q) => $q->where('status', $filter))
+            ->latest()
+            ->paginate(20);
+
+        $pendingCount = LeaveRequest::where('user_id', Auth::user()->id)
+            ->where('status', 'pending')->count();
+
+        return view('attendances.leave-history', [
+            'leaveRequests' => $leaveRequests,
+            'currentFilter' => $filter,
+            'pendingCount' => $pendingCount,
+        ]);
+    }
 }

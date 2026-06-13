@@ -35,6 +35,9 @@ Route::middleware([
 
         Route::get('/attendance-history', [UserAttendanceController::class, 'history'])
             ->name('attendance-history');
+
+        Route::get('/leave-requests', [UserAttendanceController::class, 'leaveHistory'])
+            ->name('leave-history');
     });
 
     // ADMIN AREA
