@@ -18,7 +18,7 @@ class AttendanceSeeder extends Seeder
         $end = Carbon::now()->addDay();
         $dates = $start->range($end)->toArray();
 
-        $statuses = ['present', 'present', 'present', 'present', 'late', 'excused', 'sick'];
+        $statuses = ['present', 'present', 'present', 'present', 'late', 'incomplete', 'excused', 'sick'];
 
         foreach ($dates as $date) {
             if ($date->isWeekend()) {
@@ -37,6 +37,9 @@ class AttendanceSeeder extends Seeder
                         break;
                     case 'late':
                         Attendance::factory()->present(late: true)->create($attr);
+                        break;
+                    case 'incomplete':
+                        Attendance::factory()->incomplete()->create($attr);
                         break;
                     case 'excused':
                         Attendance::factory()->excused()->create($attr);
