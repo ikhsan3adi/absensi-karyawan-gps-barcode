@@ -21,6 +21,10 @@ class AuthenticateLoginAttempt
             return null;
         }
 
+        if (!config('app.device_restriction_enabled') || $user->isAdmin) {
+            return $user;
+        }
+
         $deviceToken = $request->input('device_token');
 
         if (is_null($user->device_token)) {

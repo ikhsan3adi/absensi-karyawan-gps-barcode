@@ -113,18 +113,20 @@
               {{ $wireClick }}>
               {{ $user->city }}
             </td>
-            <td class="relative flex justify-end gap-2 px-6 py-4">
-              <x-button wire:click="edit('{{ $user->id }}')">
-                Edit
-              </x-button>
+            <td class="relative flex flex-wrap justify-end gap-2 px-6 py-4">
               @if ($user->device_token)
                 <x-secondary-button wire:click="resetDevice('{{ $user->id }}')">
                   Reset Perangkat
                 </x-secondary-button>
               @endif
-              <x-danger-button wire:click="confirmDeletion('{{ $user->id }}', '{{ $user->name }}')">
-                Delete
-              </x-danger-button>
+              <div class="flex gap-2">
+                <x-button wire:click="edit('{{ $user->id }}')">
+                  Edit
+                </x-button>
+                <x-danger-button wire:click="confirmDeletion('{{ $user->id }}', '{{ $user->name }}')">
+                  Delete
+                </x-danger-button>
+              </div>
             </td>
           </tr>
         @endforeach

@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Actions\AuthenticateLoginAttempt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 
 use function Pest\Laravel\actingAs;
@@ -104,4 +105,41 @@ test('wrong password returns null regardless of device token', function () {
     $result = $auth($request);
 
     expect($result)->toBeNull();
+});
+
+test('admin can login from any device', function () {
+    $admin = User::factory()->create([
+        'group' => 'admin',
+        'password' => Hash::make('password'),
+        'device_token' => 'registered-device',
+    ]);
+
+    $request = new Request([
+        'email' => $admin->email,
+        'password' => 'password',
+        'device_token' => 'different-device',
+    ]);
+
+    $auth = new AuthenticateLoginAttempt();
+    $result = $auth($request);
+
+    expect($result)->not->toBeNull();
+    expect($result->id)->toBe($admin->id);
+});
+
+test('device restriction can be disabled via config', function () {
+    Config::set('app.device_restriction_enabled', false);
+    $this->user->update(['device_token' => 'original-device']);
+
+    $request = new Request([
+        'email' => $this->user->email,
+        'password' => 'password',
+        'device_token' => 'different-device',
+    ]);
+
+    $auth = new AuthenticateLoginAttempt();
+    $result = $auth($request);
+
+    expect($result)->not->toBeNull();
+    expect($result->id)->toBe($this->user->id);
 });

@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Device Restriction
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, users must log in from the same device they registered.
+    | Only affects users with group 'user', not admin/superadmin.
+    |
+    */
+
+    'device_restriction_enabled' => env('DEVICE_RESTRICTION_ENABLED', true),
+
 ];

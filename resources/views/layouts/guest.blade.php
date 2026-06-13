@@ -32,6 +32,8 @@
   <x-sigsegv-core-dumped />
 
   @livewireScripts
+
+  @stack('scripts')
 </body>
 
 </html>
