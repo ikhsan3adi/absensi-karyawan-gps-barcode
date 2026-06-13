@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +29,8 @@ class UserAttendanceController extends Controller
             'lat' => ['nullable', 'numeric'],
             'lng' => ['nullable', 'numeric'],
         ]);
+
         try {
-            // Save new attachment file
             $newAttachment = null;
             if ($request->file('attachment')) {
                 $newAttachment = $request->file('attachment')->storePublicly(
@@ -38,41 +39,20 @@ class UserAttendanceController extends Controller
                 );
             }
 
-            $fromDate = Carbon::parse($request->from);
-            $fromDate->range($toDate = Carbon::parse($request->to ?? $fromDate))
-                ->forEach(function (Carbon $date) use ($request, $newAttachment) {
-                    $existing = Attendance::where('user_id', Auth::user()->id)
-                        ->where('date', $date->format('Y-m-d'))
-                        ->first();
-
-                    if ($existing) {
-                        $existing->update([
-                            'status' => $request->status,
-                            'note' => $request->note,
-                            'attachment' => $newAttachment ?? $existing->attachment,
-                            'latitude' => doubleval($request->lat) ?? $existing->latitude,
-                            'longitude' => doubleval($request->lng) ?? $existing->longitude,
-                        ]);
-                    } else {
-                        Attendance::create([
-                            'user_id' => Auth::user()->id,
-                            'status' => $request->status,
-                            'date' => $date->format('Y-m-d'),
-                            'note' => $request->note,
-                            'attachment' => $newAttachment ?? null,
-                            'latitude' => $request->lat ? doubleval($request->lat) : null,
-                            'longitude' => $request->lng ? doubleval($request->lng) : null,
-                        ]);
-                    }
-                });
-
-            Attendance::clearUserAttendanceCache(Auth::user(), $fromDate);
-            if (!$fromDate->isSameMonth($toDate)) {
-                Attendance::clearUserAttendanceCache(Auth::user(), $toDate);
-            }
+            LeaveRequest::create([
+                'user_id' => Auth::user()->id,
+                'type' => $request->status,
+                'from_date' => $request->from,
+                'to_date' => $request->to ?? $request->from,
+                'note' => $request->note,
+                'attachment' => $newAttachment,
+                'latitude' => $request->lat ? doubleval($request->lat) : null,
+                'longitude' => $request->lng ? doubleval($request->lng) : null,
+                'status' => 'pending',
+            ]);
 
             return redirect(route('home'))
-                ->with('flash.banner', __('Created successfully.'));
+                ->with('flash.banner', 'Pengajuan izin berhasil dikirim, menunggu persetujuan admin.');
         } catch (\Throwable $th) {
             return redirect()->back()
                 ->with('flash.banner', $th->getMessage())
