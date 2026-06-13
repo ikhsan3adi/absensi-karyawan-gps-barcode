@@ -34,7 +34,8 @@ class DashboardComponent extends Component
         $lateCount = $attendances->where(fn ($attendance) => $attendance->status === 'late')->count();
         $excusedCount = $attendances->where(fn ($attendance) => $attendance->status === 'excused')->count();
         $sickCount = $attendances->where(fn ($attendance) => $attendance->status === 'sick')->count();
-        $absentCount = $employeesCount - ($presentCount + $lateCount + $excusedCount + $sickCount);
+        $incompleteCount = $attendances->where(fn ($attendance) => $attendance->status === 'incomplete')->count();
+        $absentCount = $employeesCount - ($presentCount + $lateCount + $excusedCount + $sickCount + $incompleteCount);
 
         return view('livewire.admin.dashboard', [
             'employees' => $employees,
@@ -43,6 +44,7 @@ class DashboardComponent extends Component
             'lateCount' => $lateCount,
             'excusedCount' => $excusedCount,
             'sickCount' => $sickCount,
+            'incompleteCount' => $incompleteCount,
             'absentCount' => $absentCount,
         ]);
     }

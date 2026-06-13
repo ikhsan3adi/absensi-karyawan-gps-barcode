@@ -117,7 +117,7 @@
           </th>
         @endforeach
         @if (!$isPerDayFilter)
-          @foreach (['H', 'T', 'I', 'S', 'A'] as $_st)
+          @foreach (['H', 'T', 'I', 'S', 'TT', 'A'] as $_st)
             <th scope="col">
               {{ $_st }}
             </th>
@@ -160,6 +160,7 @@
             $excusedCount = 0;
             $sickCount = 0;
             $absentCount = 0;
+            $incompleteCount = 0;
           @endphp
           @foreach ($dates as $date)
             @php
@@ -184,6 +185,10 @@
                       $shortStatus = 'S';
                       $sickCount++;
                       break;
+                  case 'incomplete':
+                      $shortStatus = 'TT';
+                      $incompleteCount++;
+                      break;
                   case 'absent':
                       $shortStatus = 'A';
                       $absentCount++;
@@ -194,12 +199,12 @@
               }
             @endphp
             <td style="padding: 0px; text-align: center;">
-              {{ $isPerDayFilter ? __($status) : $shortStatus }}
+              {{ $isPerDayFilter && $status != '-' ? __("status_{$status}") : $shortStatus }}
             </td>
           @endforeach
 
           @if (!$isPerDayFilter)
-            @foreach ([$presentCount, $lateCount, $excusedCount, $sickCount, $absentCount] as $statusCount)
+            @foreach ([$presentCount, $lateCount, $excusedCount, $sickCount, $incompleteCount, $absentCount] as $statusCount)
               <td style=" text-align: center;">
                 {{ $statusCount }}
               </td>

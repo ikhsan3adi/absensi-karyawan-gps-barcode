@@ -63,6 +63,26 @@ class AttendanceFactory extends Factory
         });
     }
 
+    public function incomplete(): static
+    {
+        return $this->state(function (array $attributes) {
+            $barcode = Barcode::inRandomOrder()->first();
+            $shift = Shift::inRandomOrder()->first();
+            $time_in = Carbon::parse($shift->start_time)->subMinutes(rand(0, max: 15))->toTimeString();
+            $time_out = Carbon::parse($shift->end_time)->subMinutes(rand(min: 30, max: 120))->toTimeString();
+            return [
+                'barcode_id' => $barcode->id,
+                'time_in' => $time_in,
+                'time_out' => $time_out,
+                'status' => 'incomplete',
+                'shift_id' => $shift->id,
+                'latitude' => $barcode->latitude,
+                'longitude' => $barcode->longitude,
+                'note' => null,
+            ];
+        });
+    }
+
     public function excused(bool $sick = false): static
     {
         return $this->state(function (array $attributes) use ($sick) {
