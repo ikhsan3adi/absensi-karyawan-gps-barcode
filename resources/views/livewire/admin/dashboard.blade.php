@@ -31,10 +31,6 @@
       <span class="text-2xl font-semibold md:text-3xl">{{ __("status_incomplete") . ': ' . $incompleteCount }}</span>
       <span>{{ __("status_incomplete-early") }}</span>
     </div>
-    <div
-      class="rounded-md bg-orange-200 px-8 py-4 text-gray-800 dark:bg-orange-900 dark:text-white dark:shadow-gray-700">
-      <span class="text-2xl font-semibold md:text-3xl">Pulang Cepat: {{ $incompleteCount }}</span>
-    </div>
     <div class="rounded-md bg-red-200 px-8 py-4 text-gray-800 dark:bg-red-900 dark:text-white dark:shadow-gray-700">
       <span class="text-2xl font-semibold md:text-3xl">{{ __("status_absent") . ': ' . $absentCount }}</span><br>
       <span>{{ __("status_absent-alpha") }}</span>

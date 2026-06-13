@@ -139,12 +139,6 @@
         </div>
       </div>
       <div
-        class="flex items-center justify-between rounded-md bg-orange-200 px-4 py-2 text-gray-800 dark:bg-orange-900 dark:text-white dark:shadow-gray-700">
-        <div>
-          <h4 class="text-lg font-semibold md:text-xl">Pulang Cepat: {{ $incompleteCount }}</h4>
-        </div>
-      </div>
-      <div
         class="flex items-center justify-between rounded-md bg-red-200 px-4 py-2 text-gray-800 dark:bg-red-900 dark:text-white dark:shadow-gray-700">
         <div>
           <h4 class="text-lg font-semibold md:text-xl">{{ __("status_absent") . ': ' . $absentCount }}</h4>
