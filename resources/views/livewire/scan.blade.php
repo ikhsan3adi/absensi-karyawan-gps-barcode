@@ -153,6 +153,13 @@
             <x-heroicon-o-clock class="h-6 w-6 text-white" />
           </div>
         </a>
+        <a href="{{ route('leave-history') }}">
+          <div
+            class="flex flex-col-reverse items-center justify-center gap-2 rounded-md bg-indigo-500 px-4 py-2 text-center font-medium text-white shadow-md shadow-gray-400 hover:bg-indigo-600 dark:shadow-gray-700 md:flex-row md:gap-3">
+            Riwayat Izin
+            <x-heroicon-o-document-text class="h-6 w-6 text-white" />
+          </div>
+        </a>
       </div>
     </div>
   </div>

@@ -37,6 +37,14 @@
     </div>
   </div>
 
+  <div class="mb-4">
+    <a href="{{ route('admin.leave-requests') }}"
+      class="inline-flex items-center gap-2 rounded-md bg-yellow-200 px-6 py-3 text-gray-800 hover:bg-yellow-300 dark:bg-yellow-900 dark:text-white dark:hover:bg-yellow-800">
+      <span class="text-lg font-semibold">Pengajuan Izin Menunggu: {{ $pendingLeaveCount }}</span>
+      <x-heroicon-o-arrow-right class="h-5 w-5" />
+    </a>
+  </div>
+
   <div class="mb-4 overflow-x-scroll">
     <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
       <thead class="bg-gray-50 dark:bg-gray-900">

@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Livewire\Traits\AttendanceDetailTrait;
 use App\Models\Attendance;
+use App\Models\LeaveRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
@@ -36,6 +37,7 @@ class DashboardComponent extends Component
         $sickCount = $attendances->where(fn ($attendance) => $attendance->status === 'sick')->count();
         $incompleteCount = $attendances->where(fn ($attendance) => $attendance->status === 'incomplete')->count();
         $absentCount = $employeesCount - ($presentCount + $lateCount + $excusedCount + $sickCount + $incompleteCount);
+        $pendingLeaveCount = LeaveRequest::where('status', 'pending')->count();
 
         return view('livewire.admin.dashboard', [
             'employees' => $employees,
@@ -46,6 +48,7 @@ class DashboardComponent extends Component
             'sickCount' => $sickCount,
             'incompleteCount' => $incompleteCount,
             'absentCount' => $absentCount,
+            'pendingLeaveCount' => $pendingLeaveCount,
         ]);
     }
 }

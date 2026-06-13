@@ -35,6 +35,9 @@ Route::middleware([
 
         Route::get('/attendance-history', [UserAttendanceController::class, 'history'])
             ->name('attendance-history');
+
+        Route::get('/leave-requests', [UserAttendanceController::class, 'leaveHistory'])
+            ->name('leave-history');
     });
 
     // ADMIN AREA
@@ -84,6 +87,11 @@ Route::middleware([
         // Presence/Absensi
         Route::get('/attendances/report', [AttendanceController::class, 'report'])
             ->name('admin.attendances.report');
+
+        // Leave Requests
+        Route::get('/leave-requests', function () {
+            return view('admin.leave-requests.index');
+        })->name('admin.leave-requests');
 
         // Import/Export
         Route::get('/import-export/users', [ImportExportController::class, 'users'])

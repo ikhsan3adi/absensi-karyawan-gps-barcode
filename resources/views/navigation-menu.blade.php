@@ -25,6 +25,9 @@
             <x-nav-link class="hidden md:inline-flex" href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
               {{ __('Employee') }}
             </x-nav-link>
+            <x-nav-link class="hidden md:inline-flex" href="{{ route('admin.leave-requests') }}" :active="request()->routeIs('admin.leave-requests')">
+              {{ __('Leave Request') }}
+            </x-nav-link>
             <x-nav-dropdown :active="request()->routeIs('admin.masters.*')" triggerClasses="text-nowrap">
               <x-slot name="trigger">
                 {{ __('Master Data') }}
@@ -36,6 +39,9 @@
                 </x-dropdown-link>
                 <x-dropdown-link class="md:hidden" href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
                   {{ __('Employee') }}
+                </x-dropdown-link>
+                <x-dropdown-link class="md:hidden" href="{{ route('admin.leave-requests') }}" :active="request()->routeIs('admin.leave-requests')">
+                  {{ __('Leave Request') }}
                 </x-dropdown-link>
                 <x-dropdown-link href="{{ route('admin.masters.division') }}" :active="request()->routeIs('admin.masters.division')">
                   {{ __('Division') }}
@@ -170,6 +176,9 @@
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.employees') }}" :active="request()->routeIs('admin.employees')">
           {{ __('Employee') }}
+        </x-responsive-nav-link>
+        <x-responsive-nav-link href="{{ route('admin.leave-requests') }}" :active="request()->routeIs('admin.leave-requests')">
+          {{ __('Leave Request') }}
         </x-responsive-nav-link>
         <x-responsive-nav-link href="{{ route('admin.masters.division') }}" :active="request()->routeIs('admin.masters.division')">
           {{ __('Division') }}
