@@ -112,7 +112,7 @@
             </th>
           @endif
           @if (!$isPerDayFilter)
-            @foreach (['H', 'T', 'I', 'S', 'A'] as $_st)
+            @foreach (['H', 'T', 'I', 'S', 'PC', 'A'] as $_st)
               <th scope="col"
                 class="text-nowrap border border-gray-300 px-1 py-3 text-center text-xs font-medium text-gray-500 dark:border-gray-600 dark:text-gray-300">
                 {{ $_st }}
@@ -168,6 +168,7 @@
               $excusedCount = 0;
               $sickCount = 0;
               $absentCount = 0;
+              $incompleteCount = 0;
             @endphp
             @foreach ($dates as $date)
               @php
@@ -200,6 +201,12 @@
                         $bgColor =
                             'hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600';
                         $sickCount++;
+                        break;
+                    case 'incomplete':
+                        $shortStatus = 'PC';
+                        $bgColor =
+                            'bg-orange-200 dark:bg-orange-800 hover:bg-orange-300 dark:hover:bg-orange-700 border border-orange-300 dark:border-orange-600';
+                        $incompleteCount++;
                         break;
                     case 'absent':
                         $shortStatus = 'A';
@@ -242,7 +249,7 @@
 
             {{-- Total --}}
             @if (!$isPerDayFilter)
-              @foreach ([$presentCount, $lateCount, $excusedCount, $sickCount, $absentCount] as $statusCount)
+              @foreach ([$presentCount, $lateCount, $excusedCount, $sickCount, $incompleteCount, $absentCount] as $statusCount)
                 <td
                   class="cursor-pointer border border-gray-300 px-1 py-3 text-center text-sm font-medium text-gray-900 group-hover:bg-gray-100 dark:border-gray-600 dark:text-white dark:group-hover:bg-gray-700">
                   {{ $statusCount }}

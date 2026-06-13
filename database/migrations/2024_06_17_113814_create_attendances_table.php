@@ -22,11 +22,12 @@ return new class extends Migration
             $table->double('latitude')->nullable(); // lokasi absensi sumbu Y
             $table->double('longitude')->nullable(); // lokasi absensi sumbu X
             $table->enum('status', [
-                'present', // hadir
-                'late', // terlambat
-                'excused', // izin
-                'sick', // sakit
-                'absent' // tidak hadir
+                'present',
+                'late',
+                'excused',
+                'sick',
+                'absent',
+                'incomplete',
             ])->default('absent');
             $table->string('note')->nullable(); // keterangan
             $table->string('attachment')->nullable(); // lampiran

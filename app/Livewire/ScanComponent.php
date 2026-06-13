@@ -53,8 +53,17 @@ class ScanComponent extends Component
             $this->successMsg = __('Attendance In Successful');
         } else {
             $attendance = $existingAttendance;
+            $shift = $attendance->shift;
+            $now = Carbon::now();
+            $status = $attendance->status;
+
+            if ($shift && $shift->end_time && $now->lt($now->copy()->setTimeFromTimeString($shift->end_time))) {
+                $status = 'incomplete';
+            }
+
             $attendance->update([
-                'time_out' => date('H:i:s'),
+                'time_out' => $now->format('H:i:s'),
+                'status' => $status,
             ]);
             $this->successMsg = __('Attendance Out Successful');
         }
@@ -101,7 +110,7 @@ class ScanComponent extends Component
     {
         $this->attendance = $attendance;
         $this->shift_id = $attendance->shift_id;
-        $this->isAbsence = $attendance->status !== 'present' && $attendance->status !== 'late';
+        $this->isAbsence = !in_array($attendance->status, ['present', 'late', 'incomplete']);
     }
 
     public function getAttendance()

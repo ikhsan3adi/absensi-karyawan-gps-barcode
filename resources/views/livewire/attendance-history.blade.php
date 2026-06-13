@@ -31,6 +31,7 @@
         $excusedCount = 0;
         $sickCount = 0;
         $absentCount = 0;
+        $incompleteCount = 0;
       @endphp
       @foreach ($dates as $date)
         @php
@@ -64,6 +65,12 @@
                   $bgColor =
                       'bg-purple-200 dark:bg-purple-950 hover:bg-purple-100 dark:hover:bg-purple-700 border border-purple-600';
                   $sickCount++;
+                  break;
+              case 'incomplete':
+                  $shortStatus = 'PC';
+                  $bgColor =
+                      'bg-orange-200 dark:bg-orange-800 hover:bg-orange-300 dark:hover:bg-orange-700 border border-orange-600';
+                  $incompleteCount++;
                   break;
               case 'absent':
                   $shortStatus = 'A';
@@ -123,6 +130,12 @@
         class="flex items-center justify-between rounded-md bg-purple-200 px-4 py-2 text-gray-800 dark:bg-purple-900 dark:text-white dark:shadow-gray-700">
         <div>
           <h4 class="text-lg font-semibold md:text-xl">Sakit: {{ $sickCount }}</h4>
+        </div>
+      </div>
+      <div
+        class="flex items-center justify-between rounded-md bg-orange-200 px-4 py-2 text-gray-800 dark:bg-orange-900 dark:text-white dark:shadow-gray-700">
+        <div>
+          <h4 class="text-lg font-semibold md:text-xl">Pulang Cepat: {{ $incompleteCount }}</h4>
         </div>
       </div>
       <div
