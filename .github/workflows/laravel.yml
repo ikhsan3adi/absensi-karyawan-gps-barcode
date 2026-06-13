@@ -27,7 +27,7 @@ jobs:
         ports:
           # Opens port 3306 on service container and host
           # https://docs.github.com/en/actions/using-containerized-services/about-service-containers
-          - ${{DB_PORT}}:3306
+          - ${{ env.DB_PORT }}:3306
           # Before continuing, verify the mysql container is reachable from the ubuntu host
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
