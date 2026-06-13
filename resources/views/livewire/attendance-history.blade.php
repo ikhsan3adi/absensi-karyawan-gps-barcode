@@ -116,20 +116,20 @@
       <div
         class="flex items-center justify-between rounded-md bg-green-200 px-4 py-2 text-gray-800 dark:bg-green-900 dark:text-white dark:shadow-gray-700">
         <div>
-          <h4 class="text-lg font-semibold md:text-xl">Hadir: {{ $presentCount + $lateCount }}</h4>
-          Terlambat: {{ $lateCount }}
+          <h4 class="text-lg font-semibold md:text-xl">{{ __("status_present") . ': ' . ($presentCount + $lateCount) }}</h4>
+          {{ __("status_late") . ': ' . $lateCount }}
         </div>
       </div>
       <div
         class="flex items-center justify-between rounded-md bg-blue-200 px-4 py-2 text-gray-800 dark:bg-blue-900 dark:text-white dark:shadow-gray-700">
         <div>
-          <h4 class="text-lg font-semibold md:text-xl">Izin: {{ $excusedCount }}</h4>
+          <h4 class="text-lg font-semibold md:text-xl">{{ __("status_excused") . ': ' . $excusedCount }}</h4>
         </div>
       </div>
       <div
         class="flex items-center justify-between rounded-md bg-purple-200 px-4 py-2 text-gray-800 dark:bg-purple-900 dark:text-white dark:shadow-gray-700">
         <div>
-          <h4 class="text-lg font-semibold md:text-xl">Sakit: {{ $sickCount }}</h4>
+          <h4 class="text-lg font-semibold md:text-xl">{{ __("status_sick") . ': ' . $sickCount }}</h4>
         </div>
       </div>
       <div
@@ -141,7 +141,7 @@
       <div
         class="flex items-center justify-between rounded-md bg-red-200 px-4 py-2 text-gray-800 dark:bg-red-900 dark:text-white dark:shadow-gray-700">
         <div>
-          <h4 class="text-lg font-semibold md:text-xl">Absen: {{ $absentCount }}</h4>
+          <h4 class="text-lg font-semibold md:text-xl">{{ __("status_absent") . ': ' . $absentCount }}</h4>
         </div>
       </div>
     </div>

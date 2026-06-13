@@ -19,7 +19,7 @@
         <div class="w-full">
           <x-label for="status" value="{{ __('Status') }}"></x-label>
           <x-input type="text" class="w-full" id="status" disabled
-            value="{{ __($currentAttendance['status']) }}"></x-input>
+            value="{{ __('status_' . $currentAttendance['status']) }}"></x-input>
         </div>
       </div>
       @if ($isExcused)

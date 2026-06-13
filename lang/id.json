@@ -38,6 +38,8 @@
     "status_sick": "Sakit",
     "status_absent": "Tidak Hadir",
     "status_incomplete": "Tidak Tuntas",
+    "status_absent-alpha": "Absen",
+    "status_incomplete-early": "Pulang Cepat",
     "Coordinate": "Koordinat",
     "Choose from map": "Pilih dari maps",
     "Created successfully.": "Berhasil dibuat.",

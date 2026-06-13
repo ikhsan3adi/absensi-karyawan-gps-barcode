@@ -16,24 +16,24 @@
   </div>
   <div class="mb-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
     <div class="rounded-md bg-green-200 px-8 py-4 text-gray-800 dark:bg-green-900 dark:text-white dark:shadow-gray-700">
-      <span class="text-2xl font-semibold md:text-3xl">Hadir: {{ $presentCount }}</span><br>
-      <span>Terlambat: {{ $lateCount }}</span>
+      <span class="text-2xl font-semibold md:text-3xl">{{ __("status_present") . ': ' . $presentCount }}</span><br>
+      <span>{{ __("status_late") . ': ' . $lateCount }}</span>
     </div>
     <div class="rounded-md bg-blue-200 px-8 py-4 text-gray-800 dark:bg-blue-900 dark:text-white dark:shadow-gray-700">
-      <span class="text-2xl font-semibold md:text-3xl">Izin: {{ $excusedCount }}</span><br>
-      <span>Izin/Cuti</span>
+      <span class="text-2xl font-semibold md:text-3xl">{{ __("status_excused") . ': ' . $excusedCount }}</span><br>
     </div>
     <div
       class="rounded-md bg-purple-200 px-8 py-4 text-gray-800 dark:bg-purple-900 dark:text-white dark:shadow-gray-700">
-      <span class="text-2xl font-semibold md:text-3xl">Sakit: {{ $sickCount }}</span>
+      <span class="text-2xl font-semibold md:text-3xl">{{ __("status_sick") . ': ' . $sickCount }}</span>
     </div>
     <div
       class="rounded-md bg-orange-200 px-8 py-4 text-gray-800 dark:bg-orange-900 dark:text-white dark:shadow-gray-700">
       <span class="text-2xl font-semibold md:text-3xl">{{ __("status_incomplete") . ': ' . $incompleteCount }}</span>
+      <span>{{ __("status_incomplete-early") }}</span>
     </div>
     <div class="rounded-md bg-red-200 px-8 py-4 text-gray-800 dark:bg-red-900 dark:text-white dark:shadow-gray-700">
-      <span class="text-2xl font-semibold md:text-3xl">Tidak Hadir: {{ $absentCount }}</span><br>
-      <span>Tidak/Belum Hadir</span>
+      <span class="text-2xl font-semibold md:text-3xl">{{ __("status_absent") . ': ' . $absentCount }}</span><br>
+      <span>{{ __("status_absent-alpha") }}</span>
     </div>
   </div>
 
@@ -136,7 +136,7 @@
             {{-- Absensi --}}
             <td
               class="{{ $bgColor }} text-nowrap px-1 py-3 text-center text-sm font-medium text-gray-900 dark:text-white">
-              {{ __("status_{$status}") }}
+              {{ $status != '-' ? __("status_{$status}") : $status }}
             </td>
 
             {{-- Waktu masuk/keluar --}}

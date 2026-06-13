@@ -226,13 +226,13 @@
                   class="{{ $bgColor }} cursor-pointer text-center text-sm font-medium text-gray-900 dark:text-white">
                   <button class="w-full px-1 py-3" wire:click="show({{ $attendance['id'] }})"
                     onclick="setLocation({{ $attendance['lat'] ?? 0 }}, {{ $attendance['lng'] ?? 0 }})">
-                    {{ $isPerDayFilter ? __("status_{$status}") : $shortStatus }}
+                    {{ $isPerDayFilter && $status != '-' ? __("status_{$status}") : $shortStatus }}
                   </button>
                 </td>
               @else
                 <td
                   class="{{ $bgColor }} text-nowrap cursor-pointer px-1 py-3 text-center text-sm font-medium text-gray-900 dark:text-white">
-                  {{ $isPerDayFilter ? __("status_{$status}") : $shortStatus }}
+                  {{ $isPerDayFilter && $status != '-' ? __("status_{$status}") : $shortStatus }}
                 </td>
               @endif
             @endforeach
