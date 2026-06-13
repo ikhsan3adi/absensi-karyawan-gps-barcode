@@ -21,6 +21,14 @@
               <option value="{{ route('leave-history', ['filter' => 'rejected']) }}" {{ $currentFilter === 'rejected' ? 'selected' : '' }}>Ditolak</option>
             </select>
           </div>
+          <div class="mb-4">
+            <a href="{{ route('apply-leave') }}">
+              <x-button>
+                <x-heroicon-o-plus class="mr-2 h-4 w-4" />
+                Ajukan Izin Baru
+              </x-button>
+            </a>
+          </div>
           <div class="overflow-x-scroll">
             <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead class="bg-gray-50 dark:bg-gray-900">
