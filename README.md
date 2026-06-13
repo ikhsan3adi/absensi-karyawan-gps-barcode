@@ -1,6 +1,9 @@
 # Aplikasi Web Absensi Karyawan QR Code GPS
 
-![Aplikasi Web Absensi Karyawan QR Code GPS](./screenshots/hero.png)
+[![.github/workflows/laravel.yml](https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/actions/workflows/laravel.yml/badge.svg)](https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/actions/workflows/laravel.yml)
+
+| ![Aplikasi Web Absensi Karyawan QR Code GPS](./screenshots/absensi-gps-barcode-social-preview.png) |
+| -------------------------------------------------------------------------------------------------- |
 
 Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
@@ -79,9 +82,9 @@ Pilih salah satu opsi berikut:
 | ---------------------------------------- | ------------------------------------------------------ |
 | ![Scan](./screenshots/presensi-scan.png) | ![Scan mobile](./screenshots/presensi-scan-mobile.png) |
 
-| Pengajuan Absensi                                       | Riwayat Absensi Karyawan                             |
-| ------------------------------------------------------- | ---------------------------------------------------- |
-| ![Pengajuan Absensi](./screenshots/pengajuan-izin.jpeg) | ![Riwayat Absensi](./screenshots/presensi-user.jpeg) |
+| Riwayat Absensi Karyawan                             | Pengajuan Izin                                      | Riwayat Pengajuan Izin                                              |
+| ---------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
+| ![Riwayat Absensi](./screenshots/presensi-user.jpeg) | ![Pengajuan Izin](./screenshots/pengajuan-izin.png) | ![Riwayat Pengajuan Izin](./screenshots/riwayat-pengajuan-izin.png) |
 
 ### Admin & Superadmin
 
@@ -109,9 +112,42 @@ Pilih salah satu opsi berikut:
 | Export/Import Data Absensi & User                                | Export/Import Data Absensi & User + Preview Data                                  |
 | ![Export/Import Data Absensi](./screenshots/export-absensi.jpeg) | ![Export/Import Data Absensi + Preview](./screenshots/export-absensi-preview.png) |
 
+| Pengajuan Izin (Admin)                                             | Detail Pengajuan Izin                                             |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| ![Pengajuan Izin (Admin)](./screenshots/daftar-pengajuan-izin.png) | ![Detail Pengajuan Izin](./screenshots/detail-pengajuan-izin.png) |
+
+### Device Restriction
+
+Fitur pembatasan login perangkat untuk mencegah titip absen. Device token (UUID) otomatis digenerate dan disimpan di localStorage browser saat login.
+
+- Login dari perangkat berbeda ditolak
+- Admin dapat mereset perangkat dari menu Employee
+- Admin & superadmin tidak terpengaruh
+- Dapat dinonaktifkan via .env:
+
+  ```env
+  DEVICE_RESTRICTION_ENABLED=false
+  ```
+
+### Status Incomplete
+
+Karyawan yang absen masuk tapi pulang sebelum jam shift berakhir akan mendapatkan status 'Tidak Tuntas' (incomplete), bukan 'Hadir'. Deteksi otomatis saat scan keluar.
+
+### Alur Pengajuan Izin
+
+Pengajuan izin tidak langsung disetujui, melainkan melalui proses approval:
+
+1. Karyawan mengajukan izin/sakit via form
+2. Status pengajuan: **Menunggu** (pending)
+3. Admin menyetujui atau menolak pengajuan
+4. Jika disetujui, data absensi otomatis terisi untuk rentang tanggal tersebut
+5. Karyawan dapat melihat status pengajuannya di halaman Riwayat Izin
+
 ## Donasi ❤
 
 [![Donate trakteer](https://img.shields.io/badge/Donate-Trakteer-red?style=for-the-badge&link=https%3A%2F%2Ftrakteer.id%2Fikhsan3adi%2Ftip)](https://trakteer.id/ikhsan3adi/tip)
 [![Donate saweria](https://img.shields.io/badge/Donate-Saweria-red?style=for-the-badge&link=https%3A%2F%2Fsaweria.co%2Fxiboxann)](https://saweria.co/xiboxann)
 
 Atau, beri star...⭐⭐⭐⭐
+
+<!-- ![Aplikasi Web Absensi Karyawan QR Code GPS](./screenshots/hero.png) -->
