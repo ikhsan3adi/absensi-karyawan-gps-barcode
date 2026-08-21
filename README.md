@@ -1,6 +1,26 @@
 # Aplikasi Web Absensi Karyawan QR Code GPS
 
-[![.github/workflows/laravel.yml](https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/actions/workflows/laravel.yml/badge.svg)](https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/actions/workflows/laravel.yml)
+<a href="https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/actions/workflows/laravel.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/ikhsan3adi/absensi-karyawan-gps-barcode/laravel.yml?branch=master&style=for-the-badge&label=Continuous%20Integration&labelColor=%23934eb6&logo=github" alt="Continuous Integration">
+</a>
+<a href="https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/stargazers">
+    <img src="https://img.shields.io/github/stars/ikhsan3adi/absensi-karyawan-gps-barcode?style=for-the-badge&labelColor=%23934eb6&color=%23ec73a9&logo=github" alt="GitHub Repo stars">
+</a>
+<a href="https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors-anon/ikhsan3adi/absensi-karyawan-gps-barcode?style=for-the-badge&labelColor=%23934eb6&color=%23ec73a9&logo=github" alt="GitHub Contributors">
+</a>
+<a href="https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/network/members">
+    <img src="https://img.shields.io/github/forks/ikhsan3adi/absensi-karyawan-gps-barcode?style=for-the-badge&labelColor=%23934eb6&color=%23ec73a9&logo=github" alt="GitHub forks">
+</a>
+<a href="https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/watchers">
+    <img src="https://img.shields.io/github/watchers/ikhsan3adi/absensi-karyawan-gps-barcode?style=for-the-badge&labelColor=%23934eb6&color=%23ec73a9&logo=github" alt="GitHub watchers">
+</a>
+<a href="#teknologi-yang-digunakan">
+    <img src="https://img.shields.io/badge/12-%23FFF.svg?style=for-the-badge&label=Laravel&labelColor=%23934eb6&color=%23ec73a9&logo=laravel&logoColor=%23FFF" alt="Laravel">
+</a>
+<a href="#teknologi-yang-digunakan">
+    <img src="https://img.shields.io/badge/8.3-%23FFF.svg?style=for-the-badge&label=PHP&labelColor=%23934eb6&color=%23ec73a9&logo=php&logoColor=%23FFF" alt="PHP">
+</a>
 
 | ![Aplikasi Web Absensi Karyawan QR Code GPS](./screenshots/absensi-gps-barcode-social-preview.png) |
 | -------------------------------------------------------------------------------------------------- |
