@@ -30,11 +30,11 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 1. Clone/download repository ini
 
 2. Buat database (jika tidak menggunakan SQLite)
-   
-   ```sql
-   -- nama database sesuaikan dengan yang ada di .env
-   CREATE DATABASE db_absensi_karyawan;
-   ```
+
+    ```sql
+    -- nama database sesuaikan dengan yang ada di .env
+    CREATE DATABASE db_absensi_karyawan;
+    ```
 
 3. Jalankan perintah
 
@@ -73,6 +73,13 @@ Pilih salah satu opsi berikut:
 
 - Jalankan perintah `php artisan db:seed DatabaseSeeder` untuk menyiapkan data awal
 - Jalankan perintah `php artisan db:seed FakeDataSeeder` untuk menyiapkan data awal beserta data dummy (absensi & karyawan)
+
+Akun default hasil seeder:
+
+| Role        | Email                    | Password     |
+| ----------- | ------------------------ | ------------ |
+| Super Admin | `superadmin@example.com` | `superadmin` |
+| Admin       | `admin@example.com`      | `admin`      |
 
 ## Fitur & Pratinjau
 
@@ -125,9 +132,9 @@ Fitur pembatasan login perangkat untuk mencegah titip absen. Device token (UUID)
 - Admin & superadmin tidak terpengaruh
 - Dapat dinonaktifkan via .env:
 
-  ```env
-  DEVICE_RESTRICTION_ENABLED=false
-  ```
+    ```env
+    DEVICE_RESTRICTION_ENABLED=false
+    ```
 
 ### Status Incomplete
 
