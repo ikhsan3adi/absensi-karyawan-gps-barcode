@@ -60,7 +60,7 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
     ```sh
     # untuk membuat file `.env`
-    composer run-script post-root-package-install
+    composer run-script post-root-package-install # atau cp .env.example .env
 
     # untuk instalasi dependency php
     composer install
@@ -91,8 +91,17 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 
 Pilih salah satu opsi berikut:
 
-- Jalankan perintah `php artisan db:seed DatabaseSeeder` untuk menyiapkan data awal
-- Jalankan perintah `php artisan db:seed FakeDataSeeder` untuk menyiapkan data awal beserta data dummy (absensi & karyawan)
+1. Jalankan perintah berikut untuk menyiapkan data awal
+
+    ```sh
+    php artisan db:seed DatabaseSeeder
+    ```
+
+2. (Recommended untuk development) Jalankan perintah berikut untuk menyiapkan data awal beserta data dummy (absensi & karyawan)
+
+    ```sh
+    php artisan db:seed FakeDataSeeder
+    ```
 
 Akun default hasil seeder:
 
