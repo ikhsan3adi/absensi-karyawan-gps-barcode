@@ -1,0 +1,85 @@
+services:
+  app:
+    build:
+      target: runtime
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - LOG_LEVEL=error
+    # In production, don't mount source code - use built image
+    volumes:
+      - storage-data:/var/www/html/storage
+      - cache-data:/var/www/html/bootstrap/cache
+      # Secrets mounted via docker secrets or env_file
+      - ./docker/prod.env:/var/www/html/.env:ro
+    # No port mapping - use reverse proxy (traefik/nginx proxy)
+    # ports:
+    #   - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  db:
+    environment:
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
+      - MYSQL_DATABASE_FILE=/run/secrets/db_database
+      - MYSQL_USER_FILE=/run/secrets/db_user
+      - MYSQL_PASSWORD_FILE=/run/secrets/db_password
+    volumes:
+      - db-data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Production reverse proxy (Traefik or Nginx Proxy Manager)
+  # Uncomment and configure based on your setup
+  # proxy:
+  #   image: traefik:v3.0
+  #   command:
+  #     - --api.insecure=true
+  #     - --providers.docker=true
+  #     - --entrypoints.web.address=:80
+  #     - --entrypoints.websecure.address=:443
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     - "8080:8080"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - ./docker/traefik.yml:/etc/traefik/traefik.yml:ro
+  #   networks:
+  #     - absensi-network
+
+secrets:
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+  db_database:
+    file: ./secrets/db_database.txt
+  db_user:
+    file: ./secrets/db_user.txt
+  db_password:
+    file: ./secrets/db_password.txt
+
+volumes:
+  db-data:
+  storage-data:
+  cache-data:
+
+networks:
+  absensi-network:
+    driver: bridge

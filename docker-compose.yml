@@ -1,0 +1,136 @@
+services:
+  # =============================================================================
+  # Application (PHP-FPM + Nginx + Queue Worker + Scheduler)
+  # =============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: absensi-app
+    restart: unless-stopped
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_URL=http://localhost:8000
+      - ASSET_URL=http://localhost:8000
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=db_absensi_karyawan
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - SESSION_DRIVER=database
+      - CACHE_STORE=database
+      - QUEUE_CONNECTION=database
+      - LOG_CHANNEL=stack
+      - LOG_LEVEL=debug
+    volumes:
+      # Mount source code for development (hot reload not needed with PHP-FPM)
+      - ./:/var/www/html:cached
+      # Exclude vendor and node_modules from mount (use built-in)
+      - /var/www/html/vendor
+      - /var/www/html/node_modules
+      # Persist storage and bootstrap/cache
+      - storage-data:/var/www/html/storage
+      - cache-data:/var/www/html/bootstrap/cache
+      # Mount .env for local overrides
+      - ./.env:/var/www/html/.env:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - absensi-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # =============================================================================
+  # Database (MySQL 8.0)
+  # =============================================================================
+  db:
+    image: mysql:8.0
+    container_name: absensi-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=db_absensi_karyawan
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_ALLOW_EMPTY_PASSWORD=no
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - absensi-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  # =============================================================================
+  # phpMyAdmin (Optional - Development only)
+  # =============================================================================
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: absensi-phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=secret
+      - UPLOAD_LIMIT=20M
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - absensi-network
+    profiles:
+      - tools
+
+  # =============================================================================
+  # Redis (Optional - for future queue/cache scaling)
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: absensi-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - absensi-network
+    profiles:
+      - tools
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  db-data:
+    driver: local
+  storage-data:
+    driver: local
+  cache-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  absensi-network:
+    driver: bridge
