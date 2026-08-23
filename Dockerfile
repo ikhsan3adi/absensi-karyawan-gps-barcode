@@ -18,20 +18,26 @@ RUN apk add --no-cache \
     postgresql-dev \
     mysql-client \
     nodejs \
-    npm
+    npm \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev
 
 # Install PHP extensions needed for build
-RUN docker-php-ext-install -j$(nproc) \
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     zip \
     bcmath \
-    opcache
+    opcache \
+    gd
 
 # Install Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 # Install Bun
-RUN curl -fsSL https://bun.sh/install | bash
+RUN apk add --no-cache bash \
+    && curl -fsSL https://bun.sh/install | bash
 ENV PATH="/root/.bun/bin:${PATH}"
 
 # Set working directory
@@ -51,11 +57,16 @@ RUN composer install \
     --optimize-autoloader \
     && composer clear-cache
 
-# Install Node dependencies and build assets
-RUN bun install --frozen-lockfile \
-    && bun run build
+# Copy application source needed for build (resources, public, vite.config)
+COPY resources ./resources
+COPY public ./public
+COPY vite.config.js ./
+COPY tailwind.config.js ./
 
-# Copy application code
+# Install Node dependencies and build assets
+RUN bun install --frozen-lockfile && bun run build
+
+# Copy remaining application code
 COPY . .
 
 # Run post-install scripts
