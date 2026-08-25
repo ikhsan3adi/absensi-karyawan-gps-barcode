@@ -36,6 +36,15 @@ Aplikasi web absensi karyawan menggunakan QR Code dan GPS.
 - [OpenStreetMap](https://www.openstreetmap.org/)
 - MySQL/MariaDB
 
+## Cara Menjalankan
+
+Aplikasi ini **tidak mewajibkan Docker**. Tersedia dua cara yang setara, pilih salah satu:
+
+1. **Instalasi tradisional**: PHP, Composer, Node.js/Bun, dan MySQL dipasang langsung di mesin. Lihat bagian [Instalasi](#instalasi).
+2. **Docker Compose**: seluruh stack berjalan di dalam container tanpa perlu tool apa pun di host. Lihat bagian [Menjalankan dengan Docker](#menjalankan-dengan-docker) dan [Menjalankan di Produksi (Docker)](#menjalankan-di-produksi-docker).
+
+Perubahan kode aplikasi tidak membedakan kedua mode; file-file Docker (`Dockerfile`, folder `docker/`, `docker-compose*.yml`) hanya digunakan saat menjalankan lewat Docker.
+
 ## Instalasi
 
 ### Prasyarat
@@ -195,7 +204,7 @@ docker compose down -v
 Catatan:
 
 - Kode sumber di-bind-mount ke container sehingga perubahan langsung terlihat. Namun OPcache dikonfigurasi tanpa revalidasi (`opcache.validate_timestamps=0` untuk performa produksi), jadi setelah mengedit file PHP jalankan `docker compose restart app`.
-- File `.env` di-mount read-only ke container. Ubah konfigurasi lewat file `.env` di host atau blok `environment` di `docker-compose.yml`.
+- Konfigurasi container dibaca dari `env_file` (`docker/dev.env` untuk lokal, `docker/prod.env` untuk produksi), bukan dari file `.env`. Variabel environment selalu menang atas `.env` yang mungkin ada di host.
 - Perintah `docker compose exec` berjalan sebagai root di dalam container. File yang dibuat artisan (misal hasil export XLSX) bisa berpemilik root; perbaiki dengan `chown` bila diperlukan.
 
 ## Menjalankan di Produksi (Docker)
@@ -302,13 +311,13 @@ gunzip < backup-2026-08-25.sql.gz | docker compose exec -T db sh -c 'mysql -uroo
 
 ### Ringkasan Variabel Sensitif di `docker/prod.env`
 
-| Variabel | Fungsi |
-| -------- | ------ |
-| `APP_KEY` | Enkripsi session dan data terenkripsi; jangan diubah setelah produksi berjalan |
-| `DB_PASSWORD` + `MYSQL_PASSWORD` | Password user aplikasi; kedua nilai harus identik |
-| `MYSQL_ROOT_PASSWORD` | Password root MySQL untuk backup/administrasi |
-| `MAIL_*` | Kredensial SMTP untuk email keluar |
-| `APP_URL` / `ASSET_URL` | Domain publik; wajib benar agar asset dan link valid |
+| Variabel                         | Fungsi                                                                         |
+| -------------------------------- | ------------------------------------------------------------------------------ |
+| `APP_KEY`                        | Enkripsi session dan data terenkripsi; jangan diubah setelah produksi berjalan |
+| `DB_PASSWORD` + `MYSQL_PASSWORD` | Password user aplikasi; kedua nilai harus identik                              |
+| `MYSQL_ROOT_PASSWORD`            | Password root MySQL untuk backup/administrasi                                  |
+| `MAIL_*`                         | Kredensial SMTP untuk email keluar                                             |
+| `APP_URL` / `ASSET_URL`          | Domain publik; wajib benar agar asset dan link valid                           |
 
 ## Fitur & Pratinjau
 

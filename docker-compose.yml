@@ -17,8 +17,6 @@ services:
       # Survive rebuilds and container recreation
       - storage-data:/var/www/html/storage
       - cache-data:/var/www/html/bootstrap/cache
-      # Read-only so the entrypoint cannot rewrite host credentials
-      - ./.env:/var/www/html/.env:ro
     ports:
       - "8000:8000"
     depends_on:
