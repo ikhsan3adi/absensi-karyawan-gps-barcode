@@ -1,7 +1,5 @@
 services:
-  # =============================================================================
-  # Application (PHP-FPM + Nginx + Queue Worker + Scheduler)
-  # =============================================================================
+  # Single container running nginx, php-fpm, queue worker, and scheduler
   app:
     build:
       context: .
@@ -26,15 +24,14 @@ services:
       - LOG_CHANNEL=stack
       - LOG_LEVEL=debug
     volumes:
-      # Mount source code for development (hot reload not needed with PHP-FPM)
+      # Bind source for live edits; vendor/node_modules come from the image
       - ./:/var/www/html:cached
-      # Exclude vendor and node_modules from mount (use built-in)
       - /var/www/html/vendor
       - /var/www/html/node_modules
-      # Persist storage and bootstrap/cache
+      # Survive rebuilds and container recreation
       - storage-data:/var/www/html/storage
       - cache-data:/var/www/html/bootstrap/cache
-      # Mount .env for local overrides
+      # Read-only so the entrypoint cannot rewrite host credentials
       - ./.env:/var/www/html/.env:ro
     ports:
       - "8000:8000"
@@ -50,9 +47,7 @@ services:
       retries: 3
       start_period: 40s
 
-  # =============================================================================
-  # Database (MySQL 8.0)
-  # =============================================================================
+  # mysql_native_password keeps PHP's mysqlnd auth compatible
   db:
     image: mysql:8.0
     container_name: absensi-db
@@ -78,9 +73,7 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
 
-  # =============================================================================
-  # phpMyAdmin (Optional - Development only)
-  # =============================================================================
+  # Optional dev tools, start with: docker compose --profile tools up -d
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: absensi-phpmyadmin
@@ -100,9 +93,6 @@ services:
     profiles:
       - tools
 
-  # =============================================================================
-  # Redis (Optional - for future queue/cache scaling)
-  # =============================================================================
   redis:
     image: redis:7-alpine
     container_name: absensi-redis
