@@ -77,7 +77,8 @@ RUN php artisan package:discover --ansi
 # =============================================================================
 FROM php:8.3-fpm-alpine AS runtime
 
-# Install runtime dependencies only
+# Install runtime shared libraries only (matching extensions compiled in builder)
+# NOTE: no compilation here - extension .so files are copied from builder below
 RUN apk add --no-cache \
     nginx \
     supervisor \
@@ -91,15 +92,12 @@ RUN apk add --no-cache \
     libxml2 \
     sqlite-libs \
     postgresql-libs \
-    bash
+    bash \
+    curl
 
-# Install PHP extensions
-RUN docker-php-ext-install -j$(nproc) \
-    pdo_mysql \
-    zip \
-    bcmath \
-    opcache \
-    gd
+# Copy precompiled PHP extensions and their ini configs from builder
+COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+COPY --from=builder /usr/local/etc/php/conf.d/docker-php-ext-*.ini /usr/local/etc/php/conf.d/
 
 # Configure OPcache
 RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
@@ -109,11 +107,8 @@ RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.revalidate_freq=0" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/opcache.ini
 
-# Create nginx user and group
-RUN addgroup -g 1000 -S www-data \
-    && adduser -u 1000 -D -S -G www-data www-data
-
 # Create necessary directories
+# NOTE: www-data already exists in php:*-alpine base image (uid/gid 82)
 RUN mkdir -p /var/www/html \
     && mkdir -p /run/nginx \
     && mkdir -p /var/log/supervisor \
