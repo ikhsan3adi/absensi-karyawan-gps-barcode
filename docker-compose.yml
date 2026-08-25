@@ -7,22 +7,8 @@ services:
       target: runtime
     container_name: absensi-app
     restart: unless-stopped
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - APP_URL=http://localhost:8000
-      - ASSET_URL=http://localhost:8000
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=db_absensi_karyawan
-      - DB_USERNAME=root
-      - DB_PASSWORD=secret
-      - SESSION_DRIVER=database
-      - CACHE_STORE=database
-      - QUEUE_CONNECTION=database
-      - LOG_CHANNEL=stack
-      - LOG_LEVEL=debug
+    env_file:
+      - ./docker/dev.env
     volumes:
       # Bind source for live edits; vendor/node_modules come from the image
       - ./:/var/www/html:cached
@@ -52,10 +38,8 @@ services:
     image: mysql:8.0
     container_name: absensi-db
     restart: unless-stopped
-    environment:
-      - MYSQL_DATABASE=db_absensi_karyawan
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_ALLOW_EMPTY_PASSWORD=no
+    env_file:
+      - ./docker/dev.env
     volumes:
       - db-data:/var/lib/mysql
     ports:
@@ -63,7 +47,7 @@ services:
     networks:
       - absensi-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -73,21 +57,17 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
 
-  # Optional dev tools, start with: docker compose --profile tools up -d
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: absensi-phpmyadmin
     restart: unless-stopped
-    environment:
-      - PMA_HOST=db
-      - PMA_PORT=3306
-      - PMA_USER=root
-      - PMA_PASSWORD=secret
-      - UPLOAD_LIMIT=20M
+    env_file:
+      - ./docker/dev.env
     ports:
       - "8080:80"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - absensi-network
     profiles:

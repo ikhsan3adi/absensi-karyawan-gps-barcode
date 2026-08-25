@@ -1,20 +1,26 @@
+# Production overrides. Always run together with the base file:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Requires docker/prod.env (copy from docker/prod.env.example, never commit it).
+
 services:
   app:
     build:
       target: runtime
+    # Replaces the base dev.env entirely; real credentials live here
+    env_file:
+      - ./docker/prod.env
     environment:
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - LOG_LEVEL=error
-    # In production, don't mount source code - use built image
+      APP_ENV: production
+      APP_DEBUG: "false"
+      LOG_LEVEL: error
     volumes:
       - storage-data:/var/www/html/storage
       - cache-data:/var/www/html/bootstrap/cache
-      # Secrets mounted via docker secrets or env_file
-      - ./docker/prod.env:/var/www/html/.env:ro
-    # No port mapping - use reverse proxy (traefik/nginx proxy)
+    # Publish loopback-only so a host reverse proxy (nginx/caddy) can reach it;
+    # never bind 0.0.0.0 without TLS in front
     # ports:
-    #   - "8000:8000"
+    #   - "127.0.0.1:8000:8000"
     deploy:
       resources:
         limits:
@@ -23,18 +29,10 @@ services:
         reservations:
           cpus: '0.5'
           memory: 256M
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
 
   db:
-    environment:
-      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
-      - MYSQL_DATABASE_FILE=/run/secrets/db_database
-      - MYSQL_USER_FILE=/run/secrets/db_user
-      - MYSQL_PASSWORD_FILE=/run/secrets/db_password
+    env_file:
+      - ./docker/prod.env
     volumes:
       - db-data:/var/lib/mysql
     deploy:
@@ -45,35 +43,6 @@ services:
         reservations:
           cpus: '0.5'
           memory: 512M
-
-  # Production reverse proxy (Traefik or Nginx Proxy Manager)
-  # Uncomment and configure based on your setup
-  # proxy:
-  #   image: traefik:v3.0
-  #   command:
-  #     - --api.insecure=true
-  #     - --providers.docker=true
-  #     - --entrypoints.web.address=:80
-  #     - --entrypoints.websecure.address=:443
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #     - "8080:8080"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #     - ./docker/traefik.yml:/etc/traefik/traefik.yml:ro
-  #   networks:
-  #     - absensi-network
-
-secrets:
-  db_root_password:
-    file: ./secrets/db_root_password.txt
-  db_database:
-    file: ./secrets/db_database.txt
-  db_user:
-    file: ./secrets/db_user.txt
-  db_password:
-    file: ./secrets/db_password.txt
 
 volumes:
   db-data:
