@@ -1,0 +1,54 @@
+# Production overrides. Always run together with the base file:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Requires docker/prod.env (copy from docker/prod.env.example, never commit it).
+
+services:
+  app:
+    build:
+      target: runtime
+    # Replaces the base dev.env entirely; real credentials live here
+    env_file:
+      - ./docker/prod.env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      LOG_LEVEL: error
+    volumes:
+      - storage-data:/var/www/html/storage
+      - cache-data:/var/www/html/bootstrap/cache
+    # Publish loopback-only so a host reverse proxy (nginx/caddy) can reach it;
+    # never bind 0.0.0.0 without TLS in front
+    # ports:
+    #   - "127.0.0.1:8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+  db:
+    env_file:
+      - ./docker/prod.env
+    volumes:
+      - db-data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+volumes:
+  db-data:
+  storage-data:
+  cache-data:
+
+networks:
+  absensi-network:
+    driver: bridge

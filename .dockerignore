@@ -1,0 +1,53 @@
+# Git
+.git
+.gitignore
+
+# Dependencies
+vendor
+node_modules
+
+# Build output
+public/build
+public/hot
+
+# Storage (runtime only)
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.phpunit.result.cache
+coverage
+
+# Docker
+docker-compose.override.yml
+Dockerfile*
+*.dockerfile
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+*.pid
+*.seed
+*.pid.lock
