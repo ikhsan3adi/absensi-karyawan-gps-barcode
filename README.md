@@ -101,6 +101,103 @@ Akun default hasil seeder:
 | Super Admin | `superadmin@example.com` | `superadmin` |
 | Admin       | `admin@example.com`      | `admin`      |
 
+## Menjalankan dengan Docker
+
+Cara ini tidak membutuhkan PHP, Composer, Node.js/Bun, maupun MySQL di mesin host. Semuanya berjalan di dalam container.
+
+### Prasyarat
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### Menjalankan
+
+1. Clone/download repository ini
+
+2. Siapkan file `.env`. Jika belum ada, salin dari contoh:
+
+    ```sh
+    cp .env.example .env
+    ```
+
+    Nilai `DB_HOST`, `DB_PORT`, `DB_PASSWORD`, dan `APP_URL` akan ditimpa oleh `environment` di [docker-compose.yml](./docker-compose.yml), jadi `.env` bawaan aman digunakan.
+
+3. Build dan jalankan stack (aplikasi + MySQL):
+
+    ```sh
+    docker compose up -d
+    ```
+
+4. Tunggu sampai container `absensi-app` selesai inisialisasi. Pantau dengan:
+
+    ```sh
+    docker compose logs -f app
+    ```
+
+    Saat pertama kali dijalankan, container secara otomatis melakukan:
+
+    - setup permission `storage/` dan `bootstrap/cache`
+    - menunggu database siap
+    - generate `APP_KEY` (jika belum ada)
+    - `migrate`
+    - seeder dasar (`DatabaseSeeder`) hanya saat database masih kosong dan `APP_ENV=local`
+
+5. Aplikasi bisa diakses di [http://localhost:8000](http://localhost:8000), login dengan akun hasil seeder pada tabel di atas.
+
+### Seeder Data Dummy (FakeDataSeeder) di Docker
+
+Seeder otomatis hanya menjalankan `DatabaseSeeder`. Untuk mengisi data dummy absensi dan karyawan:
+
+```sh
+# reset total database, lalu isi data awal + data dummy
+docker compose exec app php artisan migrate:fresh --force --seed --seeder=FakeDataSeeder
+
+# atau isi data dummy tanpa mereset data yang sudah ada
+docker compose exec app php artisan db:seed FakeDataSeeder --force
+```
+
+Setelah `docker compose down -v` (hapus volume), langkah `up` berikutnya akan otomatis migrate lagi dan menjalankan seeder dasar karena database kembali kosong.
+
+### Tools Tambahan (Opsional)
+
+phpMyAdmin dan Redis tersedia sebagai profile `tools` agar tidak ikut jalan secara default:
+
+```sh
+docker compose --profile tools up -d
+```
+
+- phpMyAdmin: [http://localhost:8080](http://localhost:8080)
+- MySQL juga terekspos ke host di port `3306` (user `root`, password `secret`)
+- Redis di port `6379` (belum dipakai aplikasi, disiapkan untuk scaling queue/cache)
+
+### Perintah yang Sering Dipakai
+
+```sh
+# menjalankan artisan di dalam container
+docker compose exec app php artisan <perintah>
+
+# membuka tinker
+docker compose exec app php artisan tinker
+
+# melihat log aplikasi
+docker compose logs -f app
+
+# me-restart proses setelah mengubah kode PHP
+docker compose restart app
+
+# memberhentikan stack, data database tetap tersimpan
+docker compose down
+
+# memberhentikan stack sekaligus menghapus volume database/storage
+docker compose down -v
+```
+
+Catatan:
+
+- Kode sumber di-bind-mount ke container sehingga perubahan langsung terlihat. Namun OPcache dikonfigurasi tanpa revalidasi (`opcache.validate_timestamps=0` untuk performa produksi), jadi setelah mengedit file PHP jalankan `docker compose restart app`.
+- File `.env` di-mount read-only ke container. Ubah konfigurasi lewat file `.env` di host atau blok `environment` di `docker-compose.yml`.
+- Perintah `docker compose exec` berjalan sebagai root di dalam container. File yang dibuat artisan (misal hasil export XLSX) bisa berpemilik root; perbaiki dengan `chown` bila diperlukan.
+
 ## Fitur & Pratinjau
 
 ### User/Karyawan
