@@ -1,5 +1,9 @@
 # Aplikasi Web Absensi Karyawan QR Code GPS
 
+<a href="https://trendshift.io/repositories/135323?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-135323" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/135323/daily?language=Blade" alt="ikhsan3adi%2Fabsensi-karyawan-gps-barcode | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/135323?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-135323" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/135323/weekly?language=Blade" alt="ikhsan3adi%2Fabsensi-karyawan-gps-barcode | Trendshift" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/135323?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-135323" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/135323/monthly?language=Blade" alt="ikhsan3adi%2Fabsensi-karyawan-gps-barcode | Trendshift" width="250" height="55"/></a>
+
 <a href="https://github.com/ikhsan3adi/absensi-karyawan-gps-barcode/actions/workflows/laravel.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/ikhsan3adi/absensi-karyawan-gps-barcode/laravel.yml?branch=master&style=for-the-badge&label=Continuous%20Integration&labelColor=%23934eb6&logo=github" alt="Continuous Integration">
 </a>
