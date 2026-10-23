@@ -55,7 +55,7 @@ Perubahan kode aplikasi tidak membedakan kedua mode; file-file Docker (`Dockerfi
 
 - [Composer](https://getcomposer.org)
 - [NPM & Node.js](https://nodejs.org) atau [Bun](https://bun.com/)
-- PHP 8.3+
+- PHP versi >= `8.3.36`
 - MySQL/MariaDB/SQlite
 
 ---
