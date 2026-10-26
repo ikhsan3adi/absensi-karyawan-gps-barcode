@@ -56,7 +56,7 @@ services:
       - --collation-server=utf8mb4_unicode_ci
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin:latest
     container_name: absensi-phpmyadmin
     restart: unless-stopped
     env_file:
