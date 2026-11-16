@@ -7,12 +7,20 @@ use App\Models\Attendance;
 trait AttendanceDetailTrait
 {
     public bool $showDetail = false;
+
     public $currentAttendance = [];
 
     public function show($attendanceId)
     {
-        /** @var Attendance */
-        $attendance = Attendance::find($attendanceId);
+        $user = auth()->user();
+
+        abort_unless($user, 403);
+
+        /** @var Attendance|null */
+        $attendance = Attendance::query()
+            ->when(! $user->isAdmin, fn ($query) => $query->where('user_id', $user->id))
+            ->find($attendanceId);
+
         if ($attendance) {
             $this->showDetail = true;
             $this->currentAttendance = $attendance->getAttributes();
